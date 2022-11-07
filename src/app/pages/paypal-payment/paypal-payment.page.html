@@ -1,0 +1,85 @@
+<ion-content class="container">
+    <div class="title-block">
+        Order Details
+    </div>
+    <!-- <div class="module-block">
+        <div class="module-img">
+            <img src="assets\icon\Icon.png">
+        </div>
+        <div class="module-name">
+            Sales Proposal
+        </div>
+    </div> -->
+    <ion-row class="service-block">
+        <ion-col class="service-text">
+            Service charges
+        </ion-col>
+        <ion-col class="service-value">
+            ${{ serviceAmount }}
+        </ion-col>
+    </ion-row>
+    <ion-row class="discount-block">
+        <ion-col class="discount-text">
+            Discount
+        </ion-col>
+        <ion-col class="discount-value">
+            ${{ serviceDiscount }}
+        </ion-col>
+    </ion-row>
+    <ion-row class="total-block">
+        <ion-col class="total-text">
+            Total Amount
+        </ion-col>
+        <ion-col class="total-value">
+            ${{ serviceFinalAmount }}
+        </ion-col>
+    </ion-row>
+
+    <div class="line"></div>
+    <div class="pay-block">
+        <div class="pay-name">
+            Payment Option
+        </div>
+    </div>
+    <!-- (click)="paytopaypal()" -->
+    <!-- <div class="paypal-block">
+        <div class="paypal-name">
+            Paypal
+        </div>
+        <div class="paypal-img">
+            <img src="./assets/icon/paypal.svg">
+        </div>
+    </div> -->
+    <!-- <div class="wallet-block">
+        <div class="wallet1">
+            <div class="wallet-name">
+                Wallet
+            </div>
+            <div class="wallet-avblbal">
+                Available Bal:$70.00
+            </div>
+        </div>
+        <div>
+            <img src="./assets/icon/wallet.svg">
+        </div>
+    </div> -->
+    <!-- <ngx-paypal *ngIf="showPaypal" [config]="payPalConfig"></ngx-paypal> -->
+    <ngx-paypal [config]="payPalConfig"></ngx-paypal>
+</ion-content>
+<ion-footer>
+    <div class="button-block">
+        <ion-row>
+            <ion-col size="6"></ion-col>
+            <ion-col size="6">
+                <ion-button class="cancel-button" (click)="dismiss()" fill="clear">
+                    Cancel
+                </ion-button>
+            </ion-col>
+            <!-- <ion-col size="5.8">
+                <ion-button class="confirm-button" (click)="paytopaypal()" fill="clear">
+                    Confirm
+                </ion-button>
+            </ion-col> -->
+        </ion-row>
+    </div>
+</ion-footer>

@@ -1,92 +1,329 @@
 <ion-app class="safe-area">
-  <!-- <ion-router-outlet></ion-router-outlet>-->
-  <ion-split-pane contentId="main-content">
-    <ion-menu contentId="main-content" type="overlay" (ionWillOpen)="updateMenuState()">
-      <ion-content>
-        <ion-menu-toggle>
-          <ion-header style="text-align: -webkit-center;" mode="md">
-            <ion-toolbar style="height: 130px;display: flex;justify-content: center;align-content: center;"
-                         routerLink='/profile'>
-              <ion-card *ngIf="isEmptyObject(userData?.logo) || userData?.logo ==null"
-                        style="height:50px;width:50px;display: flex;justify-content: center;align-items: center;">{{userData?.firstname.slice(0, 1).toUpperCase() + userData?.lastname.slice(0, 1).toUpperCase()}}</ion-card>
-              <div *ngIf="!isEmptyObject(userData?.logo) && userData?.logo !==null">
-                <img [src]="userData?.logo?.url"
-                     style="height:50px;width:auto;display: flex;justify-content: center;align-items: center;"/>
-              </div>
-              <ion-title style="margin-top:7px">
-                <div>
-                  {{userData?.firstname.charAt(0).toUpperCase() + userData?.firstname.slice(1) + ' ' + userData?.lastname.charAt(0).toUpperCase() + userData?.lastname.slice(1)}}
-                </div>
-                <!-- <p
-                  style="text-align: center;font-size:9px;margin:0px">{{userData?.role.name == 'Surveyors' ? 'Surveyor' : userData?.role.name}} </p>
-                <p style="text-align: center;font-size:9px;margin:0px" *ngIf="userData?.role.type=='peengineer'">({{userData?.peengineertype}})
-                   </p> -->
-                   <p style="text-align: center;font-size:9px;margin:0px">{{userrole}}
-                  </p>
-              </ion-title>
-            </ion-toolbar>
-          </ion-header>
-        </ion-menu-toggle>
-            <!--  <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-                  <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.url]" lines="none"
-                            detail="false" [class.selected]="selectedIndex == i">
-                      <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
-                      <ion-label>{{ p.title }}</ion-label>
-                  </ion-item>
-              </ion-menu-toggle>-->
-              <ion-list id="inbox-list">
-              <ion-menu-toggle auto-hide="false">
-                    <ion-item joyrideStep='dashboardhighlight' title="Dashboard" text="Here you get an overview of all your requests, along with those that needs your attention." *ngIf="userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !== 'peengineer'" [routerLink]="['/dashboard']" routerDirection="forward" mode="md">
-                  <ion-img src="/assets/icon/dashboard.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Dashboard</p></ion-item>
-                <!-- <ion-item [routerLink]="['/onboarding']" routerDirection="forward">
-                  <ion-img src="/assets/images/dashboard.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Dashboard</ion-item> -->
-                    <ion-item joyrideStep='prelimhighlight' title="Site Assessments & Sales Proposals" text="Consolidated dashboard for all your site assessment and sales proposal requests with real-time status tracking."  (click)="SwitchMenuAccordingtoRoles('prelim')" *ngIf="userData?.role.type!=='surveyors'  && userData?.role.type!=='peengineer'" routerDirection="forward" mode="md">
-                       <!-- <ion-img src="/assets/images/design.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Prelim</ion-item>  -->
-                      <ion-img src="/assets/icon/Prelim.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Prelim
-                        <span class="matBadge" *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newprelimscounts > 0">{{ newprelimscounts }}</span></p></ion-item>
-                        <ion-item joyrideStep='surveyhighlight' title="Surveys" text="Consolidated dashboard for all your survey requests with real-time status tracking." mode="md" *ngIf="userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='peengineer' && userData?.role.type !=='qcinspector' " (click)="SwitchMenuAccordingtoRoles('survey')" routerDirection="forward">
-                          <ion-img src="/assets/icon/Survey.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Survey</ion-item>
-                        <ion-item joyrideStep='permithighlight' title="permit" text="Consolidated dashboard for all your premit design requests with real-time status tracking." mode="md" (click)="SwitchMenuAccordingtoRoles('permit')" *ngIf="(userData?.role.type!=='surveyors' && userData?.role.type!=='peengineer') && !utilities.isspecificClient" routerDirection="forward">
-                      <ion-img src="/assets/icon/Permit.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Permit
-                        <span class="matBadge" *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newpermitscounts > 0">{{ newpermitscounts }}</span></p>
-                      </ion-item>
-                        <ion-item joyrideStep='permithighlight' title="Designs" text="Consolidated dashboard for all your  design requests with real-time status tracking" mode="md" (click)="SwitchMenuAccordingtoRoles('permit')" *ngIf="(userData?.role.type!=='surveyors' && userData?.role.type!=='peengineer') && utilities.isspecificClient" routerDirection="forward">
-                      <ion-img src="/assets/icon/Permit.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Designs
-                        <span class="matBadge" *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newpermitscounts > 0">{{ newpermitscounts }}</span></p>
-                      </ion-item>
+    <!-- <ion-router-outlet></ion-router-outlet>-->
+    <ion-split-pane contentId="main-content">
+        <ion-menu contentId="main-content" type="overlay" (ionWillOpen)="updateMenuState()" [swipeGesture]="false">
+            <ion-content [ngClass]="showBottomDraw == true ? 'background_bul': ''" scrollY="false">
+                <ion-menu-toggle>
+                    <ion-header class="ion-no-border " style="height: 108px;left: 0px;text-align: -webkit-center;"
+                        mode="md">
+                        <ion-toolbar
+                            style="padding-top: 0;height: 108px;display: flex;justify-content: center;align-content: center;border-bottom: 1px solid #EEEEEE;"
+                            routerLink='/profile'>
+                            <div class="flex-container">
 
-                     <ion-item joyrideStep='inboxhighlight' title="Stay Connected" text="Consolidated dashboard for your group and individual chats." (next)="openMenu()" mode="md" [routerLink]="['/groups']" routerDirection="forward">
-                      <ion-img src="/assets/icon/Inbox.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Inbox</ion-item>
-                      <!-- <ion-item  (click)="SwitchMenuAccordingtoRoles('statistics')" *ngIf="userData?.role.type!='clientsuperadmin'" routerDirection="forward">
-                       <ion-img src="/assets/icon/Stats.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Statistics</ion-item> -->
-                       <ion-item joyrideStep='pestamphighlight' title="PE Stamps" text="Consolidated dashboard for all your PE Stamp requests with real-time status tracking." mode="md" (click)="SwitchMenuAccordingtoRoles('pestamp')" *ngIf="userData?.role.type!=='bd' && userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !=='peengineer'" routerDirection="forward">
-                        <ion-img src="/assets/icon/PEStamping.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>PE Stamps
-                        <span class="matBadge" *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newpestampscount > 0">{{ newpestampscount }}</span></p>
-                      </ion-item>
-                      <!-- <ion-item mode="md" routerLink="/comingsoon" *ngIf="userData?.role.type!=='bd' && userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !=='peengineer'" routerDirection="forward">
-                        <ion-img src="/assets/images/Team.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Team
+                                <div *ngIf="isEmptyObject(userData?.logo) || userData?.logo ==null" class="profile_img">
+                                    {{userprofile?.firstname.slice(0, 1).toUpperCase() + userprofile?.lastname.slice(0,
+                                    1).toUpperCase()}}</div>
+                                <div *ngIf="!isEmptyObject(userprofile?.logo) && userprofile?.logo !==null">
+                                    <img [src]="userprofile?.logo?.url" class="profile_image" />
+                                </div>
+                                <div style="margin-top:12px;">
+                                    <h2 class="profile-name">
+                                        {{userprofile?.firstname.charAt(0).toUpperCase() + userprofile?.firstname.slice(1) + '
+                                        ' +
+                                        userprofile?.lastname.charAt(0).toUpperCase() + userprofile?.lastname.slice(1)}}
+                                    </h2><span style="float:left">{{userrole}}
+                                    </span>
+                                </div>
+                                <!-- <p style="text-align: center;font-size:9px;margin:0px">{{userData?.role.name == 'Surveyors' ? 'Surveyor' : userData?.role.name}} </p>
+                                <p style="text-align: center;font-size:9px;margin:0px" *ngIf="userData?.role.type=='peengineer'">({{userData?.peengineertype}})
+                                </p> -->
+                            </div>
+                        </ion-toolbar>
+                    </ion-header>
+                </ion-menu-toggle>
+                <!--  <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
+                <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.url]" lines="none"
+                          detail="false" [class.selected]="selectedIndex == i">
+                    <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+                    <ion-label>{{ p.title }}</ion-label>
+                </ion-item>
+            </ion-menu-toggle>-->
+                <ion-list id="inbox-list" class="menu-list"
+                    *ngIf="(getUserAccessRightsData?.length > 0 && getUserAccessRightsData.data[0].attributes.accessrights.length > 0) || sourcetype == 'web'">
+                    <!-- comment on 20220222 -->
+                    <!-- <ion-menu-toggle auto-hide="false">
+                      <ion-item joyrideStep='dashboardhighlight' title="Dashboard"
+                          text="Here you get an overview of all your requests, along with those that needs your attention."
+                          *ngIf="userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !== 'peengineer'"
+                          [routerLink]="['/dashboard']" routerDirection="forward" mode="md">
+                          <ion-img src="/assets/icon/dashboard.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>
+                              Dashboard</p>
                       </ion-item> -->
-                      <ion-item joyrideStep='teamhighlight' title="Team" text="Build your team by adding new users and assigning them required roles." (next)="menuCtrl.close()" (click)="SwitchMenuAccordingtoRoles('team')" *ngIf="userData?.usertype=='company' && userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !=='peengineer'" routerDirection="forward">
-                        <ion-img src="/assets/images/Team.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Team
+                    <!-- <ion-item [routerLink]="['/onboarding']" routerDirection="forward">
+                      <ion-img src="/assets/images/dashboard.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Dashboard</ion-item> -->
+                    <!-- comment on 20220222 -->
+                    <!-- <ion-item joyrideStep='prelimhighlight' title="Site Assessments & Sales Proposals"
+                          text="Consolidated dashboard for all your site assessment and sales proposal requests with real-time status tracking."
+                          (click)="SwitchMenuAccordingtoRoles('prelim')"
+                          *ngIf="userData?.role.type!=='surveyors'  && userData?.role.type!=='peengineer'"
+                          routerDirection="forward" mode="md">
+                          <ion-img src="/assets/icon/Prelim.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>
+                              Sales Proposal
+                              <span class="matBadge"
+                                  *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newprelimscounts > 0">{{
+                                  newprelimscounts }}</span>
+                          </p>
                       </ion-item>
-                      <ion-item  (click)="SwitchMenuAccordingtoRoles('client')" *ngIf="userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin'" routerDirection="forward">
-                        <ion-img src="/assets/icon/clients.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Client
+                      <ion-item joyrideStep='surveyhighlight' title="Surveys"
+                          text="Consolidated dashboard for all your survey requests with real-time status tracking."
+                          mode="md"
+                          *ngIf="userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='peengineer' && userData?.role.type !=='qcinspector' "
+                          (click)="SwitchMenuAccordingtoRoles('survey')" routerDirection="forward">
+                          <ion-img src="/assets/icon/Survey.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Survey
                       </ion-item>
-                      <ion-item  (click)="SwitchMenuAccordingtoRoles('report')" *ngIf="userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin'" routerDirection="forward">
-                        <ion-img src="/assets/icon/report.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Report
+                      <ion-item joyrideStep='permithighlight' title="permit"
+                          text="Consolidated dashboard for all your premit design requests with real-time status tracking."
+                          mode="md" (click)="SwitchMenuAccordingtoRoles('permit')"
+                          *ngIf="(userData?.role.type!=='surveyors' && userData?.role.type!=='peengineer') && !utilities.isspecificClient"
+                          routerDirection="forward">
+                          <ion-img src="/assets/icon/Permit.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Permit
+                              <span class="matBadge"
+                                  *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newpermitscounts > 0">{{
+                                  newpermitscounts }}</span>
+                          </p>
                       </ion-item>
-              </ion-menu-toggle>
-          </ion-list>
-      </ion-content>
-    </ion-menu>
-    <ion-router-outlet id="main-content"></ion-router-outlet>
-  </ion-split-pane>
+                      <ion-item joyrideStep='permithighlight' title="Designs"
+                          text="Consolidated dashboard for all your  design requests with real-time status tracking"
+                          mode="md" (click)="SwitchMenuAccordingtoRoles('permit')"
+                          *ngIf="(userData?.role.type!=='surveyors' && userData?.role.type!=='peengineer') && utilities.isspecificClient"
+                          routerDirection="forward">
+                          <ion-img src="/assets/icon/Permit.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Designs
+                              <span class="matBadge"
+                                  *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newpermitscounts > 0">{{
+                                  newpermitscounts }}</span>
+                          </p>
+                      </ion-item> -->
+                    <!-- comment on 20220128 -->
+                    <!-- <ion-item joyrideStep='inboxhighlight' title="Stay Connected"
+                      text="Consolidated dashboard for your group and individual chats." (next)="openMenu()" mode="md"
+                      [routerLink]="['/groups']" routerDirection="forward">
+                      <ion-img src="/assets/icon/Inbox.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Inbox
+                      </ion-item> -->
+                    <!-- <ion-item  (click)="SwitchMenuAccordingtoRoles('statistics')" *ngIf="userData?.role.type!='clientsuperadmin'" routerDirection="forward">
+                     <ion-img src="/assets/icon/Stats.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;Statistics</ion-item> -->
+                    <!-- comment on - 20220211 => userData?.role.type!=='bd' &&  -->
+                    <!-- comment on 20220222 -->
+                    <!-- <ion-item joyrideStep='pestamphighlight' title="PE Stamps"
+                          text="Consolidated dashboard for all your PE Stamp requests with real-time status tracking."
+                          mode="md" (click)="SwitchMenuAccordingtoRoles('pestamp')"
+                          *ngIf="userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !=='peengineer'"
+                          routerDirection="forward">
+                          <ion-img src="/assets/icon/PEStamping.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>PE
+                              Stamps
+                              <span class="matBadge"
+                                  *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newpestampscount > 0">{{
+                                  newpestampscount }}</span>
+                          </p>
+                      </ion-item> -->
+                    <!-- <ion-item mode="md" routerLink="/coming-soon" *ngIf="userData?.role.type!=='bd' && userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !=='peengineer'" routerDirection="forward">
+                      <ion-img src="/assets/images/Team.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Team
+                    </ion-item> -->
+                    <!-- comment on 20220128 -->
+                    <!-- <ion-item joyrideStep='teamhighlight' title="Team"
+                          text="Build your team by adding new users and assigning them required roles."
+                          (next)="menuCtrl.close()" (click)="SwitchMenuAccordingtoRoles('team')"
+                          *ngIf="userData?.usertype=='company' && userData?.role.type !=='designer' && userData?.role.type !=='surveyors' && userData?.role.type !=='qcinspector' && userData?.role.type !=='peengineer'"
+                          routerDirection="forward">
+                          <ion-img src="/assets/images/Team.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Team
+                      </ion-item> -->
+                    <!-- comment on 20220222 -->
+                    <!-- <ion-item (click)="SwitchMenuAccordingtoRoles('client')"
+                          *ngIf="userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin'"
+                          routerDirection="forward">
+                          <ion-img src="/assets/icon/clients.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Client
+                      </ion-item>
+                      <ion-item (click)="SwitchMenuAccordingtoRoles('report')"
+                          *ngIf="userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin'"
+                          routerDirection="forward">
+                          <ion-img src="/assets/icon/report.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Report
+                      </ion-item> -->
+                    <!-- </ion-menu-toggle> -->
+                    <ion-menu-toggle auto-hide="false">
+                        <div *ngFor="let data of getUserAccessRightsData?.data[0].attributes.accessrights">
+                            <!-- comment dashboard - told by harish -->
+                            <ion-item [style.width.px]="menuwidth" class="menu_da"
+                                [ngClass]="router.url == '/dashboard' ? 'active': 'remove-active'" lines="none"
+                                joyrideStep='dashboardhighlight' title="Dashboard"
+                                text="Here you get an overview of all your requests, along with those that needs your attention."
+                                *ngIf="data.constantname === 'dashboard' && data.visibility"
+                                [routerLink]="['/dashboard']" routerDirection="forward" mode="md">
+                                <ion-img src="/assets/icon/dashboard.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;&nbsp;
+                                <p class="menu_dis">{{data.name}}</p>
+                            </ion-item>
+                            <!-- <ion-item title="Customer" *ngIf="data.constantname === 'customer' && data.visibility" mode="md">
+                              <ion-img src="/assets/icon/customer.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;
+                              <p>{{data.name}}</p>
+                          </ion-item> -->
+                          <ion-item [style.width.px]="menuwidth" class="menu_da"
+                          [ngClass]="[router.url == '/home/design' ? 'active': 'remove-active' , router.url == '/design-overview/new-design' ? 'active': 'remove-active' , router.url == '/analyst-overview/design' ? 'active': 'remove-active']"
+                          lines="none" joyrideStep='prelimhighlight' title="Site Assessments & Sales Proposals"
+                          text="Consolidated dashboard for all your site assessment and sales proposal requests with real-time status tracking."
+                          (click)="SwitchMenuAccordingtoRoles('prelim')"
+                          *ngIf="data.constantname === 'prelim' && data.visibility" routerDirection="forward"
+                          mode="md">
+                          <ion-img src="/assets/icon/Prelim.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;&nbsp;
+                          <p>{{data.name}}
+                              <span class="matBadge" *ngIf="newprelimscounts > 0 && !isClient">{{ newprelimscounts
+                                  }}</span>
+                          </p>
+                          </ion-item>
+                            <ion-item [style.width.px]="menuwidth" class="menu_da"
+                                [ngClass]="[router.url == '/home/survey' ? 'active': 'remove-active',router.url == '/surveyor-overview' ? 'active': 'remove-active' , router.url ==  '/analyst-overview/survey' ? 'active': 'remove-active' , router.url ==  '/surveyor-overview/new-surveys'? 'active': 'remove-active' , router.url ==  '/surveyor-overview/completed-surveys'? 'active': 'remove-active' , router.url ==  '/surveyor-overview/unassigned'? 'active': 'remove-active']"
+                                lines="none" joyrideStep='surveyhighlight' title="Surveys"
+                                text="Consolidated dashboard for all your survey requests with real-time status tracking."
+                                mode="md" *ngIf="data.constantname === 'survey' && data.visibility"
+                                (click)="SwitchMenuAccordingtoRoles('survey')" routerDirection="forward">
+                                <ion-img src="/assets/icon/Survey.svg" class="tab-icon"></ion-img>
+                                &nbsp;&nbsp;&nbsp;
+                                <p>{{data.name}}</p>
+                            </ion-item>
+                            <ion-item [style.width.px]="menuwidth" class="menu_da"
+                                [ngClass]="[router.url == '/permit-home/permit-design' ? 'active': 'remove-active', router.url == '/permit-design-overview/permit-new-design' ? 'active': 'remove-active' , router.url == '/analyst-overview/permit-design' ? 'active': 'remove-active']"
+                                lines="none" joyrideStep='permithighlight' title="permit"
+                                text="Consolidated dashboard for all your premit design requests with real-time status tracking."
+                                mode="md" (click)="SwitchMenuAccordingtoRoles('permit')"
+                                *ngIf="data.constantname === 'permit' && data.visibility" routerDirection="forward">
+                                <ion-img src="/assets/icon/Permit.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;&nbsp;
+                                <p>{{data.name}}
+                                    <span class="matBadge" *ngIf="newpermitscounts > 0 && !isClient">{{ newpermitscounts
+                                        }}</span>
+                                </p>
+                            </ion-item>
+                            <ion-item [style.width.px]="menuwidth" class="menu_da"
+                                [ngClass]="[router.url == '/pestamp-home/pestamp-design' ? 'active': 'remove-active' , router.url == '/peengineer/peengineer-design' ? 'active': 'remove-active']"
+                                lines="none" joyrideStep='pestamphighlight' title="PE Stamps"
+                                text="Consolidated dashboard for all your PE Stamp requests with real-time status tracking."
+                                mode="md" (click)="SwitchMenuAccordingtoRoles('pestamp')"
+                                *ngIf="data.constantname === 'pestamp' && data.visibility" routerDirection="forward">
+                                <ion-img src="/assets/icon/PEStamping.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;&nbsp;
+                                <p>{{data.name}}
+                                    <span class="matBadge" *ngIf="newpestampscount > 0 && !isClient">{{ newpestampscount
+                                        }}</span>
+                                </p>
+                            </ion-item>
+                            <ion-item [style.width.px]="menuwidth" class="menu_da"
+                                [ngClass]="router.url == '/groups' ? 'active': 'remove-active'" lines="none"
+                                joyrideStep='inboxhighlight' title="Stay Connected"
+                                text="Consolidated dashboard for your group and individual chats." (next)="openMenu()"
+                                mode="md" [routerLink]="['/groups']"
+                                *ngIf="data.constantname === 'inbox' && data.visibility" routerDirection="forward">
+                                <ion-img src="/assets/icon/Inbox.svg" class="tab-icon"></ion-img>
+                                &nbsp;&nbsp;&nbsp;
+                                <p>{{data.name}}
+                                    <span class="matBadge" *ngIf="unreadMessageCount > 0"><span style="margin:auto;">{{
+                                            unreadMessageCount }}</span></span>
+                                </p>
+                            </ion-item>
+                            <!-- <ion-item [style.width.px]="menuwidth" class="menu_da"
+                                [ngClass]="[router.url == '/team-home' ? 'active': 'remove-active']" lines="none"
+                                joyrideStep='teamhighlight' title="Team"
+                                text="Build your team by adding new users and assigning them required roles."
+                                (next)="menuCtrl.close()" (click)="SwitchMenuAccordingtoRoles('team')"
+                                *ngIf="data.constantname === 'team' && data.visibility" routerDirection="forward">
+                                <ion-img src="/assets/icon/Team.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;
+                                <p>{{data.name}}</p>
+                            </ion-item> -->
+                            <!-- <ion-item title="Customer" *ngIf="data.constantname === 'transaction' && data.visibility" mode="md">
+                              <ion-img src="/assets/icon/transaction.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;
+                              <p>{{data.name}}</p>
+                          </ion-item>
+                          <ion-item title="Customer" *ngIf="data.constantname === 'archive' && data.visibility" mode="md">
+                              <ion-img src="/assets/icon/archive.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;
+                              <p>{{data.name}}</p>
+                          </ion-item>
+                          <ion-item title="Customer" *ngIf="data.constantname === 'invoice' && data.visibility" mode="md">
+                              <ion-img src="/assets/icon/invoice.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;
+                              <p>{{data.name}}</p>
+                          </ion-item> -->
 
-  <!--
-  <ng-container *ngIf="userData.role.type === 'wattmonkadmins'">
-    <ion-item routerDirection="forward">
-      <ion-img src="/assets/images/permit.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Permit
-        <span class="matBadge" *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newpermitscounts > 0">{{ newpermitscounts }}</span></p>
-      </ion-item>
-  </ng-container> -->
+
+
+                        </div>
+                    </ion-menu-toggle>
+                </ion-list>
+                <ion-list *ngIf="sourceType == 'android' || sourceType == 'iphone'" id="inbox-list" class="menu-list">
+                    <ion-menu-toggle auto-hide="false">
+                        <div *ngFor="let data of getUserAccessRightsData.data[0].attributes.accessrights">
+                            <ion-item [style.width.px]="menuwidth" class="menu_da"
+                                [ngClass]="[router.url == '/home/survey' ? 'active': 'remove-active',router.url == '/surveyor-overview' ? 'active': 'remove-active' , router.url ==  '/analyst-overview/survey' ? 'active': 'remove-active' , router.url ==  '/surveyor-overview/new-surveys'? 'active': 'remove-active' , router.url ==  '/surveyor-overview/completed-surveys'? 'active': 'remove-active' , router.url ==  '/surveyor-overview/unassigned'? 'active': 'remove-active']"
+                                lines="none" joyrideStep='surveyhighlight' title="Surveys"
+                                text="Consolidated dashboard for all your survey requests with real-time status tracking."
+                                mode="md" *ngIf="data.constantname === 'survey' && data.visibility"
+                                (click)="SwitchMenuAccordingtoRoles('survey')" routerDirection="forward">
+                                <ion-img src="/assets/icon/Survey.svg" class="tab-icon"></ion-img>
+                                &nbsp;&nbsp;&nbsp;
+                                <p>{{data.name}}</p>
+                            </ion-item>
+                            <ion-item [style.width.px]="menuwidth" class="menu_da"
+                                [ngClass]="[router.url == '/team-home' ? 'active': 'remove-active']" lines="none"
+                                joyrideStep='teamhighlight' title="Team"
+                                text="Build your team by adding new users and assigning them required roles."
+                                (next)="menuCtrl.close()" (click)="SwitchMenuAccordingtoRoles('team')"
+                                *ngIf="data.constantname === 'team' && data.visibility" routerDirection="forward">
+                                <ion-img src="/assets/icon/Team.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;
+                                <p>{{data.name}}</p>
+                            </ion-item>
+                        </div>
+                    </ion-menu-toggle>
+                </ion-list>
+            </ion-content>
+            <div lines="none" class="log_butt" *ngIf="getuser_one != null">
+                <ion-button fill="clear" id="trigger-button" (click)="logout()" class="align-center justify-center"
+                    style="color:#595959;margin-left:16px;">
+
+
+                    <ion-img src="/assets/icon/logout.svg" style="width:16px;height: 16px;" class="tab-icon"></ion-img>
+                    &nbsp;&nbsp;
+                    <p class="menu_dis"> Log Out</p>
+                </ion-button>
+
+            </div>
+
+
+        </ion-menu>
+        <ion-router-outlet id="main-content" [swipeGesture]="false"></ion-router-outlet>
+    </ion-split-pane>
+
+    <!--
+<ng-container *ngIf="userData.role.type === 'wattmonkadmins'">
+  <ion-item routerDirection="forward">
+    <ion-img src="/assets/images/permit.svg" class="tab-icon"></ion-img>&nbsp;&nbsp;<p>Permit
+      <span class="matBadge" *ngIf="(userData?.role.type=='wattmonkadmins' || userData?.role.type=='superadmin') && newpermitscounts > 0">{{ newpermitscounts }}</span></p>
+    </ion-item>
+</ng-container> -->
+
+    <!-- 
+
+    <ng-container *ngIf="showBottomDraw && !userAccessRights?.viewonly">
+
+        <ion-bottom-drawer [(state)]="drawerState" [minimumHeight]="0" [dockedHeight]="241" [draggable]="false"
+            [disableDrag]="true" [shouldBounce]="false" [distanceTop]="0"
+            style="z-index: 9999 !important;border-radius: 24px 24px 0px 0px;">
+
+            <ion-grid class="drawer">
+                <ion-row>
+                    <ion-col size="12">
+                        <h1 class="dip_tit">Please Confirm</h1>
+                        <div class="dip">Are you sure you want to logout?</div>
+                    </ion-col>
+                </ion-row>
+                <ion-row style="bottom:0;margin-top: 20px;" class="padd">
+                    <ion-col size="6">
+                        <ion-button class="buttcan" fill="clear" (click)="log_ou()">
+                            Yes
+                        </ion-button>
+                    </ion-col>
+                    <ion-col size="6">
+                        <ion-button class="buttcc" fill="clear" (click)="dismissBottomSheet()">
+                            No
+                        </ion-button>
+                    </ion-col>
+
+                </ion-row>
+            </ion-grid>
+
+        </ion-bottom-drawer>
+
+    </ng-container> -->
 </ion-app>

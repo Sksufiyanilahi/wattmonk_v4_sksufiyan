@@ -1,0 +1,752 @@
+
+<ion-content class=" page-text-color" scrollY="true">
+    <ion-grid *ngIf="pestampdesign" class="padd-list page-text-color" style="margin-bottom:30%">
+       
+       
+        
+        <ion-row class="bkg" style="padding:6px;">
+            <ion-col size="12" class="hgt-margin">
+                <!-- <ion-item> -->
+                <label class="desc_tile">Customer Details</label>
+                <!-- </ion-item> -->
+            </ion-col>
+        </ion-row>
+       
+
+        <ion-row class="padd-top" style="padding:6px;">
+            <ion-col  size="6" *ngIf="pestampdesign.personname  !== null"><ion-card class="labb_card m-0">
+                <ion-card-content>
+                    <label class="labb">Name</label>
+                    <p class="labb_dea">{{pestampdesign.personname  == null ? nullValue : pestampdesign.personname  | titlecase}}</p></ion-card-content>
+                </ion-card>
+               </ion-col> <ion-col size="6"  *ngIf="pestampdesign.email !== null" ><ion-card class="labb_card m-0">
+                <ion-card-content>
+                     <label class="labb">Email</label>
+                     <p class="labb_dea">{{pestampdesign.email == null ? nullValue : pestampdesign.email | titlecase}}</p></ion-card-content>
+                    </ion-card>
+                </ion-col>
+           
+       
+       
+       
+            <ion-col size="6"  ><ion-card class="labb_card m-0">
+                <ion-card-content>
+                    <label class="labb">Phone Number</label>
+                    <p class="labb_dea">{{pestampdesign.contactnumber  == null ? nullValue : pestampdesign.contactnumber}}</p></ion-card-content>
+                </ion-card>
+               </ion-col> <ion-col size="6" *ngIf="pestampdesign.createdby.company !== null" ><ion-card class="labb_card m-0">
+                <ion-card-content>
+                     <label class="labb">Company</label>
+                     <p class="labb_dea"> {{pestampdesign.createdby.company == null ? nullValue : pestampdesign.createdby.company | titlecase}}</p></ion-card-content>
+                    </ion-card>
+                 </ion-col>
+                 <ion-col size="12" *ngIf="pestampdesign.deliveryaddress  !== null"> <ion-card class="labb_card m-0" *ngIf="pestampdesign.deliveryaddress  !== null">
+                    <ion-card-content><label class="labb">Shipping Address</label>
+                             <p class="labb_dea" (click)="openAddressOnMap(pestampdesign.deliveryaddress ,$event,pestampdesign.latitude, pestampdesign.longitude)" >{{pestampdesign.deliveryaddress  == null ? nullValue : pestampdesign.deliveryaddress  | titlecase}}</p>
+                            </ion-card-content>
+                        </ion-card></ion-col>
+                </ion-row>
+       
+       
+                <ion-card  mode="md" class="labb_card"   >
+                    <ion-card-content> <ion-row class="bkg">
+                    <ion-col class="hgt-margin">
+                        <!-- <ion-item> -->
+                        <label class="desc_tile">Job Details</label>
+                        <!-- </ion-item> -->
+                    </ion-col>
+                </ion-row>
+                <ion-row *ngIf="pestampdesign.jobtype !== null">
+                    <ion-col size="6" class="labbcont_align">Job Type</ion-col>
+               
+               
+                    <ion-col size="6" class="cont_align" *ngIf="pestampdesign?.jobtype=='pvbattery'">{{pestampdesign?.jobtype=='pvbattery'? 'PV+Battery' : pestampdesign?.jobtype}}</ion-col>
+                    <ion-col size="6" class="cont_align" *ngIf="pestampdesign?.jobtype=='pv'">{{pestampdesign?.jobtype=='pv'? 'PV ' : pestampdesign?.jobtype}}</ion-col>
+                    <ion-col size="6" class="cont_align" *ngIf="pestampdesign?.jobtype=='battery'">{{pestampdesign?.jobtype=='battery'? 'Battery' : pestampdesign?.jobtype}}</ion-col>
+                
+                </ion-row>
+                <ion-row>
+                    <ion-col size="6 " class="labbcont_align">Request Type</ion-col>
+                    <ion-col size="6" class="cont_align">{{pestampdesign?.type == null ? nullValue : pestampdesign?.type}}</ion-col>
+                </ion-row>
+                <ion-row *ngIf="pestampdesign.modeofstamping !== null">
+                    <ion-col size="6 " class="labbcont_align">Mode of Stamping</ion-col>
+                    <ion-col size="6" class="cont_align">
+                        {{pestampdesign?.modeofstamping == null ? nullValue :
+                            pestampdesign?.modeofstamping}}
+                    </ion-col>
+                </ion-row>
+                
+                <ion-row *ngIf="pestampdesign.hardcopies !== null">
+                    <ion-col size="6 " class="labbcont_align">Hard Copies</ion-col>
+                    <ion-col size="6" class="cont_align">
+                        {{pestampdesign?.hardcopies == null ? nullValue :
+                            pestampdesign?.hardcopies}}
+                    </ion-col>
+                </ion-row>
+                </ion-card-content>
+                </ion-card>
+       
+                <ion-card  mode="md" class="labb_card" *ngIf="pestampdesign.propertytype !== null">
+                    <ion-card-content> <ion-row class="bkg">
+                    <ion-col class="hgt-margin">
+                        <!-- <ion-item> -->
+                        <label class="desc_tile">Property Details
+                        </label>
+                        <!-- </ion-item> -->
+                    </ion-col>
+                </ion-row>
+                    <ion-row *ngIf="pestampdesign.propertytype !== null">
+                        <ion-col size="6" ><span class="labbcont_align">Property Type</span></ion-col>
+                        <ion-col size="6">
+                            <span class="cont_align residence">{{pestampdesign.propertytype == null ? nullValue : pestampdesign.propertytype |
+                                titlecase}}</span>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size="6"><span class="labbcont_align residence">{{pestampdesign?.propertytype == null ? nullValue :
+                            pestampdesign?.propertytype + ' Type'}}</span></ion-col>
+                        <ion-col size="6">
+                            <span class="cont_align residence">{{pestampdesign?.propertysubtype == null ? nullValue :
+                                pestampdesign?.propertysubtype}}</span>
+                        </ion-col>
+                    </ion-row></ion-card-content>
+                </ion-card>
+       
+
+      
+
+                <ion-card  mode="md" class="labb_card" >
+                    <ion-card-content>
+                        <ion-row class="bkg">
+                            <ion-col class="hgt-margin">
+                                <!-- <ion-item> -->
+                                <label class="desc_tile">Mounting Details</label>
+                                <!-- </ion-item> -->
+                            </ion-col>
+                        </ion-row>
+                    <ion-row >
+                        <ion-col size="6" class="labbcont_align">Mounting Type</ion-col>
+                        <ion-col size="6" class="cont_align residence">{{pestampdesign?.mountingtype == null ? nullValue :
+                            pestampdesign?.mountingtype}}
+                        </ion-col>
+                    </ion-row>
+                
+                   
+                </ion-card-content>
+                </ion-card>
+
+        
+                <ion-card  mode="md" class="labb_card" *ngIf="pestampdesign.createdby || pestampdesign.createdby!== null">
+                    <ion-card-content>
+                    <ion-row class="bkg">
+                        <ion-col class="hgt-margin">
+                            <!-- <ion-item> -->
+                            <label class="desc_tile">Created Details</label>
+                            <!-- </ion-item> -->
+                        </ion-col>
+                    </ion-row> 
+                    <ion-row *ngIf="pestampdesign.createdby!== null">
+                        <ion-col size="6" class="labbcont_align">Created By</ion-col>
+                        <ion-col size="6" class="cont_align">{{pestampdesign.createdby?.firstname | titlecase}} &nbsp;
+                            {{pestampdesign.createdby?.lastname | titlecase}}</ion-col>
+                    </ion-row> 
+                
+                    <ion-row *ngIf="pestampdesign.created_at!== null">
+                        <ion-col size="6" class="labbcont_align">Created at</ion-col>
+                        <ion-col size="6" class="cont_align">{{pestampdesign.createdAt == null ? nullValue : pestampdesign.createdAt |
+                            date: 'dd/MM/yyyy hh:mm a'}}</ion-col>
+                    </ion-row>
+                
+                </ion-card-content>
+                </ion-card>
+
+
+                <ion-card  mode="md" class="labb_card" *ngIf="pestampdesign.comments || pestampdesign.comments !==null  " >
+                    <ion-card-content>
+                <ion-row class="bkg">
+                    <ion-col size="12" class="hgt-margin">
+                        <!-- <ion-item> -->
+                        <label class="desc_tile">Comments</label>
+                        <!-- </ion-item> -->
+                    </ion-col>
+                    </ion-row>
+                    <ion-row  *ngIf="pestampdesign.comments.length !==0;else nocomments">
+                        <ion-col class="labbcont_align" size="12" *ngFor="let comment of pestampdesign.comments">
+                            <p [innerHTML]="comment?.message | linkify" class="message"></p>
+                
+                
+                
+                            
+                        
+                            <ion-row class="padd"  *ngIf="!userAccessRights?.viewonly">
+                                <ion-col size="6" class="padd author">{{comment.createdby?.firstname}}
+                                    {{comment.createdby?.lastname}}</ion-col>
+                <ion-col class="6" style="margin:0px;float:right;" class="recordupdatedon">
+                                    {{comment.updatedAt
+                                    | date:'dd/MM/yyyy hh:mm a'}}</ion-col>
+                                   
+                
+                                 </ion-row>
+                        
+                        
+                        </ion-col>
+                        
+                
+                        
+                    </ion-row>
+                    <ng-template #nocomments>
+                        <ion-col class="labbcont_align">
+                            No Comments Found
+                        </ion-col>
+                    </ng-template>
+                
+                   
+                </ion-card-content>
+                </ion-card>
+              
+                
+
+                <ion-card  mode="md" class="labb_card" *ngIf="pestampdesign.atticphotos.length > 0">
+                    <ion-card-content><ion-row class="bkg">
+                        <ion-col class="hgt-margin">
+                            <!-- <ion-item> -->
+                            <label class="desc_tile">Attic Photos</label>
+                            <!-- </ion-item> -->
+                        </ion-col>
+                    </ion-row>
+        <ion-row class="ion-no-padding font">
+            <ng-container *ngIf="pestampdesign.atticphotos.length > 0">
+                <ion-col  size="6" class="labbcont_align">Attic Photos</ion-col>
+                <ion-col size="6" class="cont_align">
+                    <div *ngFor="let attic of pestampdesign.atticphotos;let i=index"
+                        style="display: flex;justify-content: flex-end;">
+                        <span class="cont_align" style="color:#FBB200 !important"
+                            (click)="showAtticImage(attic)">{{attic?.name}}{{attic?.ext}}</span>
+                    </div>
+                </ion-col>
+            </ng-container>
+        </ion-row>
+    </ion-card-content>
+</ion-card>
+
+
+<ion-card  mode="md" class="labb_card" *ngIf="pestampdesign.roofphotos.length > 0">
+    <ion-card-content>
+        <ion-row class="bkg">
+            <ion-col class="hgt-margin">
+                <!-- <ion-item> -->
+                <label class="desc_tile">Roof Photos</label>
+                <!-- </ion-item> -->
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-no-padding font">
+            <ng-container *ngIf="pestampdesign.roofphotos.length > 0">
+                <ion-col  size="6" class="labbcont_align">Roof Photos</ion-col>
+                <ion-col size="6" class="cont_align">
+                    <div *ngFor="let roof of pestampdesign.roofphotos;let i=index"
+                        style="display: flex;justify-content: flex-end;">
+                        <span class="cont_align" style="color:#FBB200 !important"
+                            (click)="showRoofImage(roof)">{{roof?.name}}{{roof?.ext}}</span>
+                    </div>
+                </ion-col>
+            </ng-container>
+        </ion-row>
+    </ion-card-content>
+</ion-card>
+
+
+<ion-card  mode="md" class="labb_card" *ngIf="pestampdesign.permitplan.length > 0">
+    <ion-card-content>
+        <ion-row class="bkg">
+            <ion-col class="hgt-margin">
+                <!-- <ion-item> -->
+                <label class="desc_tile">Permit Plan</label>
+                <!-- </ion-item> -->
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-no-padding font">
+            <ng-container *ngIf="pestampdesign.permitplan.length > 0">
+                <ion-col size="6" class="labbcont_align">Permit Plan</ion-col>
+                <ion-col size="6" class="cont_align">
+                    <div *ngFor="let permitplan of pestampdesign.permitplan;let i=index"
+                        style="display: flex;justify-content: flex-end;">
+                        <span class="cont_align" style="color:#FBB200 !important"
+                            (click)="showPermitPlan(permitplan)">{{permitplan?.name}}{{permitplan?.ext}}</span>
+                    </div>
+                </ion-col>
+            </ng-container>
+        </ion-row>
+    </ion-card-content>
+</ion-card>
+
+
+<ion-card  mode="md" class="labb_card" >
+    <ion-card-content>
+        <ion-row class="bkg">
+            <ion-col class="hgt-margin">
+                <!-- <ion-item> -->
+                <label class="desc_tile">3rd Party Stamping</label>
+                <!-- </ion-item> -->
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-no-padding">
+            <ion-col class="thirdpartystamping">
+                <ion-item class="ion-no-padding no-border" lines="none">
+                    <ion-checkbox [checked]="pestampdesign?.thirdpartystamping" disabled="true"></ion-checkbox>
+                    <span style="color:#595959;">
+                        &nbsp;3rd party stamping required
+                    </span>
+                </ion-item>
+                
+            </ion-col>
+            <!-- <ion-col size="auto">
+                <span class="cont_align">{{pestampdesign?.thirdpartystamping == null ? nullValue :
+                    pestampdesign?.thirdpartystamping}}</span>
+            </ion-col> -->
+        </ion-row></ion-card-content>
+    </ion-card>
+    
+
+    <ion-card  mode="md" class="labb_card" *ngIf="(((pestampdesign.status == 'completed' || pestampdesign.status == 'delivered') && !isClient ) || ((pestampdesign.status == 'delivered') && isClient))">
+        <ion-card-content>
+        <!-- "((user.role.type!='clientsuperadmin' && user.role.type!='clientadmin') || ((user.role.type==='clientsuperadmin' || user.role.type === 'clientadmin') && pestampdesign.status==='delivered'))" -->
+        <ion-row class="ion-no-padding font"
+            *ngIf="(((pestampdesign.status == 'completed' || pestampdesign.status == 'delivered') && !isClient ) || ((pestampdesign.status == 'delivered') && isClient))">
+            <ng-container *ngIf="pestampdesign?.stampedfiles?.length > 0">
+                <ion-col><span class="labbcont_align">Stamped Files</span></ion-col>
+                <ion-col size="auto">
+                    <div *ngFor="let stampedfiles of pestampdesign.stampedfiles;let i=index"
+                        style="display: flex;justify-content: flex-end;">
+                        <span class="cont_align" style="color:#FBB200 !important"
+                            (click)="showStampedFile(stampedfiles)">{{stampedfiles?.name}}{{stampedfiles?.ext}}</span>
+                    </div>
+                    <!-- </div> -->
+                </ion-col>
+            </ng-container>
+        </ion-row>
+    </ion-card-content>
+</ion-card>
+
+
+<ion-card  mode="md" class="labb_card" *ngIf="pestampdesign.iselectricalstampeduploaded">
+    <ion-card-content>
+        <!-- <ion-row class="ion-no-padding font" *ngIf="((user.role.type!='clientsuperadmin' && user.role.type!='clientadmin') || ((user.role.type==='clientsuperadmin' || user.role.type === 'clientadmin') && pestampdesign.status==='delivered'))"> -->
+        <ion-row class="ion-no-padding font">
+            <ng-container *ngIf="pestampdesign.iselectricalstampeduploaded">
+                <ion-col><span class="labbcont_align">Electrical Stamped Files</span></ion-col>
+                <ion-col size="auto">
+                    <div *ngFor="let electricalstamped of pestampdesign.electricalstampedfiles"
+                        style="display: flex;justify-content: flex-end;line-height: 1.5rem;">
+                        <span class="cont_align" style="color:#FBB200 !important"
+                            (click)="showStampedFile(electricalstamped)">{{electricalstamped.name}}{{electricalstamped.ext}}</span>
+                    </div>
+                </ion-col>
+            </ng-container>
+        </ion-row>
+    </ion-card-content>
+</ion-card>
+
+
+<ion-card  mode="md" class="labb_card" *ngIf="pestampdesign.isstructuralstampeduploaded">
+    <ion-card-content>
+        <ion-row class="ion-no-padding font">
+            <ng-container *ngIf="pestampdesign.isstructuralstampeduploaded">
+                <ion-col><span class="labbcont_align">Structural Stamped Files</span></ion-col>
+                <ion-col size="auto">
+                    <div *ngFor="let structuralstamped of pestampdesign.structuralstampedfiles"
+                        style="display: flex;justify-content: flex-end;line-height: 1.5rem;">
+                        <span class="cont_align" style="color:#FBB200 !important"
+                            (click)="showStampedFile(structuralstamped)">{{structuralstamped.name}}{{structuralstamped.ext}}</span>
+                    </div>
+                </ion-col>
+            </ng-container>
+        </ion-row>
+    </ion-card-content>
+</ion-card>
+
+
+<ion-card  mode="md" class="labb_card" *ngIf="((pestampdesign.status == 'completed' || pestampdesign.status == 'delivered') && pestampdesign.propertytype == 'commercial')">
+    <ion-card-content>
+        <ion-row class="ion-no-padding"
+            *ngIf="((pestampdesign.status == 'completed' || pestampdesign.status == 'delivered') && pestampdesign.propertytype == 'commercial')">
+            <ion-col><span class="labbcont_align">Working Hours</span></ion-col>
+            <ion-col size="auto">
+                <span class="cont_align">{{pestampdesign?.workinghours == null ? nullValue :
+                    pestampdesign?.workinghours}}</span>
+            </ion-col>
+        </ion-row>
+    </ion-card-content>
+</ion-card>
+
+
+<ion-card  mode="md" class="labb_card" *ngIf="(pestampdesign.status == 'completed' || pestampdesign.status == 'delivered') && (pestampdesign.modeofstamping=='hardcopy' || pestampdesign.modeofstamping=='both')">
+    <ion-card-content>
+        <ion-row class="ion-no-padding"
+            *ngIf="(pestampdesign.status == 'completed' || pestampdesign.status == 'delivered') && (pestampdesign.modeofstamping=='hardcopy' || pestampdesign.modeofstamping=='both')">
+            <ion-col><span class="labbcont_align"> Shipping Charges</span></ion-col>
+            <ion-col size="auto">
+                <span class="cont_align">{{pestampdesign?.deliverycharges == null ? nullValue :
+                    pestampdesign?.deliverycharges}}</span>
+            </ion-col>
+        </ion-row>
+    </ion-card-content>
+</ion-card>
+
+
+
+        
+
+        <!-- <ion-row *ngIf="pestampdesign.isinrevisionstate" class="ion-no-padding ion-margin-top font">
+            <ion-col size="6">
+                <span class="labbcont_align">Revision Comments</span>
+            </ion-col>
+            <ion-col size="6">
+                <div>
+                    <p class="model-space font" style="text-align: right;">{{pestampdesign.revisioncomments == null ?
+                        nullValue : pestampdesign.revisioncomments}}</p>
+
+                </div>
+
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-no-padding font"
+            *ngIf="pestampdesign.isinrevisionstate && pestampdesign.revisionattachments.length > 0">
+            <ion-col> <span class="labbcont_align">Revision Attachments</span></ion-col>
+            <ion-col size="6" style="float: right;" *ngFor="let attachmentfile of pestampdesign.revisionattachments">
+
+                <span class="model-space font" style="text-align:right;color:#FBB200 !important"
+                    (click)="showRevisionImage(attachmentfile)">{{attachmentfile.name.length > 40 ? (attachmentfile.name
+                    | slice: 0:40) + '...' : attachmentfile.name}}{{attachmentfile.ext}}</span>
+            </ion-col>
+
+        </ion-row> -->
+
+        <ion-card  mode="md" class="labb_card" *ngIf="pestampdesign.isinrevisionstate" >
+            <ion-card-content>
+                <ion-row class="bkg">
+                    <ion-col class="hgt-margin">
+                        <!-- <ion-item> -->
+                        <label class="desc_tile">Revision</label>
+                        <!-- </ion-item> -->
+                    </ion-col>
+                </ion-row>
+            <div *ngFor=" let revision of pestampdesign.revisionpestamp" >
+                <ion-row >
+                <ion-col size="6" class="labbcont_align">Revision Comments</ion-col>
+                <ion-col size="6" class="cont_align"><div>
+                    <p class="comment-by" style="text-align: right;margin:0px">{{revision.comment == null
+                        ? nullValue : revision.comment}}</p>
+        
+                </div>
+                </ion-col>
+            </ion-row>
+
+
+            <ion-row class="ion-margin-top"
+            *ngIf="pestampdesign.isinrevisionstate && pestampdesign.revisionpestamp?.length > 0">
+            <ion-col>
+                <ion-grid class="ion-no-padding">
+                    <ion-row class="ion-no-padding" *ngIf="pestampdesign?.revisionpestamp?.length > 0">
+                        <ion-col><span class="labbcont_align">Stamped file</span></ion-col>
+                        <ion-col>
+
+                            <div *ngFor="let revisionpestamp of pestampdesign.revisionpestamp;let i=index"
+                                style="display: flex;justify-content: flex-end;">
+                                <span class="cont_align" style="color:#FBB200 !important"
+                                    *ngFor="let file of revisionpestamp.pestampfile;let i=index">{{file?.name}}</span>
+                            </div>
+
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class="ion-no-padding" *ngIf="pestampdesign?.revisionpestamp?.length > 0">
+                        <ion-col><span class="labbcont_align">Attachment
+                            </span></ion-col>
+                        <ion-col>
+                            <div *ngFor="let revisionpestamp of pestampdesign.revisionpestamp;let i=index"
+                                style="display: flex;justify-content: flex-end;">
+                                <span class="cont_align" style="color:#FBB200 !important"
+                                    *ngFor="let file of revisionpestamp.file;let i=index">{{file?.name}}</span>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-col>
+        </ion-row>
+           <!---- <ion-row >
+                <ion-col size="6" class="labbcont_align">Revision Attachments</ion-col>
+                <ion-col size="6" class="cont_align"><div *ngFor="let attachmentfile of revision.file">
+        
+                    <span class="model-space font" style="text-align:right;color:#FBB200 !important"
+                        (click)="showRevisionImage(attachmentfile)">{{attachmentfile.name.length > 40 ?
+                        (attachmentfile.name | slice: 0:40) + '...' :
+                        attachmentfile.name}}{{attachmentfile.ext}}</span>
+                        </div>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="6" class="labbcont_align"> Design file</ion-col>
+                <ion-col size="6" class="cont_align"><div *ngFor="let designfile of revision.designfile">
+        
+                    <span class="model-space font" style="text-align:right;color:#FBB200 !important"
+                        (click)="showRevisionImage(designfile)">{{designfile.name.length > 40 ? (designfile.name
+                        | slice: 0:40) + '...' : designfile.name}}{{designfile.ext}}</span>
+                        </div></ion-col> 
+            </ion-row>
+        
+        -->
+        </div>
+        </ion-card-content>
+        </ion-card>
+        
+
+
+    
+       <!----<ion-row *ngIf="pestampdesign.isinrevisionstate" class="ion-no-padding ion-margin-top font">
+            <ion-col size="6">
+                <span class="labbcont_align">Revision Comments</span>
+            </ion-col>
+            <ion-col size="6" *ngIf=" pestampdesign?.revisionpestamp?.length > 0">
+                <div *ngFor="let revisionpestamp of pestampdesign.revisionpestamp">
+                    <p [innerHTML]="revisionpestamp?.comment | linkify" class="comment font"
+                        style="text-align: right;margin:0px">}</p>
+                </div>
+            </ion-col>
+        </ion-row>
+        <ion-row class="ion-no-padding font"
+            *ngIf="pestampdesign.isinrevisionstate && pestampdesign?.revisiondesign?.length > 0">
+            <ion-col> <span class="labbcont_align">Revision Attachments</span></ion-col>
+            <ion-col size="6" style="float: right;" *ngFor="let attachmentfile of pestampdesign.revisiondesign">
+                <span class="model-space font" style="text-align:right;color:#FBB200 !important"
+                    (click)="showRevisionImage(attachmentfile)">{{attachmentfile.name.length > 40 ? (attachmentfile.name
+                    | slice: 0:40) + '...' : attachmentfile.name}}</span>
+            </ion-col>
+        </ion-row>-->
+
+      
+        <form novalidate [formGroup]="pestampForm">
+            <ion-card  mode="md" class="labb_card" *ngIf="((pestampdesign.status=='assigned' && pestampdesign.acceptedbypeengineer==true) && user.role.type=='peengineer' && pestampdesign.type !== 'both') || (user.peengineertype=='structural' && pestampdesign.acceptedbystructuralpeengineer && pestampdesign.type == 'both') || (user.peengineertype=='electrical' && pestampdesign.acceptedbyelectricalpeengineer && pestampdesign.type == 'both')">
+                <ion-card-content><ion-grid
+                *ngIf="((pestampdesign.status=='assigned' && pestampdesign.acceptedbypeengineer==true) && user.role.type=='peengineer' && pestampdesign.type !== 'both') || (user.peengineertype=='structural' && pestampdesign.acceptedbystructuralpeengineer && pestampdesign.type == 'both') || (user.peengineertype=='electrical' && pestampdesign.acceptedbyelectricalpeengineer && pestampdesign.type == 'both')">
+                <ion-row>
+                    <ion-col size="12">
+
+                        <ng-container>
+                            <ion-item class="ion-no-padding" (click)="f.click()">
+                                <ion-label class="labbcont_align" position="floating">Stamped Files*</ion-label>
+                                <input type="file" #f class="form_input" (change)="files($event)"
+                                    style="margin-top: 12px;" formControlName="stampedfiles">
+                                <ion-icon name="attach-outline" slot="end" style="margin-top:21px"></ion-icon>
+                            </ion-item>
+                            <div *ngFor="let file of stampfile;let i = index">
+                                <ion-item>
+                                    <ion-col size="11">
+                                        {{file.name}}
+                                    </ion-col>
+                                    <ion-col *ngIf="!userAccessRights?.viewonly" size="1" (click)="removeArc(i)">x
+                                    </ion-col>
+                                </ion-item>
+                            </div>
+                        </ng-container>
+
+                    </ion-col>
+                    <!-- <ion-item> -->
+                    <!-- <ion-label position="floating">architectural design*</ion-label> -->
+                    <ng-container *ngIf="pestampdesign && pestampdesign.stampedfiles !==null">
+                        <div *ngFor="let stamp of pestampdesign.stampedfiles; let i = index">
+                            <ion-item>
+                                <ion-col size="11"> {{stamp.name}}{{stamp.ext}}</ion-col>
+                                <ion-col size="1" *ngIf="!userAccessRights?.viewonly" (click)="remove(stamp, i)">x
+                                </ion-col>
+
+
+                            </ion-item>
+
+
+                        </div>
+                    </ng-container>
+                    <!-- </ion-item> -->
+
+                </ion-row>
+                <ion-row class="ion-no-padding workinghours" *ngIf="pestampdesign.propertytype=='commercial'">
+                    <ng-container>
+                        <ion-col><span class="model-type workinghours">Working Hours</span></ion-col>
+                        <ion-col size="auto">
+                            <!-- <ion-input *ngIf="pestampdesign.workinghours == '0' " class="ht_wt" type="tel" min="1" maxLength="2" formControlName="workinghours" ></ion-input> -->
+                            <ion-input class="ht_wt" type="tel" min="1" formControlName="workinghours"></ion-input>
+                            <!-- </div> -->
+                            <!-- <span *ngIf="pestampForm.get('workinghours').dirty && pestampForm.get('workinghours').hasError('max')"class="cont_align" style="color: red;font-size: 8px;">Maximum hours should be 48</span>
+                <span *ngIf="pestampForm.get('workinghours').dirty && pestampForm.get('workinghours').hasError('min')"class="cont_align" style="color: red;font-size: 8px;">Minimum hours should be 1</span>
+                <span *ngIf="pestampForm.get('workinghours').dirty && pestampForm.get('workinghours').hasError('pattern')"class="cont_align" style="color: red;font-size: 8px;">Please enter valid numbers</span> -->
+                            <div style="height: 5px;">
+                                <div
+                                    *ngIf="pestampForm.get('workinghours').hasError('max') && pestampForm.get('workinghours').dirty">
+                                    <span class="cont_align" style="color: red;font-size: 8px;">Maximum hours
+                                        should be 48</span>
+                                </div>
+                                <!-- <div *ngIf="pestampForm.get('workinghours').dirty && pestampForm.get('workinghours').hasError('pattern')">
+                      <span class="cont_align" style="color: red;font-size: 8px;">Please enter valid numbers</span>
+                  </div> -->
+                                <div
+                                    *ngIf="pestampForm.get('workinghours').hasError('min') && pestampForm.get('workinghours').dirty">
+                                    <span class="cont_align" style="color: red;font-size: 8px;">Minimum hours
+                                        should be 1</span>
+                                </div>
+                            </div>
+                        </ion-col>
+                    </ng-container>
+                </ion-row>
+            </ion-grid></ion-card-content></ion-card>
+        </form>
+
+        <!-- <ion-row *ngIf="pestampdesign.comments !=[] || pestampdesign.comments !==null  " class="ion-no-padding ion-margin-top"> -->
+
+            
+
+        
+         
+        <!-- </ion-row> -->
+
+        <ion-card  mode="md" class="labb_card"  *ngIf="(pestampdesign.status=='assigned'||pestampdesign.status=='completed') && pestampdesign.assignedto!=null">
+            <ion-card-content>
+                <ion-row class="bkg">
+                    <ion-col class="hgt-margin">
+                        <!-- <ion-item> -->
+                        <label class="desc_tile">Assigned
+                            To</label>
+                        <!-- </ion-item> -->
+                    </ion-col>
+                </ion-row>
+        <ion-row size="12" class="ion-no-padding ion-justify-content-center ion-align-items-center"
+            *ngIf="(pestampdesign.status=='assigned'||pestampdesign.status=='completed') && pestampdesign.assignedto!=null">
+            <ion-col class="ion-justify-content-center ion-align-items-center"><span class="labbcont_align">Assigned
+                    to</span></ion-col>
+            <ion-col size="auto">
+                <div class="selected d-flex">
+                    <img *ngIf="pestampdesign.assignedto.contractorlogo && pestampdesign.assignedto.contractorlogo.logo"
+                        [src]="pestampdesign.assignedto.contractorlogo.logo.url" class="assignee-image" />
+                    <div *ngIf="!pestampdesign.assignedto.contractorlogo || !pestampdesign.assignedto.contractorlogo.logo"
+                        class="assignee-image d-flex flex-row align-center justify-center">
+                        <div class="name_div">
+                            <span style="text-transform: capitalize;">{{pestampdesign.assignedto.firstname.substring(0,
+                                1)}}{{pestampdesign.assignedto.lastname.substring(0, 1)}}</span>
+                        </div>
+                    </div>
+                </div>
+            </ion-col>
+        </ion-row></ion-card-content></ion-card>
+        <form novalidate [formGroup]="commentform">
+            <ion-card  mode="md" class="labb_card"  *ngIf="(pestampdesign.status=='assigned' && pestampdesign.acceptedbypeengineer==true) && user.role.type=='peengineer'">
+                <ion-card-content>  <ion-row
+                *ngIf="(pestampdesign.status=='assigned' && pestampdesign.acceptedbypeengineer==true) && user.role.type=='peengineer'">
+                <ion-col size="12" *ngIf="pestampdesign.status =='assigned'">
+                    <span class="input-placeholder">Comments</span>
+                </ion-col>
+                <ion-col size="12" *ngIf="pestampdesign.status =='assigned'" style="padding-top: 0px;">
+                    <ion-textarea style="max-width: 98%;" class="ion-no-margin ion-no-padding comment_box" rows="3"
+                        formControlName="comments"></ion-textarea>
+                </ion-col>
+
+            </ion-row></ion-card-content></ion-card>
+        </form>
+
+
+
+
+
+
+
+
+        
+<ion-card  mode="md" class="labb_card" *ngIf="pestampdesign.status=='requestdeclined'|| ( pestampdesign.requestdeclinereason != null)">
+    <ion-card-content>
+        <span *ngFor="let onhold of pestampdesign.onholdpestamp;let i=index"> 
+              <ion-row class="bkg" *ngIf="onhold.status=='onhold'&& onhold.comment !== null">
+            <ion-col class="hgt-margin">
+                <!-- <ion-item> -->
+                <label class="desc_tile residence"> Reason</label>
+                <!-- </ion-item> -->
+            </ion-col>
+        </ion-row>
+    <ion-row *ngIf="onhold.status=='onhold'&& onhold.comment !== null">
+        <ion-col size="12" class="labbcont_align ">{{onhold.comment}}</ion-col>
+        
+    </ion-row>
+    <ion-row   *ngIf="!userAccessRights?.viewonly && onhold.status=='onhold'&& onhold.comment !== null">
+        <ion-col size="6" class="labbcont_align author">{{onhold.createdby?.firstname}}
+            {{onhold.createdby?.lastname}}</ion-col>
+<ion-col class="6" style="margin:0px;float:right;" class="recordupdatedon">
+            {{onhold.updated_at
+            | date:'dd/MM/yyyy hh:mm a'}}</ion-col>
+           
+
+         </ion-row>
+ 
+</span>
+</ion-card-content>
+</ion-card> 
+       
+
+<ion-card  mode="md" class="labb_card" *ngIf="((pestampdesign.unhold && pestampdesign.requestunholdreason) || (pestampdesign.status == 'requestdeclined' && pestampdesign.requestunholdreason))">
+    <ion-card-content>
+        <span *ngFor="let onhold of pestampdesign.onholdpestamp;let i=index"> 
+              <ion-row class="bkg" *ngIf="onhold.status=='unhold'&& onhold.comment !== null">
+            <ion-col class="hgt-margin">
+                <!-- <ion-item> -->
+                <label class="desc_tile residence">{{onhold.status}} Reason</label>
+                <!-- </ion-item> -->
+            </ion-col>
+        </ion-row>
+    <ion-row *ngIf="onhold.status=='unhold'&& onhold.comment !== null">
+        <ion-col size="12" class="labbcont_align ">{{onhold.comment}}</ion-col>
+        
+    </ion-row>
+    <ion-row   *ngIf="!userAccessRights?.viewonly && onhold.status=='unhold'&& onhold.comment !== null">
+        <ion-col size="6" class="labbcont_align author">{{onhold.createdby?.firstname}}
+            {{onhold.createdby?.lastname}}</ion-col>
+<ion-col class="6" style="margin:0px;float:right;" class="recordupdatedon">
+            {{onhold.updated_at
+            | date:'dd/MM/yyyy hh:mm a'}}</ion-col>
+           
+
+         </ion-row>
+ 
+</span>
+</ion-card-content>
+</ion-card> 
+
+
+
+        <span *ngFor=" let onhold of pestampdesign.onholdpestamp;let i=index"> 
+            <ion-card  mode="md" class="labb_card" *ngIf="onhold.file?.length">
+                <ion-card-content><ion-row class="bkg" *ngIf="onhold.file?.length">
+            <ion-col class="hgt-margin">
+                <!-- <ion-item> -->
+                <label class="desc_tile residence">Request Declined Attachments</label>
+                <!-- </ion-item> -->
+            </ion-col>
+        </ion-row>
+ 
+    <ion-row *ngIf="onhold.file?.length">
+       
+        <ion-col size="12" class="labbcont_align" *ngFor="let attachmentfile of onhold.file" style="color:#FBB200 !important"
+        (click)="showRevisionImage(attachmentfile)"> {{attachmentfile.name.length > 40 ?
+            (attachmentfile.name | slice: 0:40) + '...' : attachmentfile.name}}
+        </ion-col>
+    </ion-row>
+
+    <ion-row   *ngIf="onhold.file?.length && !userAccessRights?.viewonly">
+        <ion-col size="6" class="labbcont_align author">{{onhold.createdby?.firstname}}
+            {{onhold.createdby?.lastname}}</ion-col>
+<ion-col class="6" style="margin:0px;float:right;" class="recordupdatedon">
+            {{onhold.updated_at
+            | date:'dd/MM/yyyy hh:mm a'}}</ion-col>
+           
+
+         </ion-row></ion-card-content>
+        </ion-card>
+        </span>
+
+        
+    </ion-grid>
+</ion-content>

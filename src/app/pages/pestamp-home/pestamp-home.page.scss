@@ -1,0 +1,30 @@
+
+.ht_wt{
+    height:62px;
+    width:62px;
+  }
+  
+  ion-fab-button {
+      --border-width: 2px;
+      --border-style: solid;
+      --box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.3);
+      --border-color: white;
+      --background: #FBB200;
+  }
+  
+  ion-tab-bar {
+      --border: none;
+  }
+  
+  ion-tab-button {
+      font-size: 1em;
+      --color: #9E9E9E;
+      --color-selected: #FBB200;
+  }
+  
+  ion-tab-button[aria-selected=true] {
+      border-bottom: 3px solid #FBB200;
+      border-bottom-left-radius: 2px;
+      border-bottom-right-radius: 2px;
+  }
+  

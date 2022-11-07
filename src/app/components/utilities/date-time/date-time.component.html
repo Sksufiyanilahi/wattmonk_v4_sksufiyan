@@ -1,0 +1,35 @@
+<!--<div class="d-flex flex-column">
+  <span class="input-placeholder">{{placeholder}}*</span>
+  <div class="main-background d-flex flex-row align-center justify-center">
+    <div class="d-flex flex-column align-center justify-center ion-padding date-background" (click)="changeDate()">
+      <span class="month">{{date | date: 'MMM'}}</span>
+      <span class="day">{{date | date: 'dd'}}</span>
+    </div>
+    <div class="ion-padding" (click)="changeTime()">
+      <span class="time">{{date | date: 'hh : mm a'}}</span>
+    </div>
+  </div>
+</div>-->
+<ion-row class="padd">
+  <ion-col size="6"  class="padd" style="padding-left: 0px;" (click)="changeDate()">
+    <span class="input-placeholder">Date* </span>
+
+    <div class="flex-container da_p">
+      <div><ion-icon name="calendar-outline" ></ion-icon></div>
+      <div><span class="customer-address" >{{date | date: 'dd MMM yyyy'}}</span></div>
+     
+    </div>
+    
+  
+  </ion-col>
+  
+  <ion-col size="6"  class="padd" style="padding-right: 0px;" (click)="changeTime()">
+    <span class="input-placeholder">Time*</span>
+
+    <div class="flex-container da_p">
+      <div><ion-icon name="time-outline" ></ion-icon></div>
+      <div><span class="customer-address" >{{date | date: 'hh : mm a'}}</span></div>
+     
+    </div>
+   
+  </ion-col></ion-row>

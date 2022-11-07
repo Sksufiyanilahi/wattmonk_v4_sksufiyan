@@ -1,0 +1,187 @@
+<ion-header class="chat-header">
+    <ion-toolbar>
+        <div class="header-block">
+            <div class="left-block" (click)="goBack()">
+                <span>Back</span>
+                <!-- <img src="/assets/icon/back.svg" class="action-icon" /> -->
+            </div>
+            <div class="name-block" (click)="chatMembersList()" *ngIf="!isError">
+                <div class="charAt-block">
+                    <span class="charAt">{{ setCharacter(name) }}</span>
+                </div>
+                <div class="name">{{name}}</div>
+            </div>
+            <div class="right-block">
+                <img src="/assets/icon/video.svg" class="video-icon" (click)="dialcall()" *ngIf="!isError" />
+                <img src="/assets/icon/call.svg" class="call-icon" (click)="videocall()" *ngIf="!isError" />
+            </div>
+        </div>
+    </ion-toolbar>
+</ion-header>
+<ion-content class="chat-container ion-padding" #content [scrollEvents]="true" (ionScrollStart)="logScrollStart()"
+    (ionScroll)="logScrolling($event)" (ionScrollEnd)="logScrollEnd()">
+    <ion-list *ngIf="!isError">
+        <div *ngIf="groupMessages?.length > 0 || groupMessages != undefined">
+            <div *ngFor="let message of groupMessages; let i = index">
+                <div class="date-block"
+                    *ngIf=" i === 0 ? showDate(message.sentAt) : showDate(message.sentAt, groupMessages[i - 1].sentAt) && !message?.deletedAt">
+                    <div>
+                        {{ i === 0 ? showDate(message.sentAt) : showDate(message.sentAt, groupMessages[i - 1].sentAt) }}
+                    </div>
+                </div>
+                <div style="display: flex;">
+                    <div *ngIf="message.category == 'message' && !message?.deletedAt"
+                        [class]="message.sender?.uid === loggedInUserData?.uid ? 'message you' : 'message me'"
+                        (click)="deleteMessage(message)">
+                        <div class="sender-name" *ngIf="message.sender?.uid !== loggedInUserData?.uid">
+                            {{message.sender.name}}
+                        </div>
+                        <div [class]="message.sender?.uid === loggedInUserData?.uid ? 'message-box sender-msg' : 'message-box received-msg'"
+                            class="" *ngIf="message.type == 'text' && message.text">
+                            <div class="text">{{message.text}}</div>
+                            <div [class]="message.sender?.uid === loggedInUserData?.uid ? 'receipts-time sender-receipts-time' : 'receipts-time receiver-receipts-time'"
+                                *ngIf="
+                              (message.type == 'text' ||
+                              message.category == 'custom' ||
+                              message.type == 'media' ||
+                              message.type == 'image' ||
+                              (message.category === 'message' && message.type == 'audio') ||
+                              (message.category === 'message' && message.type == 'video') ||
+                              message.type == 'file') && !message?.deletedAt
+                          ">
+                                <span class="time">
+                                    {{ message.sentAt * 1000 | date: "h:mm a" }}
+                                </span>
+                                <!-- <span class="message-receipts" *ngIf="message.sender?.uid === loggedInUserData?.uid">
+                              <img *ngIf="message.sentAt && !message.deliveredAt && !message.readAt"
+                                  src="./assets/images/grey-tick-icon.png" />
+                              <img *ngIf="message.deliveredAt && !message.readAt"
+                                  src="./assets/images/grey-double-tick-icon.png" />
+                              <img *ngIf="message.readAt" src="./assets/images/double-tick-blue-icon.svg" />
+                          </span> -->
+                            </div>
+                        </div>
+                        <div *ngIf="message.type == 'video'" class="message-video">
+                            <video controls>
+                                <source src="{{ message.data.url }}" type="audio/mp4" />
+                            </video>
+                        </div>
+                        <div *ngIf="message.type == 'audio'" class="message-audio">
+                            <audio controls>
+                                <source src="{{ message.data.url }}" />
+                            </audio>
+                        </div>
+                        <div *ngIf="message.type == 'media'">
+                            {{ message.text ? "this is text Message" : message.category }}
+                        </div>
+                        <div *ngIf="message.type == 'file'" class="message-file">
+                            <a href="{{ message.data.url }}" target="_blank">
+                                <div>
+                                    <p class="file-icon"></p>
+                                    <p class="file-name">
+                                        {{ message.data.attachments[0].name }}
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
+                        <div *ngIf="message.type == 'custom'">
+                            {{ message.text ? "this is text Message" : message.category }}
+                        </div>
+                        <div *ngIf="message.type == 'image'" class="message-image">
+                            <img src="{{ message.data.url ? message.data.url : message.category }}" />
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="message.category == 'action' && message.message && !message?.deletedAt"
+                    class="action-block">
+                    <div>{{message.message}}</div>
+                </div>
+                <div *ngIf="message.category == 'call' && !message?.deletedAt">
+                    <div *ngIf="message.action == 'unanswered'" style="text-align: center;color: dimgray;">
+                        {{ message.sender.name + " had missed call from " + message.receiver.name }}
+                    </div>
+                    <div *ngIf="message.action == 'rejected'" style="text-align: center;color: dimgray;">
+                        {{ message.sender.name + " had rejected call with " + message.receiver.name }}
+                    </div>
+                    <div *ngIf="message.action == 'ongoing'" style="text-align: center;color: dimgray;">
+                        {{ message.sender.name + " had joined the call with " + message.receiver.name }}
+                    </div>
+                    <div *ngIf="message.action == 'initiated'" style="text-align: center;color: dimgray;">
+                        {{ message.sender.name + " had initiated the call with " + message.receiver.name }}
+                    </div>
+                    <div *ngIf="message.action == 'ended'" style="text-align: center;color: dimgray;">
+                        {{ message.sender.name + " ended the call with " + message.receiver.name }}
+                    </div>
+                    <div *ngIf="message.action == 'cancelled'" style="text-align: center;color: dimgray;">
+                        {{ message.sender.name + " rejected the call with " + message.receiver.name }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="groupMessages?.length == 0 || groupMessages == undefined" style="text-align: center;font-size: 14px;margin-top: 20px;">
+            No Message Found
+        </div>
+    </ion-list>
+    <!-- <img [src]="imgURL" alt=""> -->
+</ion-content>
+<!-- <ion-footer class="ion-no-border" *ngIf="userData.role.type !=='designer' && userData.role.type !=='qcinspector'"
+    class="chat-footer">
+    <ion-toolbar *ngIf="!isError">
+        <div class="chat-box">
+            <ion-input placeholder="Type your message here.." type="text" [(ngModel)]="messageText"
+                (ionBlur)="checkBlur()" (ionFocus)="checkFocus()" (ionInput)="checkInput()">
+            </ion-input>
+            <div class="send-btn" (click)="sendMessage()">
+                <img src="./assets/images/send_msg.svg" />
+                <button (click)='sendMessage()' class="btnSendChatView">
+                  <ion-icon name="send" class="btnSendChat"></ion-icon>
+              </button>
+            </div>
+        </div>
+    </ion-toolbar>
+</ion-footer> -->
+
+<footer  *ngIf="userData.role.type !=='designer' && userData.role.type !=='qcinspector'"
+    class="chat-footer">
+    <div *ngIf="!isError" class="chat-box" style="position: bottom;">
+       <div >
+
+        <label for="upload">
+        <ion-icon (click)="presentAttchmentActionSheet()" style="font-size: 40px; padding-right: 5px;" name="add-circle-outline"></ion-icon>
+           
+            <!-- <input #dummyClick class="inputmessage" type="file"  (change)="onFileSelected($event)" name="img_file" id="img_file" style="display:none"> -->
+            <input #dummyClick [(ngModel)]="filetype" class="inputmessage"  type="file" (change)="onFileSelected($event,'img_file')"  name="img_file" id="img_file" style="display:none" accept="image/*">
+            <input #videoClick [(ngModel)]="filetype" class="inputmessage" type="file" (change)="onFileSelected($event,'vid_file')"  name="vid_file" id="vid_file" style="display:none" accept="video/*">
+            <input #audioClick [(ngModel)]="filetype" class="inputmessage" type="file" (change)="onFileSelected($event,'audio_file')" name="audio_file" id="audio_file" style="display:none" accept="audio/*">
+            <input #filesClick [(ngModel)]="filetype" class="inputmessage" type="file" (change)="onFileSelected($event,'files_file')" name="files_file" id="files_file" style="display:none" >
+            
+        </label>
+
+        <!-- <input type="file"  name="img_file" id="img_file"/>  -->
+
+        <!-- <ion-icon (click)="presentAttchmentActionSheet()" style="font-size: 40px; padding-right: 5px;" name="add-circle-outline"></ion-icon> -->
+        <!-- <ion-icon (click)="sendMsg($event)" style="font-size: 40px; padding-right: 5px;" name="add-circle-outline"></ion-icon> -->
+        
+    </div>
+
+    <!-- <img [src]="imgURL" alt=""> -->
+    <ng-template (click)="onMentionSelect(selection)" #mentionListTemplate let-item="item">
+        <span>{{item.name}}</span>
+        <!-- <span>{{item.uid}}</span> -->
+    </ng-template>
+    <input contenteditable="true" class="inputmessage" type="text" placeholder="Type your message here.."  [(ngModel)]="messageText"
+     [mentionConfig]="{  items: items,
+        dropUp: true,
+        labelKey: 'name',
+        mentionSelect: onMentionSelect}" 
+    [mentionListTemplate]="mentionListTemplate">  
+       
+     
+        <div class="send-btn" (click)="sendMessage()">
+            <img src="./assets/images/send_msg.svg" />
+            <!-- <button (click)='sendMessage()' class="btnSendChatView">
+              <ion-icon name="send" class="btnSendChat"></ion-icon>
+          </button> -->
+        </div>
+        </div>
+</footer>

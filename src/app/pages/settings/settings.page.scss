@@ -1,0 +1,52 @@
+._color{
+    color: #6e6e6e;
+    }
+    
+    .title {
+    font-size: 1.3em;
+    top: 12%;
+    position: absolute;
+    }
+    
+    .text-bold {
+    color: black;
+    font-weight: bold;
+    }
+    
+    ._font{
+        font-size: 0.9em;
+    }
+    
+    ._font1{
+        font-size: 0.8em;
+    }
+    
+    ion-toggle{
+        //  padding-left: 0px;
+        --background: #fcefd5;
+      --background-checked: #fcefd5;
+    
+      --handle-background: white;
+      --handle-background-checked: #EDC773;
+      height: 8px;
+    
+    }
+    
+    .ionPadding{
+        padding-top: 0px;
+    }
+    
+    .ionPadding1{
+        padding-top: 5px;
+    }
+    
+    .ApplyBtn{
+        --background:#EDC773;
+          color: #434343;
+          width: auto;
+          height: 35px;
+          border-radius: 7px;
+          display: block;
+          font-size: 13px;
+      }
+      

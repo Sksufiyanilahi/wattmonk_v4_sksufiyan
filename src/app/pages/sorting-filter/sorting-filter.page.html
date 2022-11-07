@@ -1,0 +1,128 @@
+<div>
+
+    <ion-toolbar>
+
+
+        <ion-row style="margin-top: 10px;">
+            <ion-col>
+                <h4 class="tit_mod" style="margin-left: 16px;margin-top:6px;">Sort</h4>
+            </ion-col>
+            <ion-col>
+                <ion-button fill="clear" size="small" style="float: right;" class="ion-no-padding" (click)="dismiss()">
+                    <ion-icon name="close-outline" style="color: #333029;" size="large"></ion-icon>
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-toolbar>
+
+
+
+</div>
+<ion-content>
+    <form [formGroup]="sortingform" novalidate style="overflow:scroll">
+        <div style="margin: 8px;">
+
+            <ion-list class="obd_class" lines="none">
+
+                <ion-item class="hed"> Order Type</ion-item>
+
+                <ion-radio-group (ionChange)="filtersortvalue($event)" formControlName="orderbyfilterstatus">
+                    <ion-item lines="none" style="margin-top: -10px;">
+
+                        <ion-label class="tit">Created At</ion-label>
+                        <ion-radio mode="md" slot="end" value='created_at'></ion-radio>
+
+                    </ion-item>
+                </ion-radio-group>
+
+
+
+                <ion-item class="hed" lines="none" style="margin-top: -10px;" *ngIf="isOrderFilterApplied">
+                    Order By
+                </ion-item>
+
+                <ion-radio-group (ionChange)="filtersortvalue1($event)" formControlName="ordertypefilterstatus"
+                    *ngIf="isOrderFilterApplied">
+                    <ion-item lines="none" style="margin-top: -10px;">
+
+                        <ion-label class="tit">Ascending</ion-label>
+                        <ion-radio mode="md" slot="end" value='asc'></ion-radio>
+
+                    </ion-item>
+                    <ion-item lines="none" style="margin-top: -10px;">
+
+                        <ion-label class="tit">Descending</ion-label>
+                        <ion-radio mode="md" slot="end" value='desc'></ion-radio>
+
+                    </ion-item>
+                </ion-radio-group>
+
+
+                <span *ngIf="!isClient && !isPeSuperadmin">
+
+                    <ion-item class="hed" lines="none" style="margin-top: -10px;">
+
+                        Design Type
+
+                    </ion-item>
+
+
+                    <ion-radio-group (ionChange)="filterStatusvalue($event)" formControlName="statusfilter">
+                        <!--<ion-item lines="none" style="margin-top: -10px;" >
+
+            <ion-label class="tit">New Design</ion-label>
+            <ion-radio mode="md" slot="end"  value='newdesign' ></ion-radio>
+
+          </ion-item>-->
+                        <ion-item lines="none" style="margin-top: -10px;">
+
+                            <ion-label class="tit">Revision Design</ion-label>
+                            <ion-radio mode="md" slot="end" value='revision' [checked]="true"></ion-radio>
+
+                        </ion-item>
+                    </ion-radio-group>
+                </span>
+                <ion-item class="hed" lines="none" style="margin-top: -10px;"
+                    *ngIf="!isClient && requestType == 'pestamp'">
+
+                    Priority
+
+                </ion-item>
+
+
+                <ion-radio-group *ngIf="!isClient && requestType == 'pestamp'" (ionChange)="prioritycheck($event)"
+                    formControlName="priority">
+                    <ion-item lines="none" style="margin-top: -10px;">
+
+                        <ion-label class="tit">Priority</ion-label>
+                        <ion-radio mode="md" slot="end" value='true'></ion-radio>
+
+                    </ion-item>
+
+                </ion-radio-group>
+
+
+            </ion-list>
+
+        </div>
+
+    </form>
+
+</ion-content>
+
+
+
+<div class="flex bottom_buu" style="padding-bottom:30px;background-color: #fff;">
+
+    <div style="width:100%; margin-left:16px;">
+        <ion-button class="buttcan" fill="clear" (click)="updateRadioValue()">
+            Clear
+        </ion-button>
+    </div>
+    <div style="width:5%"></div>
+    <div style="width:100% ;margin-right:16px;">
+        <ion-button class="buttcc" fill="clear" (click)="applyFilter()">
+            Apply
+        </ion-button>
+    </div>
+</div>

@@ -1,0 +1,161 @@
+<!--<ion-header>
+  <ion-toolbar>
+    <ion-title>Edit Profile</ion-title>
+  </ion-toolbar>
+</ion-header>-->
+<ion-header class="ion-no-border" style="background: #F8F8F8;">
+  
+  <ion-row>
+      <ion-col size="2">
+        
+          <ion-button fill="clear" (click)="dismiss()" [disabled]='enableDisable' >
+              <ion-img fill="clear" src="assets/images/back.svg" class="action-icon"></ion-img>
+              
+          </ion-button>
+        
+      </ion-col>
+      <ion-col size="8" >
+          <p  class="iti" >Edit Profile</p>
+      </ion-col>
+
+      <ion-col size="2">
+        
+      </ion-col>
+     
+  </ion-row>
+
+</ion-header>
+<ion-content >
+  <div class="form_mar">
+    <form [formGroup]="profileEdit" novalidate>
+    <div style="display:flex;">
+      <div style="width:100%">
+        <span class="input-placeholder">First Name*</span>
+          <ion-input type="text" formControlName="firstname" placeholder="Ex. john" class="form_input"></ion-input>
+        
+        <div >
+          <div *ngIf="profileEdit.get('firstname').hasError('pattern') && profileEdit.get('firstname').dirty">
+              <span class="error">{{firstNameError}}</span>
+          </div>
+          <div *ngIf="profileEdit.get('firstname').value === '' && profileEdit.get('firstname').dirty">
+              <span class="error">{{fieldRequired}}</span>
+          </div>
+      </div>
+      </div><div style="width:5%"></div>
+      <div style="width:100%">
+        <span class="input-placeholder">Last Name*</span>
+          <ion-input type="text" formControlName="lastname" placeholder="Ex. Deo" class="form_input"></ion-input>
+        
+        <div >
+          <div *ngIf="profileEdit.get('lastname').hasError('pattern') && profileEdit.get('lastname').dirty">
+              <span class="error">{{lastNameError}}</span>
+          </div>
+          <div *ngIf="profileEdit.get('lastname').value === '' && profileEdit.get('lastname').dirty">
+              <span class="error">{{fieldRequired}}</span>
+          </div>
+      </div>
+      </div>
+    </div>
+    <!-- <div >
+      <div>
+        <span class="input-placeholder">Email*</span>
+          <ion-input type="email" formControlName="email" placeholder="Ex. john@wattmonk.com" class="form_input" [disabled]="true"></ion-input>
+       
+        <div >
+          <div *ngIf="profileEdit.get('email').hasError('pattern') && profileEdit.get('email').dirty">
+              <span class="error">{{emailError}}</span>
+          </div>
+          <div *ngIf="profileEdit.get('email').value === '' && profileEdit.get('email').dirty">
+              <span class="error">{{fieldRequired}}</span>
+          </div>
+      </div>
+      </div>
+    </div> -->
+    <div>
+      <div>
+        <span class="input-placeholder">Address*</span>
+        <ion-input type="text" class="form_input" placeholder="Ex.USA" autocapitalize="words" formControlName="address"
+        autocomplete="off" (ionChange)="updateSearchResults($event)" (ionClear)="onCancel()"
+        debounce="300" (ionFocus)="forAutoComplete($event)" (ionBlur)="onBlur()"></ion-input>
+        <div >
+          <ion-list style="padding:0px" *ngIf="!isSelectSearchResult">
+            <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
+                <span>
+                    {{ item.description }}
+                </span>
+            </ion-item>
+        </ion-list>
+          <div *ngIf="profileEdit.get('address').value === '' && profileEdit.get('address').dirty">
+              <span class="error">{{fieldRequired}}</span>
+          </div>
+      </div>
+      </div>
+    </div>
+    <!-- <div>
+      <div>
+        <ion-item  lines="none">
+          <mat-form-field style="width: 100%; margin-top: 8px;" class="ion-no-padding">
+              <input type="text" placeholder="Country*" class="form_input font-size" matInput [matAutocomplete]="auto" autocomplete="off" formControlName="country">
+
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let country of filteredCountries | async" [value]="country.country"
+                (onSelectionChange)="setSelectedCountry(country)" class="font">{{country.country}}</mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+      </ion-item>
+        <div *ngIf="profileEdit.get('country').value === '' && profileEdit.get('country').dirty">
+        <span class="error">{{fieldRequired}}</span>
+    </div>
+      </div>
+      </div> -->
+      <div>
+      <div>
+        <span class="input-placeholder">Phone*</span>
+          <ion-input type="tel" (keypress)="NumbersOnly($event)" formControlName="phone" placeholder="Ex. 1234-4567-90" class="form_input" required></ion-input>
+       
+        <div >
+          <div *ngIf="profileEdit.get('phone').hasError('pattern') && profileEdit.get('phone').dirty">
+              <span class="error">{{phoneError}}</span>
+          </div>
+          <div *ngIf="profileEdit.get('phone').value === '' && profileEdit.get('phone').dirty">
+              <span class="error">{{fieldRequired}}</span>
+          </div>
+      </div>
+      </div>
+    </div>
+    <!-- <div>
+      <div>
+        <ion-item lines="none">
+          <ion-label position="floating">Company</ion-label>
+          <ion-input type="text" formControlName="company" class="form-control"></ion-input>
+        </ion-item>
+        <div >
+          <div *ngIf="profileEdit.get('company').hasError('pattern') && profileEdit.get('company').dirty">
+              <span class="error">{{companyError}}</span>
+          </div>
+          <div *ngIf="profileEdit.get('company').value === '' && profileEdit.get('company').dirty">
+              <span class="error">{{fieldRequired}}</span>
+          </div>
+      </div>
+      </div>
+    </div> -->
+    
+  </form>
+</div>
+</ion-content>
+
+
+
+<div class="flex bottom_buu" style="padding-bottom:30px;">
+      
+      <div style="width:100%; margin-left:16px;">
+        <ion-button class="buttcan1"   fill="clear" (click)="dismiss()" >
+          Cancel
+        </ion-button>
+      </div><div style="width:5%"></div>
+      <div style="width:100% ;margin-right:16px;" >
+        <ion-button class="buttcc"    fill="clear" (click)="updateProfile()" >
+          Submit
+        </ion-button>
+      </div>
+    </div>

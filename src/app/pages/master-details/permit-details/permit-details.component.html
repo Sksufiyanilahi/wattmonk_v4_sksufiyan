@@ -1,0 +1,1383 @@
+<ion-header class="ion-no-border " *ngIf="permitdesign">
+    
+  <!-- <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()" [disabled]=enableDisable>
+    <ion-img src="/assets/images/back.svg" class="action-icon"></ion-img>
+</ion-button> -->
+<!-- <ion-col size="auto">
+<ion-button fill="clear" disabled="true" size="small" class="action-icon">
+</ion-button>
+</ion-col> -->
+<!--<ion-col class="ion-text-center" size="9" style="padding-left: 27px;">
+  <ion-grid class="ion-align-items-center ion-justify-content-center">
+      <ion-row class="ion-align-items-center ion-justify-content-center">
+          <span class="survey-name ion-text-center">{{permitdesign?.name == null ? nullValue :
+              permitdesign?.name}}</span>
+      </ion-row>
+      <ion-row class="ion-align-items-center ion-justify-content-center">
+          <span class="survey-email ion-text-center"
+              *ngIf="user.designertype!='external'">{{permitdesign?.email == null ? nullValue :
+              permitdesign?.email}}</span>
+      </ion-row>
+  </ion-grid>
+</ion-col>-->
+<!-- <ion-col size="1" *ngIf="!userAccessRights?.viewonly && permitdesign.createdby.id == user.id && (permitdesign.status == 'created' || permitdesign.status == 'requestdeclined'||(permitdesign.status == 'outsourced' && !user.ispaymentmodeprepay))">
+<ion-button fill="clear" size="small" class="ion-no-padding"
+    [routerLink]="['/permitschedule/',permitdesignId]" routerDirection="forward" [disabled]=enableDisable>
+    <ion-img src="/assets/images/edit.svg" class="action-icon"></ion-img>
+</ion-button>
+</ion-col>
+<ion-col size="1" *ngIf="!userAccessRights?.viewonly && permitdesign.createdby.id == user.id && (permitdesign.status == 'created' || permitdesign.status == 'requestdeclined' ||(permitdesign.status == 'outsourced' && !user.ispaymentmodeprepay))">
+<ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteDesign()" [disabled]=enableDisable>
+    <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>
+</ion-button>
+</ion-col> -->
+
+<!--<ion-grid class="position-relative ion-no-padding">
+<ion-row class=" header-half-height">
+</ion-row>
+<ion-row class="header-half-height">
+
+</ion-row>
+<ion-row class="position-absolute header-icon-position full-width">
+<ion-col class="flex-center">
+  <ion-img src="/assets/detailpage/Permit.svg" class="header-icon"></ion-img>
+</ion-col>
+</ion-row>
+<ion-row class="ion-no-padding"
+*ngIf="isUserDesigner || isUserAnalyst||(permitdesign.status=='reviewassigned' && permitdesign.reviewassignedto.id==user.id)">
+<ion-col class="flex-center">
+  <countdown-timer [countDownTimerConfig]="timerConfig"></countdown-timer>
+</ion-col>
+</ion-row>
+</ion-grid>-->
+</ion-header>
+
+<ion-content class="page-text-color" scrollY="true">
+<ion-grid *ngIf="permitdesign" class="padd-list page-text-color" style="margin-bottom:30%">
+
+<ion-row class="bkg" style="padding:6px;">
+<ion-col size="12" class="hgt-margin">
+  <!-- <ion-item> -->
+  <label class="desc_tile">Customer and Site Details</label>
+  <!-- </ion-item> -->
+</ion-col>
+</ion-row>
+
+
+<ion-row style="padding:6px;">
+<ion-col  size="6" *ngIf="permitdesign.name !== null"><ion-card class="labb_card m-0">
+  <ion-card-content>
+      <label class="labb">Name</label>
+      <p class="labb_dea">{{permitdesign.name == null ? nullValue : permitdesign.name | titlecase}}</p></ion-card-content>
+  </ion-card>
+ </ion-col> <ion-col size="6"  *ngIf="permitdesign.email !== null" ><ion-card class="labb_card m-0">
+  <ion-card-content>
+       <label class="labb">Email</label>
+       <p class="labb_dea">{{permitdesign.email == null ? nullValue : permitdesign.email | titlecase}}</p></ion-card-content>
+      </ion-card>
+  </ion-col>
+
+
+
+
+<ion-col size="6" *ngIf="permitdesign.phonenumber!== null" ><ion-card class="labb_card m-0">
+  <ion-card-content>
+      <label class="labb">Phone Number</label>
+      <p class="labb_dea">{{permitdesign.phonenumber == null ? nullValue : permitdesign.phonenumber | titlecase}}</p></ion-card-content>
+  </ion-card>
+ </ion-col> <ion-col size="6" *ngIf="permitdesign.company !== null" ><ion-card class="labb_card m-0">
+  <ion-card-content>
+       <label class="labb">Company</label>
+       <p class="labb_dea"> {{permitdesign.company == null ? nullValue : permitdesign.company | titlecase}}</p></ion-card-content>
+      </ion-card>
+   </ion-col>
+   <ion-col size="12" *ngIf="user.designertype!='external'"> <ion-card class="labb_card m-0" *ngIf="permitdesign.address !== null">
+      <ion-card-content><label class="labb">Address</label>
+               <p class="labb_dea" (click)="openAddressOnMap(permitdesign.address,$event,permitdesign.latitude, permitdesign.longitude)" >{{permitdesign.address == null ? nullValue : permitdesign.address | titlecase}}</p>
+              </ion-card-content>
+          </ion-card></ion-col>
+  </ion-row>
+
+
+
+<ion-card  mode="md" *ngIf="user.designertype!='external' && permitdesign?.solarcapacity != null" class="labb_card" >
+<ion-card-content> <ion-row class="bkg">
+<ion-col class="hgt-margin">
+<!-- <ion-item> -->
+<label class="desc_tile">Solar Details</label>
+<!-- </ion-item> -->
+</ion-col>
+</ion-row>
+<ion-row *ngIf="permitdesign?.solarcapacity != null">
+<ion-col size="6 " class="labbcont_align">Solar Capacity</ion-col>
+<ion-col size="6" class="cont_align">{{permitdesign?.solarcapacity}} kW</ion-col>
+</ion-row>
+
+<ion-row *ngIf="permitdesign?.monthlybill != null">
+<ion-col size="6 " class="labbcont_align">Annual Units</ion-col>
+<ion-col size="6" class="cont_align">{{permitdesign?.monthlybill}} kW</ion-col>
+</ion-row>
+
+
+</ion-card-content></ion-card>
+
+<ion-card  mode="md" class="labb_card" *ngIf="permitdesign.solarmake?.name !== null">
+<ion-card-content> <ion-row class="bkg">
+<ion-col class="hgt-margin">
+<!-- <ion-item> -->
+<label class="desc_tile">Module Details</label>
+<!-- </ion-item> -->
+</ion-col>
+</ion-row>
+<ion-row *ngIf="permitdesign.solarmake?.name !== null">
+<ion-col size="6" class="labbcont_align">Make</ion-col>
+<ion-col size="6" class="cont_align">{{permitdesign.solarmake?.name == null ? nullValue :
+permitdesign.solarmake?.name}}</ion-col>
+</ion-row>
+<ion-row>
+<ion-col size="6 " class="labbcont_align">Model</ion-col>
+<ion-col size="6" class="cont_align">{{permitdesign.solarmodel?.name == null ? nullValue : permitdesign.solarmodel?.name}}</ion-col>
+</ion-row>
+<ion-row>
+<ion-col size="6 " class="labbcont_align">Module Count</ion-col>
+<ion-col size="6" class="cont_align">{{permitdesign.modulecount}}</ion-col>
+</ion-row>
+</ion-card-content>
+</ion-card>
+
+
+<ion-card  mode="md" class="labb_card" *ngIf="permitdesign?.designinverters?.length > 0">
+<ion-card-content> <ion-row class="bkg">
+<ion-col class="hgt-margin">
+<!-- <ion-item> -->
+<label class="desc_tile">Inverter Details</label>
+<!-- </ion-item> -->
+</ion-col>
+</ion-row>
+<ion-grid  *ngFor="let inverters of permitdesign?.designinverters; let i = index">
+<ion-row >
+<ion-col size="6" class="labbcont_align">Make</ion-col>
+<ion-col size="6" class="cont_align">{{inverters.invertermake?.name == null ? nullValue :
+inverters.invertermake?.name}}</ion-col>
+</ion-row>
+<ion-row>
+<ion-col size="6 " class="labbcont_align">Model</ion-col>
+<ion-col size="6" class="cont_align">{{inverters.invertermodel?.name == null ? nullValue :
+inverters.invertermodel?.name}} </ion-col>
+</ion-row>
+<ion-row>
+<ion-col size="6 " class="labbcont_align">Inverter Count</ion-col>
+<ion-col size="6" class="cont_align">{{inverters.inverterscount}}</ion-col>
+</ion-row></ion-grid>
+</ion-card-content>
+</ion-card>
+
+<ion-card  mode="md" class="labb_card" *ngIf="permitdesign?.designbatteries?.length > 0 && permitdesign?.jobtype=='pvbattery'">
+  <ion-card-content> <ion-row class="bkg">
+  <ion-col class="hgt-margin">
+      <!-- <ion-item> -->
+      <label class="desc_tile">Battery Details</label>
+      <!-- </ion-item> -->
+  </ion-col>
+</ion-row>
+<ion-grid  *ngFor="let battery of permitdesign?.designbatteries; let i = index">
+<ion-row >
+  <ion-col size="6" class="labbcont_align">Make</ion-col>
+  <ion-col size="6" class="cont_align">{{battery.batterymake?.name == null ? nullValue :
+      battery.batterymake?.name}}</ion-col>
+</ion-row>
+<ion-row>
+  <ion-col size="6 " class="labbcont_align">Model</ion-col>
+  <ion-col size="6" class="cont_align">{{battery.batterymodel?.name == null ? nullValue :
+      battery.batterymodel?.name}} </ion-col>
+</ion-row>
+<ion-row>
+  <ion-col size="6 " class="labbcont_align">Battery Count</ion-col>
+  <ion-col size="6" class="cont_align">{{battery.batteriescount}}</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col size="6 " class="labbcont_align">Battery Combiner Box</ion-col>
+  <ion-col size="6" class="cont_align"><span
+    *ngIf="battery.batterycombinerbox">
+    Yes</span>
+  <span *ngIf="!battery.batterycombinerbox">
+    No</span></ion-col>
+</ion-row>
+</ion-grid>
+</ion-card-content>
+</ion-card>
+
+
+<ion-card  mode="md" class="labb_card"   >
+<ion-card-content> <ion-row class="bkg">
+<ion-col class="hgt-margin">
+<!-- <ion-item> -->
+<label class="desc_tile">Job Details</label>
+<!-- </ion-item> -->
+</ion-col>
+</ion-row>
+<ion-row *ngIf="permitdesign.jobtype !== null">
+<ion-col size="6" class="labbcont_align">Job Type</ion-col>
+
+
+<ion-col size="6" class="cont_align" *ngIf="permitdesign?.jobtype=='pvbattery'">{{permitdesign?.jobtype=='pvbattery'? 'PV+Battery' : permitdesign?.jobtype}}</ion-col>
+<ion-col size="6" class="cont_align" *ngIf="permitdesign?.jobtype=='pv'">{{permitdesign?.jobtype=='pv'? 'PV ' : permitdesign?.jobtype}}</ion-col>
+<ion-col size="6" class="cont_align" *ngIf="permitdesign?.jobtype=='battery'">{{permitdesign?.jobtype=='battery'? 'Battery' : permitdesign?.jobtype}}</ion-col>
+
+
+</ion-row>
+
+<ion-row *ngIf="permitdesign.mpurequired !== null">
+<ion-col size="6 " class="labbcont_align">MPU Required</ion-col>
+<ion-col size="6" class="cont_align">
+{{permitdesign?.mpurequired ? 'Yes' : 'No'}}
+</ion-col>
+</ion-row>
+
+<ion-row *ngIf="permitdesign.esiid !== null && permitdesign.esiid !== ''">
+<ion-col size="6 " class="labbcont_align">ESI ID</ion-col>
+<ion-col size="6" class="cont_align">
+{{permitdesign?.esiid == null ? 'nullValue' : permitdesign?.esiid}}
+</ion-col>
+</ion-row>
+</ion-card-content>
+</ion-card>
+
+
+<ion-card  mode="md" class="labb_card" *ngIf="permitdesign.projecttype !== null">
+<ion-card-content> <ion-row class="bkg">
+<ion-col class="hgt-margin">
+<!-- <ion-item> -->
+<label class="desc_tile">Property Details
+</label>
+<!-- </ion-item> -->
+</ion-col>
+</ion-row>
+<ion-row *ngIf="permitdesign.projecttype !== null">
+<ion-col size="6" ><span class="labbcont_align">Property Type</span></ion-col>
+<ion-col size="6">
+<span class="cont_align residence">{{permitdesign.projecttype == null ? nullValue : permitdesign.projecttype |
+  titlecase}}</span>
+</ion-col>
+</ion-row>
+<ion-row>
+<ion-col size="6"><span class="labbcont_align residence">{{permitdesign?.projecttype == null ? nullValue :
+permitdesign?.projecttype + ' Type'}}</span></ion-col>
+<ion-col size="6">
+<span class="cont_align residence">{{permitdesign?.projectsubtype == null ? nullValue :
+  permitdesign?.projectsubtype}}</span>
+</ion-col>
+</ion-row></ion-card-content>
+</ion-card>
+<ion-card  mode="md" class="labb_card" *ngIf="permitdesign.newconstruction !== null">
+<ion-card-content>
+<ion-row class="bkg">
+<ion-col class="hgt-margin">
+  <!-- <ion-item> -->
+  <label class="desc_tile">Construction Details</label>
+  <!-- </ion-item> -->
+</ion-col>
+</ion-row>
+<ion-row *ngIf="permitdesign.newconstruction !== null">
+<ion-col size="6" class="labbcont_align">New Construction</ion-col>
+<ion-col size="6" class="cont_align">{{permitdesign.newconstruction == null ? nullValue : permitdesign.newconstruction | titlecase}}
+</ion-col>
+</ion-row>
+</ion-card-content>
+</ion-card>
+
+<ion-card  mode="md" class="labb_card" *ngIf="permitdesign.attachments.length > 0">
+<ion-card-content>
+<ion-row class="bkg">
+<ion-col class="hgt-margin">
+  <!-- <ion-item> -->
+  <label class="desc_tile">Attachments</label>
+  <!-- </ion-item> -->
+</ion-col>
+</ion-row>
+<ion-row *ngFor="let attachment of permitdesign.attachments;let i=index">
+<ion-col size="12" class="labbcont_align">
+<span  style="color:#FBB200 !important"
+  (click)="showurl(i,'attachments')">{{attachment?.name}}</span>
+
+
+</ion-col>
+</ion-row>
+
+
+
+
+</ion-card-content>
+</ion-card>
+
+
+<ion-card  mode="md" class="labb_card" *ngIf="permitdesign.architecturaldesign?.length > 0">
+<ion-card-content>
+<ion-row class="bkg">
+<ion-col class="hgt-margin">
+  <!-- <ion-item> -->
+  <label class="desc_tile">Architectural Design</label>
+  <!-- </ion-item> -->
+</ion-col>
+</ion-row>
+<ion-row *ngFor="let archdesign of permitdesign.architecturaldesign;let i=index">
+<ion-col size="12" class="labbcont_align">
+<span  (click)="showurl(i,'architecturaldesign')"
+  style="color:#FBB200 !important">{{archdesign?.name}}</span>
+</ion-col>
+</ion-row>
+</ion-card-content>
+</ion-card>
+
+<ion-card  mode="md" class="labb_card"  *ngIf="permitdesign?.designgeneralinformation?.moduleslayoutdesign?.length > 0 ">
+<ion-card-content>
+<ion-row class="bkg">
+<ion-col class="hgt-margin">
+  <!-- <ion-item> -->
+  <label class="desc_tile">Module Layout Design</label>
+  <!-- </ion-item> -->
+</ion-col>
+</ion-row>
+<ion-row *ngFor="let moddesign of permitdesign.designgeneralinformation.moduleslayoutdesign;let i=index">
+<ion-col size="12" class="labbcont_align">
+<span style="color: #FBB200 !important;"
+  (click)="showurl(i,'moduleslayoutdesign')">{{moddesign?.name}}</span>
+</ion-col>
+</ion-row>
+</ion-card-content>
+</ion-card>
+
+
+<ion-card  mode="md" class="labb_card" >
+<ion-card-content>
+<ion-row class="bkg">
+<ion-col class="hgt-margin">
+  <!-- <ion-item> -->
+  <label class="desc_tile">Mounting Details</label>
+  <!-- </ion-item> -->
+</ion-col>
+</ion-row>
+<ion-row >
+<ion-col size="6" class="labbcont_align">Mounting Type</ion-col>
+<ion-col size="6" class="cont_align residence">{{permitdesign?.mountingtype == null ? nullValue :
+permitdesign?.mountingtype}}
+</ion-col>
+</ion-row>
+
+<ion-row *ngIf="permitdesign.mountingtype == 'roof' || permitdesign.mountingtype =='both'">
+<ion-col size="6" class="labbcont_align">Roof Type</ion-col>
+<ion-col size="6" class="cont_align residence">{{permitdesign?.rooftype == null ? nullValue :
+permitdesign?.rooftype}}
+</ion-col>
+</ion-row>
+
+<ion-row *ngIf="permitdesign.mountingtype=='ground' || permitdesign.mountingtype == 'both'">
+<ion-col size="6" class="labbcont_align">Tilt of Ground Mounting System</ion-col>
+<ion-col size="6" class="cont_align">{{permitdesign?.tiltofgroundmountingsystem == null ? nullValue
+: permitdesign?.tiltofgroundmountingsystem}}
+</ion-col>
+</ion-row>
+</ion-card-content>
+</ion-card>
+
+
+
+
+<ion-card  mode="md" class="labb_card" *ngIf="permitdesign?.designgeneralinformation !== null">
+<ion-card-content>
+<ion-row class="bkg">
+<ion-col class="hgt-margin">
+  <!-- <ion-item> -->
+  <label class="desc_tile">General Information</label>
+  <!-- </ion-item> -->
+</ion-col>
+</ion-row>
+<ion-row >
+<ion-col size="6" class="labbcont_align"></ion-col>
+<ion-col size="6" class="cont_align">
+</ion-col>
+</ion-row>
+
+<ion-row >
+<ion-col size="6" class="labbcont_align">Ahj Name</ion-col>
+<ion-col size="6" class="cont_align">
+{{permitdesign?.designgeneralinformation?.ahjdetails?.name ==
+  null || permitdesign?.designgeneralinformation?.ahjdetails?.name ==
+  '' ? nullValue :permitdesign?.designgeneralinformation?.ahjdetails?.name}}
+</ion-col>
+</ion-row>
+<ion-row >
+<ion-col size="6" class="labbcont_align">Utility Name</ion-col>
+<ion-col size="6" class="cont_align">
+{{permitdesign?.designgeneralinformation?.utilitydetails?.name
+  == null || permitdesign?.designgeneralinformation?.utilitydetails?.name
+  == '' ? nullValue
+  :permitdesign?.designgeneralinformation?.utilitydetails?.name}}
+</ion-col>
+</ion-row>
+<ion-row >
+<ion-col size="6" class="labbcont_align">Ahj Requirments</ion-col>
+<ion-col size="6" class="cont_align">
+{{permitdesign?.designgeneralinformation?.ahjdetails?.requirements
+  == null  || permitdesign?.designgeneralinformation?.ahjdetails?.requirements
+  == '' ? nullValue
+  :permitdesign?.designgeneralinformation?.ahjdetails?.requirements}}
+</ion-col>
+</ion-row>
+<ion-row >
+<ion-col size="6" class="labbcont_align">Utility Requirments</ion-col>
+<ion-col size="6" class="cont_align">
+{{permitdesign?.designgeneralinformation?.utilitydetails?.requirements
+  == null  || permitdesign?.designgeneralinformation?.utilitydetails?.requirements
+  == '' ? nullValue
+  :permitdesign?.designgeneralinformation?.utilitydetails?.requirements}}
+</ion-col>
+</ion-row>
+<ion-row *ngIf="permitdesign?.designgeneralinformation?.riskcategory !== null">
+<ion-col size="6" class="labbcont_align">Risk Catagory</ion-col>
+<ion-col size="6" class="cont_align">
+{{permitdesign?.designgeneralinformation?.riskcategory == null
+  ? nullValue :permitdesign?.designgeneralinformation?.riskcategory}}
+</ion-col>
+</ion-row>
+<ion-row *ngIf="permitdesign?.designgeneralinformation?.batterybackup !== null">
+<ion-col size="6" class="labbcont_align">Battery backup</ion-col>
+<ion-col size="6" class="cont_align">
+{{permitdesign?.designgeneralinformation?.batterybackup ==
+  null ? nullValue :permitdesign?.designgeneralinformation?.batterybackup}}
+</ion-col>
+</ion-row>
+<ion-row *ngIf="permitdesign?.designgeneralinformation?.firesetbackdetails?.firesetback !== null">
+<ion-col size="6" class="labbcont_align">Fire setback</ion-col>
+<ion-col size="6" class="cont_align">
+{{permitdesign?.designgeneralinformation?.firesetbackdetails?.firesetback
+  ? 'Yes' : 'No'}}
+</ion-col>
+</ion-row>
+<ion-row *ngIf="permitdesign?.designgeneralinformation?.firesetbackdetails?.setbackdetails !== null && permitdesign?.designgeneralinformation?.firesetbackdetails?.setbackdetails !== ''">
+<ion-col size="6" class="labbcont_align">Details of setback</ion-col>
+<ion-col size="6" class="cont_align">
+{{permitdesign?.designgeneralinformation?.firesetbackdetails?.setbackdetails
+  == null ? nullValue
+  :permitdesign?.designgeneralinformation?.firesetbackdetails?.setbackdetails}}
+</ion-col>
+</ion-row>
+<ion-row *ngIf="permitdesign?.designgeneralinformation?.financingtype !== null">
+<ion-col size="6" class="labbcont_align">Financing Type</ion-col>
+<ion-col size="6" class="cont_align" *ngIf="permitdesign?.designgeneralinformation?.financingtype == 'cashloan'">
+Cash or Loan
+
+</ion-col>
+<ion-col size="6" class="cont_align" *ngIf="permitdesign?.designgeneralinformation?.financingtype == 'lease'">Lease</ion-col>
+</ion-row>
+<ion-row *ngIf="permitdesign?.designgeneralinformation?.financingtype == 'lease'">
+<ion-col size="6" class="labbcont_align">Do you require meter for lessor?</ion-col>
+<ion-col size="6" class="cont_align">
+{{ permitdesign?.designgeneralinformation?.lessormeter ?
+  'Yes': 'No' }}
+</ion-col>
+</ion-row>
+<ion-row *ngIf="permitdesign?.nec !== null">
+  <ion-col size="6" class="labbcont_align">NEC</ion-col>
+  <ion-col size="6" class="cont_align">
+  {{permitdesign?.nec}}
+  </ion-col>
+  </ion-row>
+  <ion-row *ngIf="permitdesign?.irc !== null">
+    <ion-col size="6" class="labbcont_align">IRC</ion-col>
+    <ion-col size="6" class="cont_align">
+    {{permitdesign?.irc}}
+    </ion-col>
+    </ion-row>
+    <ion-row *ngIf="permitdesign?.designgoverningcode !== null">
+      <ion-col size="6" class="labbcont_align">Governing code</ion-col>
+      <ion-col size="6" class="cont_align">
+      {{permitdesign?.designgoverningcode}}
+      </ion-col>
+      </ion-row>
+
+<ion-row *ngIf="permitdesign?.costofsystem !== null">
+<ion-col size="6" class="labbcont_align">Cost of System</ion-col>
+<ion-col size="6" class="cont_align">
+{{permitdesign?.costofsystem + '$/Watt'}}
+</ion-col>
+</ion-row>
+<ion-row *ngIf="permitdesign?.incentive?.title !== null">
+<ion-col size="6" class="labbcont_align">Incentive</ion-col>
+<ion-col size="6" class="cont_align">
+{{permitdesign?.incentive?.title}}
+</ion-col>
+</ion-row>
+<ion-row *ngIf="permitdesign?.utilityrate !== null">
+<ion-col size="6" class="labbcont_align">Utility Rate</ion-col>
+<ion-col size="6" class="cont_align">
+{{permitdesign?.utilityrate?.rate}}
+</ion-col>
+</ion-row>
+<ion-row *ngIf="permitdesign?.annualutilityescalation !== null">
+<ion-col size="6" class="labbcont_align">Annual Utility Escalation</ion-col>
+<ion-col size="6" class="cont_align">
+{{permitdesign?.annualutilityescalation + '$'}}
+</ion-col>
+</ion-row>
+
+</ion-card-content>
+</ion-card>
+
+
+
+
+<ion-card  mode="md" class="labb_card" *ngIf="permitdesign.comments || permitdesign.comments !==null  " >
+<ion-card-content>
+<ion-row class="bkg">
+<ion-col size="12" class="hgt-margin">
+<!-- <ion-item> -->
+<label class="desc_tile">Comments</label>
+<!-- </ion-item> -->
+</ion-col>
+</ion-row>
+<ion-row  *ngIf="permitdesign.comments.length !==0;else nocomments">
+<ion-col class="labbcont_align" size="12" *ngFor="let comment of permitdesign.comments">
+<p [innerHTML]="comment?.message | linkify" class="message"></p>
+
+
+
+
+
+<ion-row class="padd"  *ngIf="!userAccessRights?.viewonly">
+  <ion-col size="6" class="padd author">{{comment.createdby?.firstname}}
+      {{comment.createdby?.lastname}}</ion-col>
+<ion-col class="6" style="margin:0px;float:right;" class="recordupdatedon">
+      {{comment.updated_at
+      | date:'dd/MM/yyyy hh:mm a'}}</ion-col>
+     
+
+   </ion-row>
+
+
+</ion-col>
+
+
+
+</ion-row>
+<ng-template #nocomments>
+<ion-col class="labbcont_align">
+No Comments Found
+</ion-col>
+</ng-template>
+
+
+</ion-card-content>
+</ion-card>
+
+
+
+<ion-card  mode="md" class="labb_card" *ngIf="permitdesign.reviewissues || permitdesign.reviewissues !==null  ">
+<ion-card-content>
+<ion-row class="bkg">
+<ion-col class="hgt-margin">
+  <!-- <ion-item> -->
+  <label class="desc_tile">Review Comments</label>
+  <!-- </ion-item> -->
+</ion-col>
+</ion-row>
+<ion-row *ngIf="permitdesign.reviewissues || permitdesign.reviewissues !==null  ">
+<ion-col size="6" class="labbcont_align">Review Comments</ion-col>
+<ion-col size="6" class="cont_align"><p class="comment-by" style="text-align: right;margin:0px">{{permitdesign?.reviewissues}}</p>
+<p class="comment-by" style="text-align: right;margin-top:0px">Posted by
+  {{permitdesign.reviewassignedto?.firstname}}
+  {{permitdesign.reviewassignedto?.lastname}}</p>
+</ion-col>
+</ion-row>
+</ion-card-content>
+</ion-card>
+
+<ion-card  mode="md" class="labb_card" *ngIf="permitdesign.createdby || permitdesign.createdby!== null">
+<ion-card-content>
+<ion-row class="bkg">
+<ion-col class="hgt-margin">
+<!-- <ion-item> -->
+<label class="desc_tile">Created Details</label>
+<!-- </ion-item> -->
+</ion-col>
+</ion-row> 
+<ion-row *ngIf="permitdesign.createdby!== null">
+<ion-col size="6" class="labbcont_align">Created By</ion-col>
+<ion-col size="6" class="cont_align">{{permitdesign.createdby?.parent?.firstname | titlecase}}
+{{permitdesign.createdby?.parent?.lastname | titlecase}}</ion-col>
+</ion-row> 
+
+<ion-row *ngIf="permitdesign.created_at!== null">
+<ion-col size="6" class="labbcont_align">Created at</ion-col>
+<ion-col size="6" class="cont_align">{{permitdesign.createdAt == null ? nullValue : permitdesign.createdAt |
+date: 'dd/MM/yyyy hh:mm a'}}</ion-col>
+</ion-row>
+
+</ion-card-content>
+</ion-card>
+
+
+<ion-card  mode="md" class="labb_card"  *ngIf="!userAccessRights?.viewonly && permitdesign.requesttype == 'permit' && ((permitdesign.status == 'designcompleted' || permitdesign.status == 'reviewassigned' || permitdesign.status == 'reviewpassed' || permitdesign.status == 'reviewfailed' || permitdesign.status == 'delivered' || (permitdesign.status == 'requestdeclined' && permitdesign.permitdesign != null) || (permitdesign.status == 'requestaccepted' && permitdesign.unhold && permitdesign.permitdesign != null) || permitdesign.isinrevisionstate) && !isClient) || ((permitdesign.status == 'delivered' ) && isClient) && permitdesign.permitdesign != null">
+<ion-card-content>
+<ion-row class="bkg">
+<ion-col class="hgt-margin">
+  <!-- <ion-item> -->
+  <label class="desc_tile">Permit Design</label>
+  <!-- </ion-item> -->
+</ion-col>
+</ion-row>
+<div
+*ngIf="!userAccessRights?.viewonly && permitdesign.requesttype == 'permit' && ((permitdesign.status == 'designcompleted' || permitdesign.status == 'reviewassigned' || permitdesign.status == 'reviewpassed' || permitdesign.status == 'reviewfailed' || permitdesign.status == 'delivered' || (permitdesign.status == 'requestdeclined' && permitdesign.permitdesign != null) || (permitdesign.status == 'requestaccepted' && permitdesign.unhold && permitdesign.permitdesign != null) || permitdesign.isinrevisionstate) && !isClient) || ((permitdesign.status == 'delivered') && isClient) && permitdesign.permitdesign != null">
+<form novalidate [formGroup]="commentsForm">
+
+
+  
+  <ion-row class="ion-margin-top"
+      *ngIf="!userAccessRights?.viewonly && ((isUserAnalyst && permitdesign && permitdesign.status =='reviewassigned') || (permitdesign && permitdesign.status=='reviewassigned' && permitdesign.reviewassignedto.id==user.id))">
+      <ion-col size="6" >
+          <ion-item class="ion-no-padding no-border" lines="none">
+          <ion-checkbox checked="false" (ionChange)="workbyanalyst($event)"></ion-checkbox>
+          <span style="color:#595959;font-size: 12px;">&nbsp; Work By Analyst </span>
+</ion-item>
+      </ion-col>
+      <ion-col size="6" class="cont_align">
+
+          <ion-button [ngClass]="isSelfUpdate ? 'is-open': ''" (click)="isSelfUpdate = !isSelfUpdate"
+              fill="clear" style="float:right;" class="butt">Self Update</ion-button>
+
+      </ion-col>
+  </ion-row>
+  <div
+      *ngIf="(isUserAnalyst && permitdesign.status=='reviewassigned')||(permitdesign.status=='reviewassigned' && permitdesign.reviewassignedto.id==user.id)">
+      <ion-row *ngIf="isSelfUpdate">
+          <!-- <span> -->
+          <ion-col size="12">
+              <ng-container>
+                  <ion-item class="ion-no-padding" (click)="permitplan.click()">
+                      <ion-label position="floating" class="label">Permit Plan*</ion-label>
+                      <input type="file" #permitplan class="form_input" (change)="permitupdate($event)"
+                          accept="application/pdf" style="margin-top: 12px;" multiple>
+                      <ion-icon name="attach-outline" slot="end" style="margin-top:21px"></ion-icon>
+                  </ion-item>
+                  <div *ngFor="let file of permitPlanList;let i = index">
+                      <ion-item>
+                          <ion-col size="11">
+                              {{file.name}}
+                          </ion-col>
+                          <ion-col size="1" (click)="removeArc(i,'permitplan')">x</ion-col>
+                      </ion-item>
+                  </div>
+              </ng-container>
+          </ion-col>
+
+          <!-- </span> -->
+      </ion-row>
+  </div>
+</form>
+<ion-row *ngIf="!userAccessRights?.viewonly && permitdesign.requesttype == 'permit' && ((permitdesign.status == 'designcompleted' || permitdesign.status == 'reviewassigned' || permitdesign.status == 'reviewpassed' || permitdesign.status == 'reviewfailed' || permitdesign.status == 'delivered' || (permitdesign.status == 'requestdeclined' && permitdesign.permitdesign != null) || (permitdesign.status == 'requestaccepted' && permitdesign.unhold && permitdesign.permitdesign != null) || permitdesign.isinrevisionstate) && !isClient) || ((permitdesign.status == 'delivered' || permitdesign.status == 'designcompleted') && isClient) && permitdesign.permitdesign != null">
+  <ion-col size="6" class="labbcont_align">Permit Design</ion-col>
+  <!-- comment on 20220128 -->
+  <!-- <ion-button size="3" style="width:72px;height: 20px;font-size: x-small;float: right;text-transform: none;" *ngIf="(isUserAnalyst && permitdesign.status=='reviewassigned')||(permitdesign.status=='reviewassigned' && permitdesign.reviewassignedto.id==user.id)" (click)="isSelfUpdate = !isSelfUpdate">Self Update</ion-button>
+<ion-button size="2" style="width:72px;height: 20px;font-size: x-small;float: right;text-transform: none;" *ngIf="isUserDesigner && permitdesign.status=='reviewfailed'" (click)="ispermitUpdate = !ispermitUpdate">Update</ion-button> -->
+  <ion-col size="6" class="cont_align" style="float: right;">
+      <span class="cont_align" style="text-align:right;color:#FBB200 !important"
+          (click)="showDesignImage()">{{permitdesign?.permitdesign?.name}}</span>
+      <!-- <ion-icon name="close-circle-outline" *ngIf="imageName.length>0 " (click)="showuploadbox()" style="color:red;font-size: 20px;margin-left: 10px"></ion-icon> -->
+  </ion-col>
+</ion-row>
+</div>
+
+</ion-card-content>
+</ion-card>
+
+
+
+<ion-card  mode="md" class="labb_card" *ngIf="permitdesign.isinrevisionstate" >
+<ion-card-content>
+<ion-row class="bkg">
+<ion-col class="hgt-margin">
+  <!-- <ion-item> -->
+  <label class="desc_tile">Revision</label>
+  <!-- </ion-item> -->
+</ion-col>
+</ion-row>
+<div *ngFor=" let revision of permitdesign.revisiondesign" >
+<ion-row >
+<ion-col size="6" class="labbcont_align">Revision Comments</ion-col>
+<ion-col size="6" class="cont_align"><div>
+<p class="comment-by" style="text-align: right;margin:0px">{{revision.comment == null
+  ? nullValue : revision.comment}}</p>
+
+</div>
+</ion-col>
+</ion-row>
+<ion-row *ngIf="revision.file.length > 0">
+<ion-col size="6" class="labbcont_align">Revision Attachments</ion-col>
+<ion-col size="6" class="cont_align"><div *ngFor="let attachmentfile of revision.file">
+
+<span class="model-space font" style="text-align:right;color:#FBB200 !important"
+  (click)="showRevisionImage(attachmentfile)">{{attachmentfile.name.length > 40 ?
+  (attachmentfile.name | slice: 0:40) + '...' :
+  attachmentfile.name}}</span>
+  </div>
+</ion-col>
+</ion-row>
+<ion-row *ngIf="revision.designfile.length > 0">
+<ion-col size="6" class="labbcont_align"> Design file</ion-col>
+<ion-col size="6" class="cont_align"><div *ngFor="let designfile of revision.designfile">
+
+<span class="model-space font" style="text-align:right;color:#FBB200 !important"
+  (click)="showRevisionImage(designfile)">{{designfile.name.length > 40 ? (designfile.name
+  | slice: 0:40) + '...' : designfile.name}}</span>
+  </div></ion-col> 
+</ion-row></div>
+</ion-card-content>
+</ion-card>
+
+
+
+<ion-card  mode="md" class="labb_card" *ngIf="filterPermitOnholdDesign?.length !=0" >
+  <ion-card-content>
+  
+  <ion-row class="bkg" >
+  <ion-col class="hgt-margin">
+    <!-- <ion-item> -->
+    <label class="desc_tile residence">On Hold Reason</label>
+    <!-- </ion-item> -->
+  </ion-col>
+  </ion-row>
+  <span *ngFor="let onhold of filterPermitOnholdDesign;let i=index"> 
+  <ion-row *ngIf="onhold.status=='onhold'&& onhold.comment !== null">
+  <ion-col size="12" class="labbcont_align ">{{onhold.comment}}</ion-col>
+  
+  </ion-row>
+  <ion-row   *ngIf="!userAccessRights?.viewonly && onhold.status=='onhold'&& onhold.comment !== null">
+  <ion-col size="6" class="labbcont_align author">{{onhold.createdby?.firstname}}
+  {{onhold.createdby?.lastname}}</ion-col>
+  <ion-col class="6" style="margin:0px;float:right;" class="recordupdatedon">
+  {{onhold.updated_at
+  | date:'dd/MM/yyyy hh:mm a'}}</ion-col>
+  
+  
+  </ion-row>
+  
+  </span>
+  </ion-card-content>
+  </ion-card> 
+  <ion-card  mode="md" class="labb_card" *ngIf="filterPermitOnholdDesign?.length !=0 && isOnholdAttachments" >
+      <ion-card-content>
+      
+      <ion-row class="bkg" >
+      <ion-col class="hgt-margin">
+        <!-- <ion-item> -->
+        <label class="desc_tile residence">On Hold Attachment</label>
+        <!-- </ion-item> -->
+      </ion-col>
+      </ion-row>
+      <span *ngFor="let onhold of filterPermitOnholdDesign;let i=index"> 
+          <span *ngFor="let attachmentfile of onhold.file" 
+          (click)="showRevisionImage(attachmentfile)">
+      <ion-row ><ion-col size="12" class="labbcont_align " style="color:#FBB200 !important"> {{attachmentfile.name.length > 40 ?
+          (attachmentfile.name | slice: 0:40) + '...' : attachmentfile.name}}
+      </ion-col></ion-row>
+  <ion-row><ion-col size="6" class="labbcont_align author">{{onhold.createdby?.firstname}}
+          {{onhold.createdby?.lastname}}</ion-col>
+  <ion-col class="6" style="margin:0px;float:right;" class="recordupdatedon">
+          {{onhold.updated_at
+          | date:'dd/MM/yyyy hh:mm a'}}</ion-col></ion-row></span>
+      
+      </span>
+
+
+     
+      </ion-card-content>
+      </ion-card> 
+  
+  <ion-card  mode="md" class="labb_card" *ngIf="filterPermitUnholdDesign?.length !=0">
+  <ion-card-content>
+  
+  <ion-row class="bkg" >
+  <ion-col class="hgt-margin">
+    <!-- <ion-item> -->
+    <label class="desc_tile residence">Un Hold Reason</label>
+    <!-- </ion-item> -->
+  </ion-col>
+  </ion-row><span *ngFor="let onhold of filterPermitUnholdDesign;let i=index"> 
+  <ion-row *ngIf="onhold.status=='unhold'&& onhold.comment !== null">
+  <ion-col size="12" class="labbcont_align ">{{onhold.comment}}</ion-col>
+  
+  </ion-row>
+  <ion-row   *ngIf="!userAccessRights?.viewonly && onhold.status=='unhold'&& onhold.comment !== null">
+  <ion-col size="6" class="labbcont_align author">{{onhold.createdby?.firstname}}
+  {{onhold.createdby?.lastname}}</ion-col>
+  <ion-col class="6" style="margin:0px;float:right;" class="recordupdatedon">
+  {{onhold.updated_at
+  | date:'dd/MM/yyyy hh:mm a'}}</ion-col>
+  
+  
+  </ion-row>
+  
+  </span>
+  </ion-card-content>
+  </ion-card> 
+
+  <ion-card  mode="md" class="labb_card" *ngIf="filterPermitUnholdDesign?.length !=0 && isUnholdAttachments" >
+      <ion-card-content>
+      
+      <ion-row class="bkg" >
+      <ion-col class="hgt-margin">
+        <!-- <ion-item> -->
+        <label class="desc_tile residence">Un Hold Attachment</label>
+        <!-- </ion-item> -->
+      </ion-col>
+      </ion-row>
+      <span *ngFor="let onhold of filterPermitUnholdDesign;let i=index"> 
+          <span *ngFor="let attachmentfile of onhold.file" 
+          (click)="showRevisionImage(attachmentfile)">
+      <ion-row ><ion-col size="12" class="labbcont_align " style="color:#FBB200 !important"> {{attachmentfile.name.length > 40 ?
+          (attachmentfile.name | slice: 0:40) + '...' : attachmentfile.name}}
+      </ion-col></ion-row>
+  <ion-row><ion-col size="6" class="labbcont_align author">{{onhold.createdby?.firstname}}
+          {{onhold.createdby?.lastname}}</ion-col>
+  <ion-col class="6" style="margin:0px;float:right;" class="recordupdatedon">
+          {{onhold.updated_at
+          | date:'dd/MM/yyyy hh:mm a'}}</ion-col></ion-row></span>
+      
+      </span>
+
+
+     
+      </ion-card-content>
+      </ion-card> 
+
+     
+
+
+
+
+
+
+<ion-card  mode="md" class="labb_card" *ngIf="designerCritera?.length > 0 && !userAccessRights?.viewonly && isUserDesigner && permitdesign && (permitdesign.status =='designassigned'|| permitdesign.status =='reviewfailed')">
+
+<ion-card-content>
+<!--For Designer -->
+<ion-row class="bkg" *ngIf="designerCritera?.length > 0">
+<ion-col class="hgt-margin">
+  <!-- <ion-item> -->
+  <label class="desc_tile">CheckList</label>
+  <!-- </ion-item> -->
+</ion-col>
+</ion-row>
+<ion-row
+*ngIf="designerCritera?.length > 0 && !userAccessRights?.viewonly && isUserDesigner && permitdesign &&( permitdesign.status =='designassigned'|| permitdesign.status =='reviewfailed' )">
+
+<ion-col size="12"  *ngIf="designerCritera.length != 0">
+  <p class="labbcont_align">
+       CheckList* <span style="color: red;"
+          *ngIf="displayerror">Required</span>
+  </p>
+  <div class="" style="height: 255px; overflow-y: auto; overflow-x: hidden;">
+      <ion-row *ngFor="let item of designerCritera; let i = index">
+          <ion-col size="1.5">
+              <ion-icon name="checkmark-done-outline" *ngIf="item.feedback"></ion-icon>
+              <ion-icon name="close-circle-outline" *ngIf="!item.feedback"></ion-icon>
+          </ion-col>
+          <ion-col size="9">{{item.criteriatitle}}</ion-col>
+          <ion-col size="1.5">
+              <input type="checkbox" class="mt-1 mr-2" [checked]="item.feedback"
+                  (change)="item.feedback == 'null'? item.feedback = true : item.feedback == true? item.feedback = false: item.feedback == false? item.feedback = true: null; onSaveCritetria(item,i)">
+              <ion-icon name="chatbox-outline" (click)="ShowCommentCriteria(item)"
+                  *ngIf="!item.feedback && (item.comments[item.comments.length-1]?.createdby.id != user.id || item.comments.length == 0)">
+              </ion-icon>
+          </ion-col>
+          <ion-row class="ion-no-padding"
+              *ngIf="(isciteriacommentshow == true && selectedCriteria.id == item.id)||( isEditChecklist == true && selectedCriteria.id == item.id)  ">
+              <ion-col size="12" class="ion-no-padding">
+                  <ion-textarea style="max-width: 98%;" class="ion-no-margin comment_box"
+                      rows="3" [formControl]="checklistcomments" placeholder="Add your comments here...">
+                  </ion-textarea>
+              </ion-col>
+              <ion-col class="ion-no-padding">
+                  <ion-button class="action-button-color" fill="clear" (click)="onCancelCriteria()">Cancel
+                  </ion-button>
+                  <ion-button class="action-button-color" fill="clear" *ngIf="!isEditChecklist"
+                      (click)="onSaveCritetria(selectedCriteria,i)">Save</ion-button>
+                  <ion-button class="action-button-color" fill="clear" *ngIf="isEditChecklist"
+                      (click)="onEditCommentsPrelimChecklist()">Save</ion-button>
+              </ion-col>
+          </ion-row>
+          <div *ngIf="!item.feedback">
+              <ion-row *ngFor="let comment of item.comments; let j = index">
+                  <ion-col size="12">
+                      <p>
+                          {{comment.createdby?.firstname | titlecase}}
+                          {{comment.createdby?.lastname | titlecase}}</p>
+                      <small
+                          style="font-style: italic;font-weight: bold;color: #6666;">{{comment.updated_at
+                          | date:'dd MMM yy- HH:mm'}}</small>
+                      <p>
+                          {{comment.message}}</p>
+                  </ion-col>
+                  <ion-col size="12" *ngIf="user.id==comment.createdby?.id && j==item.comments.length-1">
+
+                      <ion-icon name="create-outline" style="font-size:18px;"
+                          (click)="editChecklistComment(comment,i,j,item)"></ion-icon>
+
+                      <ion-icon name="trash-outline" style="font-size:18px;"
+                          (click)="deleteChecklistComment(comment,i,j)"></ion-icon>
+                  </ion-col>
+              </ion-row>
+          </div>
+      </ion-row>
+  </div>
+</ion-col>
+</ion-row>
+</ion-card-content>
+</ion-card>
+<!---For Analysis-->
+
+<ion-card  mode="md" class="labb_card"  *ngIf="designerCritera?.length > 0 && !userAccessRights?.viewonly && ((isUserAnalyst && permitdesign && permitdesign.status =='reviewassigned') || (permitdesign && permitdesign.status=='reviewassigned' && permitdesign.reviewassignedto.id==user.id))">
+
+<ion-card-content>
+  <ion-row class="bkg" *ngIf="designerCritera?.length > 0">
+      <ion-col class="hgt-margin">
+          <!-- <ion-item> -->
+          <label class="desc_tile">CheckList</label>
+          <!-- </ion-item> -->
+      </ion-col>
+  </ion-row>
+<ion-row
+*ngIf="!userAccessRights?.viewonly && ((isUserAnalyst && permitdesign && permitdesign.status =='reviewassigned') || (permitdesign && permitdesign.status=='reviewassigned' && permitdesign.reviewassignedto.id==user.id))">
+
+<ion-col size="12"  *ngIf="designerCritera.length != 0">
+<p class="labbcont_align">
+  CheckList* <span style="color: red;"
+      *ngIf="displayerror">Required</span>
+</p>
+<div class="" style="height: 255px; overflow-y: auto; overflow-x: hidden;">
+  <ion-row *ngFor="let item of designerCritera; let i = index">
+      <ion-col size="1.5">
+          <ion-icon name="checkmark-done-outline" *ngIf="item.feedback"></ion-icon>
+          <ion-icon name="close-circle-outline" *ngIf="!item.feedback"></ion-icon>
+      </ion-col>
+      <ion-col size="9">{{item.criteriatitle}}</ion-col>
+      <ion-col size="1.5">
+          <input type="checkbox" class="mt-1 mr-2" [checked]="item.feedback"
+              (change)="item.feedback == 'null'? item.feedback = true : item.feedback == true? item.feedback = false: item.feedback == false? item.feedback = true: null; onSaveCritetria(item,i)">
+          <ion-icon name="chatbox-outline" (click)="ShowCommentCriteria(item)"
+              *ngIf="!item.feedback && (item.comments[item.comments.length-1]?.createdby.id != user.id || item.comments.length == 0)">
+          </ion-icon>
+      </ion-col>
+      <ion-row class="ion-no-padding"
+          *ngIf="(isciteriacommentshow == true && selectedCriteria.id == item.id)||( isEditChecklist == true && selectedCriteria.id == item.id)  ">
+          <ion-col size="12" class="ion-no-padding">
+              <ion-textarea style="max-width: 98%;" class="ion-no-margin ion-no-padding comment_box"
+                  rows="3" [formControl]="anyalistchecklistcomments"
+                  placeholder="Add your comments here..."></ion-textarea>
+          </ion-col>
+          <ion-col class="ion-no-padding">
+              <ion-button class="action-button-color" fill="clear" (click)="onCancelCriteria()">Cancel
+              </ion-button>
+              <ion-button class="action-button-color" fill="clear" *ngIf="!isEditChecklist"
+                  (click)="onSaveCritetria(selectedCriteria,i)">Save</ion-button>
+              <ion-button class="action-button-color" fill="clear" *ngIf="isEditChecklist"
+                  (click)="onEditCommentsPrelimChecklist()">Save</ion-button>
+          </ion-col>
+      </ion-row>
+      <div *ngIf="!item.feedback">
+          <ion-row *ngFor="let comment of item.comments; let j = index">
+              <ion-col size="12">
+                  <p>
+                      {{comment.createdby?.firstname | titlecase}}
+                      {{comment.createdby?.lastname | titlecase}}</p>
+                  <small
+                      style="font-style: italic;font-weight: bold;color: #6666;">{{comment.updated_at
+                      | date:'dd MMM yy- HH:mm'}}</small>
+                  <p>
+                      {{comment.message}}</p>
+              </ion-col>
+              <ion-col size="12" *ngIf="user.id==comment.createdby?.id && j==item.comments.length-1">
+                  <ion-icon name="create-outline" style="font-size:18px;"
+                      (click)="editChecklistCommentForAnalyst(comment,i,j,item)"></ion-icon>
+
+                  <ion-icon name="trash-outline" style="font-size:18px;"
+                      (click)="deleteChecklistComment(comment,i,j)"></ion-icon>
+              </ion-col>
+          </ion-row>
+      </div>
+  </ion-row>
+</div>
+</ion-col>
+</ion-row>
+</ion-card-content></ion-card>
+<!--For All-->
+
+<ion-card  mode="md" class="labb_card"  *ngIf="designerCritera?.length > 0 && !userAccessRights?.viewonly && !isClient && (permitdesign.status == 'designcompleted' || permitdesign.status == 'reviewpassed' || permitdesign.status == 'delivered' || (permitdesign.status=='designassigned' && !isUserDesigner ) || (permitdesign.status=='reviewfailed' && !isUserDesigner && !isWattmonkadmins) || (permitdesign.status == 'reviewassigned' && !isUserAnalyst  && permitdesign.reviewassignedto.id != user.id) ) ">
+
+<ion-card-content>
+<ion-row class="bkg" *ngIf="designerCritera?.length > 0">
+<ion-col class="hgt-margin">
+  <!-- <ion-item> -->
+  <label class="desc_tile">CheckList</label>
+  <!-- </ion-item> -->
+</ion-col>
+</ion-row>
+<ion-row
+*ngIf="designerCritera?.length > 0 && !userAccessRights?.viewonly && !isClient && (permitdesign.status == 'designcompleted' || permitdesign.status == 'reviewpassed' || permitdesign.status == 'delivered' || (permitdesign.status=='designassigned' && !isUserDesigner ) || (permitdesign.status=='reviewfailed' && !isUserDesigner && !isWattmonkadmins) || (permitdesign.status == 'reviewassigned' && !isUserAnalyst  && permitdesign.reviewassignedto.id != user.id) )">
+
+<ion-col size="12"  *ngIf="designerCritera.length != 0">
+  <p class="labbcont_align">
+       CheckList* <span style="color: red;"
+          *ngIf="displayerror">Required</span>
+  </p>
+  <div class="" style="height: 255px; overflow-y: auto; overflow-x: hidden;">
+      <ion-row *ngFor="let item of designerCritera; let i = index">
+          <ion-col size="1.5">
+              <ion-icon name="checkmark-done-outline" *ngIf="item.feedback"></ion-icon>
+              <ion-icon name="close-circle-outline" *ngIf="!item.feedback"></ion-icon>
+          </ion-col>
+          <ion-col size="9">{{item.criteriatitle}}</ion-col>
+          <ion-col size="1.5">
+              <input type="checkbox" class="mt-1 mr-2" [checked]="item.feedback" disabled='true'>
+          </ion-col>
+          <ion-row class="ion-no-padding" *ngIf="isciteriacommentshow && selectedCriteria.id == item.id">
+              <ion-col size="12" class="ion-no-padding">
+                  <ion-textarea style="max-width: 98%;" class="ion-no-margin comment_box"
+                      rows="3" [formControl]="anyalistchecklistcomments"
+                      placeholder="Add your comments here..."></ion-textarea>
+              </ion-col>
+
+              <ion-col class="ion-no-padding">
+                  <ion-button class="action-button-color" fill="clear" (click)="onCancelCriteria()">Cancel
+                  </ion-button>
+                  <ion-button class="action-button-color" fill="clear"
+                      (click)="onSaveCritetria(selectedCriteria,i)">Save</ion-button>
+              </ion-col>
+          </ion-row>
+          <div *ngIf="!item.feedback">
+              <ion-row *ngFor="let comment of item.comments; let j = index">
+                  <ion-col size="12">
+                      <p>
+                          {{comment.createdby?.firstname | titlecase}}
+                          {{comment.createdby?.lastname | titlecase}}</p>
+                      <small
+                          style="font-style: italic;font-weight: bold;color: #6666;">{{comment.updated_at
+                          | date:'dd MMM yy- HH:mm'}}</small>
+                      <p>
+                          {{comment.message}}</p>
+                  </ion-col>
+                  <ion-col size="12" *ngIf="user.id==comment.createdby?.id && j==item.comments.length-1">
+                      <ion-icon name="create-outline" style="font-size:18px;"
+                          (click)="editChecklistCommentForAnalyst(comment,i,j,item)"></ion-icon>
+                      <ion-icon name="trash-outline" style="font-size:18px;"
+                          (click)="deleteChecklistComment(comment,i,j)"></ion-icon>
+                  </ion-col>
+              </ion-row>
+          </div>
+      </ion-row>
+  </div>
+</ion-col>
+</ion-row>
+</ion-card-content>
+</ion-card>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ion-card  mode="md" class="labb_card"  *ngIf="permitdesign.status=='designassigned'||permitdesign.status=='completed'">
+<ion-card-content>
+<ion-row class="bkg">
+<ion-col class="hgt-margin">
+  <!-- <ion-item> -->
+  <label class="desc_tile">Assigned
+      To</label>
+  <!-- </ion-item> -->
+</ion-col>
+</ion-row>
+
+
+
+<ion-row 
+*ngIf="permitdesign.status=='designassigned'||permitdesign.status=='completed'">
+<ion-col size="6"  class="labbcont_align">Assigned
+      To</ion-col>
+
+      <ion-col size="6" class="cont_align">{{permitdesign.designassignedto.firstname}} {{permitdesign.designassignedto.lastname }}</ion-col>
+<!--<ion-col size="auto">
+  <div class="selected d-flex">
+      <img *ngIf="permitdesign.designassignedto.contractorlogo && permitdesign.designassignedto.contractorlogo.logo"
+          [src]="permitdesign.designassignedto.contractorlogo.logo.url" class="assignee-image" />
+      <div *ngIf="!permitdesign.designassignedto.contractorlogo || !permitdesign.designassignedto.contractorlogo.logo"
+          class="assignee-image d-flex flex-row align-center justify-center">
+          <div class="name_div">
+              <span
+                  style="text-transform: capitalize;"></span>
+          </div>
+      </div>
+  </div>
+</ion-col>-->
+</ion-row>
+</ion-card-content>
+</ion-card>
+
+
+
+<ion-card  mode="md" class="labb_card" *ngIf="permitdesign.status=='reviewassigned'||permitdesign.status=='delivered'">
+<ion-card-content>
+<ion-row class="bkg">
+<ion-col class="hgt-margin">
+  <!-- <ion-item> -->
+  <label class="desc_tile">Assigned
+      To</label>
+  <!-- </ion-item> -->
+</ion-col>
+</ion-row>
+<ion-row 
+
+*ngIf="permitdesign.status=='reviewassigned'||permitdesign.status=='delivered'">
+
+<ion-col size="6"  class="labbcont_align">Assigned
+  To</ion-col>
+
+  <ion-col size="6" class="cont_align">{{permitdesign.reviewassignedto.firstname}} {{permitdesign.reviewassignedto.lastname }}</ion-col>
+<!--<ion-col class="ion-justify-content-center ion-align-items-center"><span class="labbcont_align">Assigned
+      to</span></ion-col>
+<ion-col size="auto">
+  <div class="selected d-flex">
+      <img *ngIf="permitdesign.designassignedto.contractorlogo && permitdesign.designassignedto.contractorlogo.logo"
+          [src]="permitdesign.designassignedto.contractorlogo.logo.url" class="assignee-image" />
+      <div *ngIf="!permitdesign.designassignedto.contractorlogo || !permitdesign.designassignedto.contractorlogo.logo"
+          class="assignee-image d-flex flex-row align-center justify-center">
+          <div class="name_div">
+              <span
+                  style="text-transform: capitalize;">{{permitdesign.reviewassignedto.firstname.substring(0,
+                  1)}}{{permitdesign.reviewassignedto.lastname.substring(0, 1)}}</span>
+          </div>
+      </div>
+  </div>
+</ion-col>-->
+</ion-row>
+</ion-card-content>
+</ion-card>
+
+
+
+<ion-card  mode="md" class="labb_card" *ngIf="permitdesign && permitdesign.type !=='design'">
+<ion-card-content>
+
+<ion-row class="" *ngIf="permitdesign && permitdesign.type !=='design'">
+<ion-col size="12">
+  <form novalidate [formGroup]="assigneeForm">
+      <ion-item class="no-border" lines="none">
+          <app-user-selector placeholder="assign" [assignees]="listOfAssignees"
+              formControlName="designassignedto"></app-user-selector>
+      </ion-item>
+  </form>
+</ion-col>
+</ion-row>
+</ion-card-content>
+</ion-card>
+
+
+<ion-card  mode="md" class="labb_card" *ngIf="!userAccessRights?.viewonly && isUserDesigner && (permitdesign.status =='designassigned' || permitdesign.status=='reviewfailed' )">
+<ion-card-content>
+<ion-row class="bkg"    *ngIf="!userAccessRights?.viewonly && isUserDesigner && (permitdesign.status =='designassigned' || permitdesign.status=='reviewfailed' )">
+<ion-col class="hgt-margin">
+  <!-- <ion-item> -->
+  <label class="desc_tile">Permit Design</label>
+  <!-- </ion-item> -->
+</ion-col>
+</ion-row>
+
+
+
+<ion-row 
+*ngIf="!userAccessRights?.viewonly && isUserDesigner && (permitdesign.status =='designassigned' || permitdesign.status=='reviewfailed' )">
+
+<form novalidate [formGroup]="commentsForm">
+ 
+  <ion-row
+ >
+  <!-- <span> -->
+
+  
+  <ion-col size="12">
+
+      <ng-container >
+      <ion-item style="width:70%;" (click)="d.click()">
+          <span class="input-placeholder">Permit Design</span>
+
+          <input  #d type="file" class="form_input"  (change)="permitfiles($event)"
+          formControlName="permitdesign"  />
+          <ion-icon name="attach-outline" slot="end" ></ion-icon>
+          </ion-item>
+
+          <ion-row>
+              
+              <ion-col size="12">
+                  <ion-slides pager="false" [options]="slideOptsTwo" #slideWithNav2
+                      >
+                      <ion-slide *ngFor="let url of imageurls; let i = index">
+                          <div>
+                              <img [src]="url" style="
+                height: 10rem;
+                width: 10rem;
+                border: 3px solid black;
+              " alt="file" />
+
+                              <ion-icon class="remove" name="close-circle-outline"
+                                  (click)="removePermit(i)"></ion-icon>
+                          </div>
+                      </ion-slide>
+                  </ion-slides>
+              </ion-col>
+              
+          </ion-row>
+
+     
+      </ng-container>
+  </ion-col>
+
+  <!-- </span> -->
+</ion-row>
+ 
+</form>
+</ion-row>
+
+
+<div *ngIf="isUserDesigner && permitdesign.status=='reviewfailed'">
+
+
+
+<ion-row *ngIf="ispermitUpdate">
+  <!-- <span> -->
+  <ion-col size="9" class="cont_align" style="justify-content: flex-end;">
+
+      <ion-input type="file" formControlName="permitdesign" readonly
+          (change)="permitupdate($event)"
+          style="border-bottom:1px solid grey; width: max-content; flex: auto;" multiple="false">
+          <ion-icon name="attach-outline" style="float: right;text-align:right ;"></ion-icon>
+      </ion-input>
+
+
+
+
+
+  </ion-col>
+
+  <!-- </span> -->
+</ion-row>
+</div>
+</ion-card-content>
+</ion-card>
+<ion-card  mode="md" class="labb_card" *ngIf="!userAccessRights?.viewonly && isUserDesigner && permitdesign && permitdesign.status =='designassigned'">
+<ion-card-content>
+<ion-row class="bkg">
+<ion-col class="hgt-margin">
+  <!-- <ion-item> -->
+  <label class="desc_tile">Comments</label>
+  <!-- </ion-item> -->
+</ion-col>
+</ion-row>
+<ion-row 
+*ngIf="!userAccessRights?.viewonly && isUserDesigner && permitdesign && permitdesign.status =='designassigned'">
+
+<form novalidate [formGroup]="commentsForm" style="width:100%">
+  <ion-col size="12">
+      <span class="labbcont_align">Comments</span>
+  </ion-col>
+  <ion-col size="12" style="padding-top: 0px;">
+      <ion-textarea style="max-width: 98%;" class="ion-no-margin comment_box" rows="3" placeholder="Mention  your comments here" 
+          formControlName="comments"></ion-textarea>
+  </ion-col>
+</form>
+</ion-row>
+</ion-card-content>
+</ion-card>
+
+
+
+<ion-card  mode="md" class="labb_card" *ngIf="!userAccessRights?.viewonly && ((isUserAnalyst && permitdesign && permitdesign.status =='reviewassigned') || (permitdesign && permitdesign.status=='reviewassigned' && permitdesign.reviewassignedto.id==user.id))">
+<ion-card-content>
+<ion-row class="bkg">
+<ion-col class="hgt-margin">
+  <!-- <ion-item> -->
+  <label class="desc_tile">Issues</label>
+  <!-- </ion-item> -->
+</ion-col>
+</ion-row>
+<!-- For Analyst -->
+<ion-row 
+*ngIf="!userAccessRights?.viewonly && ((isUserAnalyst && permitdesign && permitdesign.status =='reviewassigned') || (permitdesign && permitdesign.status=='reviewassigned' && permitdesign.reviewassignedto.id==user.id))">
+
+<form [formGroup]="reviewIssuesForm" >
+
+  <ion-col size="12" class="">
+      <span class="labbcont_align">Issues*</span>
+  </ion-col>
+  <ion-col size="12" class="ion-no-padding">
+      <ion-textarea class="ion-no-margin comment_box" placeholder="Mention  your issues here" rows="3"
+          formControlName="reviewIssues"></ion-textarea>
+  </ion-col>
+
+</form>
+</ion-row>
+
+</ion-card-content>
+</ion-card>
+
+
+</ion-grid>
+</ion-content>
+
+
+
+
+<ion-footer *ngIf="permitdesign && permitdesign.type !=='design'" class="ion-no-border white-bg">
+<ion-grid>
+<ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
+<ion-col size="auto">
+  <ion-button class="action-button-color" fill="clear" (click)="updateAssignee()">Save</ion-button>
+</ion-col>
+</ion-row>
+</ion-grid>
+
+</ion-footer>
+<ion-footer
+*ngIf="isUserDesigner && permitdesign && (permitdesign.status=='designassigned'||permitdesign.status=='reviewfailed')"
+class="ion-no-border white-bg">
+<ion-grid>
+<ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
+<ion-col size="auto">
+  <ion-button class="action-button-color" fill="clear" (click)="updatecomments()">Submit</ion-button>
+</ion-col>
+</ion-row>
+</ion-grid>
+
+</ion-footer>
+<ion-footer
+*ngIf="(isUserAnalyst && permitdesign && permitdesign.status=='reviewassigned')||(permitdesign && permitdesign.status=='reviewassigned' && permitdesign.reviewassignedto.id==user.id)"
+class="ion-no-border white-bg">
+<ion-grid>
+<ion-row class="ion-text-end ion-align-items-end ion-justify-content-end">
+<ion-col size="auto">
+  <ion-button class="action-button-color" *ngIf="!isSelfUpdate" fill="clear" style="float: left;"
+      (click)="reportDesignReviewFailure()">Failed</ion-button>
+  <ion-button class="action-button-color" fill="clear" style="float: right ;"
+      (click)="designReviewSuccess()">Passed</ion-button>
+</ion-col>
+</ion-row>
+</ion-grid>
+
+</ion-footer>

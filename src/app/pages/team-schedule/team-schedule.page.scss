@@ -1,0 +1,388 @@
+.designdialogcontent {
+  max-height: 80vh;
+  height: 80vh;
+}
+.designdialogcontent .mat-expansion-panel-header-title {
+  font-size: 12px;
+  font-weight: 600;
+}
+.designdialogcontent .mat-expansion-panel-header {
+  padding: 0 14px;
+  height: 44px !important;
+}
+.designdialogcontent .mat-expansion-panel-body {
+  padding: 0 14px 2px;
+}
+.designdialogcontent textarea {
+  min-height: 42px !important;
+  height: 42px !important;
+}
+.designform {
+  width: 98%;
+  margin-left: 10px;
+}
+.designrow {
+  margin-left: 14px;
+  margin-right: 14px;
+}
+.designrow p {
+  font-size: 0.8em;
+  color: #000000;
+  font-weight: 600;
+}
+.designform .formradiogroup {
+  width: 100%;
+}
+
+.architectureuploadcol {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.prioritybutton {
+  margin-top: 0.5rem;
+  font-size: 0.7em;
+}
+
+.pdfselectionpreview img {
+  width: 40px;
+}
+
+.pdfselectionpreview p {
+  margin-bottom: 0px;
+  color: #000000;
+  font-size: 0.7rem;
+}
+
+.pdfpreviewcol {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.back {
+  border: red;
+  margin-top: 6px;
+  background: bottom;
+}
+.valid {
+  color: #000000;
+}
+.invalid {
+  color: red;
+}
+.loader {
+  width: 100px;
+  left: 45%;
+  height: 100px;
+  top: 50%;
+}
+
+.spinnertext {
+  margin-top: 16px !important;
+  color: #FBB200;
+}
+
+.spinnercard {
+  width: 26%;
+  position: absolute;
+  left: 34%;
+  top: 36%;
+}
+.word {
+  font-kerning: normal;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.list-border {
+  padding: 10px 0 10px 0px;
+}
+.delete-btn {
+  cursor: pointer;
+}
+
+// .mat-form-field-autofill-control{
+//   width: 200% !important;
+//   max-width: 200% !important;
+// }
+
+// .mat-form-field-autofill-control{
+//   width: 200% !important;
+//   max-width: 200% !important;
+// }
+
+// .pac-container {
+//   box-sizing: content-box;
+//   padding-right: 4px;
+// }
+
+.file-icon {
+  width: 20px !important;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.list-border {
+  padding: 10px 0 10px 0px;
+}
+.delete-btn {
+  cursor: pointer;
+}
+
+
+// ion-label {
+//   color: #6C6C6C !important;
+// }
+
+.error {
+  color: rgb(223, 62, 62);
+  font-size: 11px;
+}
+
+.select_div {
+  border-bottom: 1px solid #E1E1E1;
+}
+
+ion-select{
+  max-width: 100% !important;
+  width: 100% !important;
+  padding-left: 0px !important;
+}
+input[type="file"]{
+  visibility:hidden;
+}
+
+.mrT{
+  margin-top:-11px !important;font-size: 10px!important;
+}
+
+.font{
+  font-size: 10px;
+}
+
+.font-size{
+  font-size: 12px;
+}
+ion-bottom-drawer {
+
+  --padding: 0 !important;
+  padding: 0 !important;
+
+  --background: #F3F3F3 !important;
+  background: #F3F3F3 !important;
+
+  ion-content {
+    --background: #F3F3F3 !important;
+  }
+
+}
+
+.mrgn{
+  padding-left: 2px !important;
+  font-size: 10px !important;
+}
+
+.title{
+
+font-family: 'Lexend';
+font-style: normal;
+font-weight: 400;
+font-size: 18px;
+line-height: 25px;
+text-align: center;
+color: #2F2E2C;
+margin-right: -40px;
+margin-left: 7px;
+}
+
+.bck-txt{
+  font-family: 'Lexend';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 15px;
+color: #595959;
+margin-right: 10px;
+background: unset;
+--background:transparent;
+--box-shadow: none;
+
+ion-label {
+  color: #222428;
+}
+}
+
+.field-label{
+margin-bottom: 15px;
+font-family: 'Lexend';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 18px;
+color: #2F2E2C;
+}
+
+.item-div{
+margin: 0px 8px 20px 8px;
+}
+
+.list-div{
+margin-left: 8px;
+margin-bottom: -15px;
+margin-right: 0px!important;
+
+}
+
+.icon{
+// padding-right: 4px;
+margin-left: 3px;
+}
+
+.subtitle{
+font-family: 'Lexend' !important;
+font-style: normal;
+font-weight: 400 !important;
+font-size: 14px !important;
+line-height: 18px;
+color: #2F2E2C !important;
+margin-bottom: 28px;
+
+}
+.label-type{
+font-family: 'Lexend';
+font-style: normal;
+font-weight: 400 !important;
+font-size: 14px !important;
+line-height: 18px;
+color: #2F2E2C !important;
+}
+
+.Start-btn{
+text-transform: none;
+font-size: 12px;
+font-weight: 400;
+line-height: 15px;
+letter-spacing: 0em;
+color: #fff;
+width: 115px;
+height: 42px;
+
+padding: 10px 20px;
+gap: 10px;
+
+background: #2F2E2C;
+border-radius: 6px;
+  padding: 10px 20px;
+// padding-right: 12px;
+
+}
+
+.btnlabel{
+font-family: 'Lexend';
+font-style: normal !important;
+font-weight: 400;
+font-size: 12px !important;
+line-height: 15px;
+color: #FFFFFF !important;
+background: none;
+
+}
+
+.item{
+  border-radius: 8px;
+  margin-top: 2px;
+}
+
+.role-div{
+  // margin-bottom: -8px;
+  height: 30px;
+}
+
+.label-div{
+margin:28px 0px 5px 8px;
+
+}
+
+// .native-input.sc-ion-input-md,
+// .native-input.sc-ion-input-ios {
+//   border-radius: var(--border-radius);
+//   padding-left: 0px !important;
+//   padding-right: var(--padding-end);
+//   padding-top: 16.5px;
+//   padding-bottom: 16.5px;
+//   font-family: 'Lexend';
+//   font-style: normal;
+//   font-weight: 400;
+//   font-size: 12px;
+//   line-height: 15px;
+
+//   color: #858585;
+
+// }
+// ion-checkbox{
+// margin-right: -10px !important;
+// }
+
+.team-input{
+border-radius: var(--border-radius);
+padding-left: 0px !important;
+
+
+}
+
+
+
+.native-input.sc-ion-input-md,
+.native-input.sc-ion-input-ios {
+border-radius: var(--border-radius);
+// padding-left: 16px;
+--padding-start:unset
+
+padding-right: var(--padding-end);
+padding-top: 16.5px;
+padding-bottom: 16.5px;
+font-family: 'Lexend';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+line-height: 15px;
+
+color: #858585;
+
+}
+
+
+// .native-input.sc-ion-input-md:invalid {
+//   -webkit-box-shadow: none;
+//   box-shadow: none;
+//   padding-left: 0px !important;
+//   --padding-start:unset;
+// }
+
+.btn{
+background: #2F2E2C !important;
+--background: #2F2E2C !important;
+border-radius: 6px;
+}
+
+
+

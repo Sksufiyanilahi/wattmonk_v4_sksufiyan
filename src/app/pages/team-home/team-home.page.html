@@ -1,0 +1,365 @@
+<!-- <ion-header>
+    <ion-grid>
+        <ion-row class="ion-align-items-center">
+            <ion-toolbar>
+                <ion-row class="ion-align-items-center">
+                    <ion-col size="1">
+                        <ion-buttons style="float:left">
+
+                            <ion-menu-button mode="md">
+                                <ion-img fill="clear" class="ion-no-margin  menu_im" src="assets/icon/new/menu.svg">
+                                </ion-img>
+                            </ion-menu-button>
+                        </ion-buttons>
+                    </ion-col>
+                    <ion-col>
+                        <div class="sera_div" (click)="searchbar()"><span class="search_test">Search</span></div>
+                    </ion-col>
+                    <ion-col size="1">
+                        <div class="notification-padding" [routerLink]="['/notification']" routerDirection="forward"
+                            (click)="setzero()">
+                            <ion-img src="assets/icon/new/notification.svg" class="notification-icon"></ion-img>
+                            <span class="badge" *ngIf="unreadCount > 0">
+                                {{unreadCount > 99 ? '99+' : unreadCount}}
+                            </span>
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </ion-toolbar>
+        </ion-row>
+    </ion-grid>
+</ion-header> -->
+<ion-content class="scroll">
+    <ion-grid>
+        <ion-row class="ion-align-items-center">
+            <ion-toolbar>
+                <ion-row class="ion-align-items-center">
+                    <ion-col size="1">
+                        <ion-buttons style="float:left">
+
+                            <ion-menu-button mode="md">
+                                <ion-img fill="clear" class="ion-no-margin  menu_im" src="assets/icon/new/menu.svg">
+                                </ion-img>
+                            </ion-menu-button>
+                        </ion-buttons>
+                    </ion-col>
+                    <ion-col>
+                        <div class="sera_div" (click)="searchbar()"><span class="search_test">Search</span></div>
+                    </ion-col>
+                    <ion-col size="1">
+                        <div class="notification-padding" [routerLink]="['/notification']" routerDirection="forward"
+                            (click)="setzero()">
+                            <ion-img src="assets/icon/new/notification.svg" class="notification-icon"></ion-img>
+                            <span class="badge" *ngIf="unreadCount > 0">
+                                {{unreadCount > 99 ? '99+' : unreadCount}}
+                            </span>
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </ion-toolbar>
+        </ion-row>
+    </ion-grid>
+    <ion-row style="background: #F8F8F8;">
+        <ion-col>
+            <h1 class="ion-no-padding ion-no-margin home">Team</h1>
+        </ion-col>
+        <ion-col size="4">
+            <div class="flex-container" style="float:right;margin-right: 8px;">
+                <!-- <div *ngIf="!isClient">
+          <ion-img src="/assets/icon/new/filter.svg" style="margin-top:16px; width:20px;height:20px;"
+            (click)="presentFilterModal()"></ion-img>
+        </div> -->
+                <div *ngIf="!userAccessRights?.viewonly" class="notification-padding" (click)="teamScheduledPage()"
+                    routerDirection="forward">
+                    <ion-icon name="add" class="plus_ic" style="font-size: 27px;"></ion-icon>
+                </div>
+            </div>
+        </ion-col>
+    </ion-row>
+    <!-- <ion-row> -->
+    <!-- <ion-col size="12"> -->
+    <!-- <ion-slides pager="false" [options]="slideOpts">
+          <ion-slide style="width: 80px !important;" *ngFor="let list of teamList" (click)="team()">
+           <ion-card>
+             <ion-card-header><ion-icon name="{{list.icon}}"></ion-icon></ion-card-header>
+             <ion-card-content>
+               <p style="margin: 0px;">{{list.count}}</p>
+               <p style="margin: 0px;">{{list.role}}</p>
+             </ion-card-content>
+           </ion-card>
+          </ion-slide>
+        </ion-slides> -->
+    <div *ngIf="isTeamData" style="margin-right:15px;margin-left: 15px;">
+        <!-- {{ adminRoleName }} -->
+
+        <!-- <ion-row class="ion-no-padding" >
+      <ion-segment [(ngModel)]="segments" mode="md" scrollable>
+        <div >
+      <ion-col style="width: 80px;" class="ion-no-padding" *ngFor="let users of overviewData.slice().reverse(); let i = index" >
+        <ion-segment-button [style.width.px]="segbtnWidth"  value="{{users.adminType}}" *ngIf="(users.adminType === adminName && users.roleName === adminRoleName) " (ionChange)="segmentChanged($event)" class="surveysegbtn segbtnspcl"
+        (click)="filterAdmin(users.roleName, i)">
+        <ion-label>{{users.roleName}}({{users.rolecount}})</ion-label>
+      </ion-segment-button>  
+      </ion-col>
+    </div>
+      <ion-col class="ion-no-padding" *ngFor="let users of overviewData.slice().reverse(); let i = index" >
+        <ion-segment-button [style.width.px]="segbtnWidth"  value="{{users.adminType}}" *ngIf="(users.adminType === surveyorName && users.roleName === surveyorRoleName)" (ionChange)="segmentChanged($event)" class="surveysegbtn segbtnspcl"
+        (click)="filterAdmin(users.roleName, i)">
+        <ion-label>{{users.roleName}}({{users.rolecount}})</ion-label>
+      </ion-segment-button>  
+      </ion-col>
+    </ion-segment>
+     </ion-row> -->
+
+        <ion-segment [style.width.px]="segWidth" [(ngModel)]="segments" style="margin: 20px 0px 0px 0px; " mode="md"
+            scrollable>
+            <div class="segdiv" *ngFor="let users of  overviewData.slice().reverse(); let i = index">
+
+                <ion-segment-button [style.width.px]="segbtnWidth" value="{{users.adminType}}"
+                    *ngIf="(users.adminType === adminName && users.roleName === adminRoleName) || (users.adminType === surveyorName && users.roleName === surveyorRoleName)"
+                    (ionChange)="segmentChanged($event)" class="surveysegbtn segbtnspcl"
+                    (click)="filterAdmin(users.roleName, i)">
+                    <ion-label>{{users.roleName}}({{users.rolecount}})</ion-label>
+                </ion-segment-button>
+            </div>
+
+        </ion-segment>
+    </div>
+    <ion-segment style="margin-top: 20px;" mode="md" scrollable *ngIf="!isTeamData">
+
+        <ion-segment-button *ngFor="let count of [1,22,3,4]; let i = index" class="surveysegbtn segbtnspcl">
+
+            <ion-skeleton-text animated style="border-radius: 0%;"></ion-skeleton-text>
+        </ion-segment-button>
+    </ion-segment>
+    <!-- <ion-slides pager="false" [options]="slideOpts" *ngIf="!isTeamData">
+        <ion-slide class="wt" *ngFor="let count of [1,22,3,4]; let i = index">
+          <ion-card class="slide-class card-class">
+            <ion-card-header class="img" *ngIf="!isTeamData">
+              <div>
+                <ion-skeleton-text
+                  animated
+                  style="border-radius: 50%; height: 2.5rem; width: 2.6rem"
+                ></ion-skeleton-text>
+              </div>
+            </ion-card-header>
+            <ion-card-content>
+              <p style="margin: 0px" class="font_sz">
+                <ion-skeleton-text
+                  animated
+                  style="width: 100%; height: 5px"
+                ></ion-skeleton-text>
+              </p>
+            </ion-card-content>
+          </ion-card>
+        </ion-slide>
+      </ion-slides> -->
+    <!-- </ion-col> -->
+    <!-- </ion-row> -->
+    <!-- <ion-row>
+    <ion-col>
+      <ion-segment
+        scrollable
+        (ionChange)="segmentChanged($event)"
+        value="member"
+        mode="md"
+        style="margin-top: 5%"
+      >
+        <ion-segment-button value="member">
+          <ion-label class="segment-btn">Member</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="groupsaplha">
+          <ion-label class="segment-btn">Groups Alpha</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="groups">
+          <ion-label class="segment-btn">Groups</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-col>
+  </ion-row> -->
+
+    <ion-content [scrollEvents]="true" style="height: 100%; position: sticky;margin-top:20px">
+        <!-- <div> -->
+        <div class="maindiv" *ngIf="isTeamData">
+            <div *ngIf="teamData.length > 0;else noTeamData">
+                <div *ngFor="let team of teamData;let i = index" class="team-block">
+                    <div class="img-block">
+                        <ion-avatar *ngIf="isEmptyObject(team?.logo) || team?.logo ==null">
+                            <span class="profile_img"> {{team?.firstname.slice(0, 1).toUpperCase() +
+                                team?.lastname.slice(0, 1).toUpperCase()}}</span>
+                        </ion-avatar>
+                        <ion-avatar *ngIf="!isEmptyObject(team?.logo) && team?.logo !==null">
+                            <img [src]="team?.logo?.url" class="profile_img" />
+                        </ion-avatar>
+                    </div>
+                    <div class="details-block">
+                        <div class="name">
+                            {{ team.firstname }} {{ team.lastname }}
+                        </div>
+                        <div class="email">
+                            <img src="./assets/icon/mail.svg" alt="">&nbsp;{{team.email}}
+                        </div>
+                    </div>
+                    <div class="action-block">
+                        <div class="user">
+                            <img (click)="edit(team)" src="./assets/icon/user.svg" alt="">
+                        </div> 
+                        <div class="block">
+                            <img (click)="deleteTeam(team)" src="./assets/icon/ban.svg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ng-template #noTeamData>
+                <div *ngIf="teamData.length === 0" class="h-100 d-flex flex-column align-center justify-center mar_not">
+                    <!-- <div *ngIf="!netSwitch"> -->
+                    No Team found
+                    <!-- </div> -->
+                    <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
+                </div>
+            </ng-template>
+        </div>
+        <div class="maindiv" *ngIf="!isTeamData">
+            <div>
+                <ion-item class="ion-text-wrap" lines="none" *ngFor="let team of [10,50,30,49,29]" class="detailitem">
+                    <!-- <ion-item-sliding> -->
+                    <!-- <ion-card  class="ion-no-padding custom-card ion-no-margin"> -->
+                    <!-- <ion-item lines="none" class="item-class"> -->
+                    <ion-avatar class="itemimg" slot="start">
+                        <ion-skeleton-text animated style="width: 100%; border-radius:50%"></ion-skeleton-text>
+                        <!-- <img class="profile_img" /> -->
+                    </ion-avatar>
+                    <ion-label style="margin-left: -5px;" class="ion-text-wrap" slot="start">
+
+                        <p class="itemname">
+                            <ion-skeleton-text animated style="width: 100%; border-radius: 0%"></ion-skeleton-text>
+                        </p>
+                        <p class="itemname">
+                            <ion-skeleton-text animated style="width: 100%; border-radius: 0%"></ion-skeleton-text>
+                        </p>
+                    </ion-label>
+                    <div slot="end">
+                        <span style="padding-right:10px ;">
+                            <p>
+                                <ion-skeleton-text animated style="width: 100%; border-radius: 0%"></ion-skeleton-text>
+                            </p>
+                            <!-- <button (click)="edit(team)" class="itembtn"> </button></span> -->
+                        </span>
+                        <span>
+                            <!-- <button (click)="deleteTeam(team)" style="margin-right:10x" class="itembtn"><img class="itembtnimg"
+                  src="../../../../assets/icon/ban.svg" alt=""></button> -->
+                            <p>
+                                <ion-skeleton-text animated style="width: 100%; border-radius: 0%"></ion-skeleton-text>
+                            </p>
+
+                        </span>
+                    </div>
+                </ion-item>
+            </div>
+        </div>
+
+        <!-- <ion-list *ngIf="!isTeamData">
+      <ion-item lines="none" *ngFor="let team of [10,50,30,49,29]" style="margin-bottom: 3%">
+        <ion-card class="ion-no-padding custom-card ion-no-margin" style="width: 100%;">
+          <ion-item lines="none" class="item-class">
+            <div style="padding-left: 0px; background: none" class="profile_img">
+              <ion-skeleton-text animated style="width: 100%; border-radius: 50%"></ion-skeleton-text>
+            </div>
+            <div>
+              <ion-skeleton-text animated style="width: 0px"></ion-skeleton-text>
+            </div>
+
+            <div size="auto" style="align-self: center">
+              <ion-skeleton-text animated style="margin-left: 10%; width: 10rem; height: 6px"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 6rem; height: 6px;margin-left: 10%;"></ion-skeleton-text>
+            </div>
+          </ion-item>
+        </ion-card>
+      </ion-item>
+    </ion-list> -->
+        <!-- </div> -->
+    </ion-content>
+</ion-content>
+<ng-container *ngIf="showBottomDraw">
+
+    <ion-bottom-drawer [(state)]="drawerState" [minimumHeight]="0" [dockedHeight]="320" [draggable]="false"
+        [disableDrag]="true" [shouldBounce]="true" [distanceTop]="0" class="drawer" style="z-index: 9999 !important;">
+        <form [formGroup]="assignForm">
+            <ion-grid class="drawer">
+                <ion-row>
+                    <ion-col size="12">
+                        <app-user-selector (assigneeData)=getassignedata($event) placeholder="Assign"
+                            [assignees]="listOfAssignees" formControlName="assignedto"></app-user-selector>
+
+                    </ion-col>
+                </ion-row>
+
+                <ion-row style="justify-content: flex-end;">
+                    <ion-col size="auto" style="padding-top: 0px; margin-right: 6px;">
+                        <ion-button class="buttom-drawer-button" fill="clear" (click)="transferJobs()">
+                            Confirm
+                        </ion-button>
+                    </ion-col>
+                    <ion-col size="auto">
+                        <ion-button class="buttom-drawer-button-cancel" fill="clear" (click)="dismissBottomSheet()">
+                            Cancel
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </form>
+
+    </ion-bottom-drawer>
+</ng-container>
+
+
+
+<!-- <ion-content>
+  <ion-grid >
+      <ion-row class="ion-align-items-center">
+          <ion-toolbar>
+              <ion-row class="ion-align-items-center">
+                  <ion-col size="1"><ion-buttons style="float:left">
+                     
+                      <ion-menu-button mode="md"> <ion-img fill="clear" class="ion-no-margin  menu_im" src="assets/icon/new/menu.svg" ></ion-img></ion-menu-button>
+                  </ion-buttons></ion-col>
+                
+                  <ion-col >
+                      <div  class="sera_div" (click)="searchbar()"><span class="search_test">Search</span></div>
+
+      
+                     
+                  </ion-col>
+                  <ion-col size="1" >
+                      <div class="notification-padding" [routerLink]="['/notification']" routerDirection="forward"
+                          (click)="setzero()">
+                          <ion-img src="assets/icon/new/notification.svg" class="notification-icon"></ion-img>
+                          <span class="badge" *ngIf="unreadCount > 0">
+                              {{unreadCount > 99 ? '99+' : unreadCount}}
+                          </span>
+                      </div>
+                  </ion-col>
+              </ion-row>
+          </ion-toolbar>
+      </ion-row>
+  </ion-grid>
+
+
+</ion-content> -->
+
+<!-- <ion-tabs style="margin-top: 60px">
+  <ion-tab-bar class="ion-no-border">
+      <ion-tab-button tab="pestamp-design">
+      </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs> -->
+
+
+
+
+<ion-footer class="ion-no-border white-bg" *ngIf="showFooter && userData?.parent.id != 232">
+    <div class="position-relative">
+
+    </div>
+
+</ion-footer>

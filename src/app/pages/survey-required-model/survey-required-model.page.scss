@@ -1,0 +1,29 @@
+.head-block {
+    padding: 10px 0;
+    text-align: center;
+
+    .title {
+        font-size: 1em;
+    }
+
+    .sub-title {
+        font-size: 0.8em;
+    }
+}
+
+.data-block {
+    padding: 8px;
+
+    ion-col {
+        display: flex;
+
+        span {
+            font-size: 0.8em;
+            margin: auto auto auto 0;
+        }
+
+        ion-button {
+            font-size: 0.8em;
+        }
+    }
+}

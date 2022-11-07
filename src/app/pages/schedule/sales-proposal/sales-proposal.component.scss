@@ -1,0 +1,124 @@
+.user-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  
+  ion-range {
+    --bar-background: #CBCBCB;
+    --bar-background-active: #CBCBCB;
+    --knob-background: #FBB200;
+    --knob-border-radius: 2px solid white;
+    --knob-size: 20px;
+    --knob-border-radius: 50%;
+    --pin-color: #E1E1E1;
+  }
+  
+  .solar-data {
+    position: absolute;
+    margin-top: 50px;
+    width: 146px;
+    max-width: 150px;
+    z-index: 3;
+    margin-left: 0px;
+    max-height: 200px;
+    overflow: auto;
+  }
+  
+  .solar-made {
+    position: absolute;
+    width: 172px;
+    max-width: 175px;
+    z-index: 3;
+    margin-left: 0px;
+    max-height: 200px;
+    overflow: auto;
+    margin-top: 2px;
+  }
+  
+  ion-label {
+    color: #6C6C6C !important;
+  }
+  
+  .error {
+    color: rgb(223, 62, 62);
+    font-size: 11px;
+  }
+  
+  .remove{
+    position: absolute;
+    z-index: 999;
+    margin-left:-20px;
+  
+  }
+  
+  
+  input[type="file"]{
+    visibility:hidden;
+  }
+  .font{
+    font-size: 10px;
+  }
+  
+  .custon-nav{
+    height: 48px;
+    width: 20px;
+    cursor: pointer;
+  
+    vertical-align: middle;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .prev-icon-custom{
+    // background: url(https://freakyjolly.com/demo/jquery/OwlCarousel2/nav-icon.png) no-repeat scroll 0px 0px;
+   }
+  .prev-icon-custom.disabled{
+    opacity: 0.4;
+    cursor: default;
+  }
+  
+  .next-icon-custom{
+    // background: url(https://freakyjolly.com/demo/jquery/OwlCarousel2/nav-icon.png) no-repeat scroll -32px 0px;
+   }
+  .next-icon-custom.disabled{
+    opacity: 0.4;
+    cursor: default;
+  }
+  .slider-nav{
+    ion-icon{
+        height: 100%;
+    }
+  }
+  
+  .slide-text{
+    position: absolute;
+    color: white;
+    bottom: 30px;
+  }
+  
+  ion-item{
+  
+    --background: #F8F8F8 !important;
+  
+  
+  }
+  .previewlabel{
+
+
+    overflow: hidden;
+  }
+  .divau{
+
+    border-color:#fff;
+    border-top: #fff;
+    border-left: #fff;
+    width:100%;
+    z-index:99999999999999999999999;
+    padding :20px;
+  }
+  .mat-input-element {
+    caret-color: #000;
+}

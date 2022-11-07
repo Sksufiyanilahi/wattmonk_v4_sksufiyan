@@ -1,0 +1,965 @@
+<ion-content>
+    <ion-grid>
+        <div class="head">
+            <ion-toolbar>
+                <!-- <div>
+                    <div>
+                        <ion-buttons>
+                            <ion-menu-button mode="md">
+                                <ion-img fill="clear" class="ion-no-margin  menu_im" src="assets/icon/new/menu.svg">
+                                </ion-img>
+                            </ion-menu-button>
+                        </ion-buttons>
+                    </div>
+                    <div class="sera_div" (click)="searchbar()"><span class="search_test">Search</span></div>
+                    <div class="notification-padding" [routerLink]="['/notification']" routerDirection="forward"
+                        (click)="setzero()">
+                        <ion-img src="assets/icon/new/notification.svg" class="notification-icon"></ion-img>
+                        <span class="badge" *ngIf="unreadCount > 0">
+                            {{unreadCount > 99 ? '99+' : unreadCount}}
+                        </span>
+                    </div>
+                </div> -->
+                <ion-row class="ion-align-items-center">
+                    <ion-col size="1">
+                        <ion-buttons style="float:left">
+
+                            <ion-menu-button mode="md">
+                                <ion-img fill="clear" class="ion-no-margin  menu_im" src="assets/icon/new/menu.svg">
+                                </ion-img>
+                            </ion-menu-button>
+                        </ion-buttons>
+                    </ion-col>
+
+                    <ion-col>
+                        <div class="sera_div" (click)="searchbar()"><span class="search_test">Search</span></div>
+                    </ion-col>
+                    <ion-col size="1">
+                        <div class="notification-padding" [routerLink]="['/notification']" routerDirection="forward"
+                            (click)="setzero()">
+                            <ion-img src="assets/icon/new/notification.svg" class="notification-icon"></ion-img>
+                            <span class="badge" *ngIf="unreadCount > 0">
+                                {{unreadCount > 99 ? '99+' : unreadCount}}
+                            </span>
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </ion-toolbar>
+        </div>
+        <ion-row style="margin-top: 70px;">
+            <ion-col size="9">
+
+                <p style="margin-left: 8px;"> <span class="titlegray">Hello</span> <span class="title">
+                        {{username}}</span> </p>
+                <p class="subtitle">Welcome to Wattmonk</p>
+            </ion-col>
+            <ion-col size="3" style="display: flex;align-self: center;">
+                <div *ngIf="userData?.logo ==null" class="profile_img" style="vertical-align: middle;">
+                    {{userData?.userprofile.firstname.slice(0, 1).toUpperCase() + userData?.userprofile.lastname.slice(0,
+                    1).toUpperCase()}}</div>
+                <div *ngIf="userData?.logo !==null">
+                    <img [src]="userData?.logo?.url" class="profile_image" />
+                </div>
+                <!-- <img class="imagehead" src="../../../assets/images/image 1.png"> -->
+            </ion-col>
+
+
+
+
+        </ion-row>
+
+        <div class="divpadding">
+            <ion-row class="headcard">
+                <ion-col class="ion-padding" size="9">
+                    <h1 class="ion-no-padding ion-no-margin headtitle">{{totalProjects}} </h1>
+                    <h3 class="headsubtitle">Total Projects</h3>
+                </ion-col>
+                <ion-col class="ion-no-padding ion-no-margin" size="3" style="position: relative">
+                    <img style="position: absolute; right:0px; top:-14px; border-radius: 0 8px 0 0;width: 83px;height: 83px;"
+                        src="./assets/images/imgyellow.svg" alt="">
+                </ion-col>
+            </ion-row>
+        </div>
+        <!-- SLIDE ONE STARTS HERE -->
+
+        <ion-title mode="md" class="heading">Services</ion-title>
+        <ion-slides class="slides" pager [options]="sliderConfig1">
+            <ion-slide class="slide1">
+                <ion-card *ngIf="services" class="slidercard">
+                    <ion-card-header class="ion-no-padding headerbottom">
+                        <ion-item mode="md" lines="none">
+                            <h5 class="side_label">Statics</h5>
+                            <ion-select mode="md" class="select-text" value="thismonth"
+                                (ionChange)="handelChangeService($event,'servicesLine')" interface="popover">
+                                <ion-select-option value="thisweek">This Week</ion-select-option>
+                                <ion-select-option value="thismonth">This Month</ion-select-option>
+                                <ion-select-option value="lastmonth">Last Month</ion-select-option>
+                                <ion-select-option value="all">All</ion-select-option>
+                                <!-- <ion-select-option value="all">ALL</ion-select-option> -->
+                            </ion-select>
+                        </ion-item>
+
+                        <ion-card-subtitle style="margin-left: 14px;padding-bottom: 16px;">
+
+                            <!-- <div style="height: 9px; width:9px; color:#FBB814"> -->
+                            <!-- <span style="height: 9px; width:9px; background-color:#FBB814;"></span><span style="color:#AFAFAF;">Sales Proposal</span> -->
+                            <!-- </div> -->
+                            <div class="flex-container">
+                                <div style="padding-right: 9px;">
+                                    <div class='box yellow'></div><span style="text-transform: none;">Sales
+                                        Proposal</span>
+                                </div>
+                                <div style="padding-right: 9px;">
+                                    <div class='box green'></div><span style="text-transform: none;">Permit</span>
+                                </div>
+                                <div style="padding-right: 9px;">
+                                    <div class='box blue'></div><span style="text-transform: none;">PE
+                                        Stamp</span>
+                                </div>
+                            </div>
+                        </ion-card-subtitle>
+                    </ion-card-header>
+                    <ion-card-content style="padding: 0 0 0 1px;">
+                        <div class="dashboardCharts">
+                            <ngx-charts-line-chart (window:resize)="onResize($event)" [view]="view"
+                                [scheme]="servicesLineGraph.colorScheme" [xAxis]="servicesLineGraph.xAxis"
+                                [yAxis]="servicesLineGraph.yAxis" [timeline]="servicesLineGraph.timeline"
+                                [results]="servicesLineGraph.lineChartData">
+                            </ngx-charts-line-chart>
+                        </div>
+                        <!-- <div >
+            <canvas id="lineCanvas" #lineCanvas style="position: relative; height: 350px;"></canvas>
+          </div> -->
+                    </ion-card-content>
+                </ion-card>
+
+                <!-- SKELETON Line GRAPH start -->
+                <!-- <div  > -->
+                <ion-card *ngIf="!services" mode="md" class="slidercard">
+                    <ion-card-header class="ion-no-padding headerbottom">
+                        <ion-row>
+                            <ion-col size="9">
+                                <ion-skeleton-text animated style="width: 90%;">
+                                </ion-skeleton-text>
+                            </ion-col>
+                            <ion-col size="3">
+                                <ion-skeleton-text animated style="width: 90%;">
+                                </ion-skeleton-text>
+                            </ion-col>
+                        </ion-row>
+                        <ion-card-subtitle style="margin-left: 10px;">
+
+                            <!-- <div style="height: 9px; width:9px; color:#FBB814"> -->
+                            <!-- <span style="height: 9px; width:9px; background-color:#FBB814;"></span><span style="color:#AFAFAF;">Sales Proposal</span> -->
+                            <!-- </div> -->
+                            <div class="flex-container">
+                                <div style="padding-right: 6px;">
+                                    <div class='box yellow'></div>Sales Proposal
+                                </div>
+                                <div style="padding-right: 6px;">
+                                    <div class='box green'></div>Permit
+                                </div>
+                                <div style="padding-right: 6px;">
+                                    <div class='box blue'></div>PE Stamp
+                                </div>
+                            </div>
+                        </ion-card-subtitle>
+
+                    </ion-card-header>
+                    <!-- <div>
+                    <ion-label>
+                      <div style="height: 9px; width:9px; color:#FBB814"> <span style="color:#AFAFAF">Sales Proposal</span></div>
+                    
+                    </ion-label>
+                  </div> -->
+
+                    <ion-card-content>
+
+                        <ion-row>
+                            <ion-col size="1">
+                                <p style="color: #AFAFAF ; font-size: 12px;padding-bottom: 12px;">
+                                    <!-- <ion-skeleton-text animated>
+                            50
+                          </ion-skeleton-text>   -->
+                                    80
+                                </p>
+                                <p style="color: #AFAFAF ; font-size: 12px;padding-bottom: 12px;">
+                                    <!-- <ion-skeleton-text animated>
+                            50
+                          </ion-skeleton-text>   -->
+                                    70
+                                </p>
+                                <p style="color: #AFAFAF ; font-size: 12px;padding-bottom: 12px;">
+                                    <!-- <ion-skeleton-text animated>
+                            50
+                          </ion-skeleton-text>   -->
+                                    60
+                                </p>
+                                <p style="color: #AFAFAF ; font-size: 12px;padding-bottom: 12px;">
+                                    <!-- <ion-skeleton-text animated>
+                            50
+                          </ion-skeleton-text>   -->
+                                    50
+                                </p>
+                                <p style="color: #AFAFAF ; font-size: 12px;padding-bottom: 12px;">
+                                    <!-- <ion-skeleton-text animated>
+                              50
+                            </ion-skeleton-text>   -->
+                                    40
+                                </p>
+                                <p style="color: #AFAFAF ; font-size: 12px;padding-bottom: 12px;">
+                                    <!-- <ion-skeleton-text animated>
+                            50
+                          </ion-skeleton-text>   -->
+                                    30
+                                </p>
+                                <p style="color: #AFAFAF ; font-size: 12px;padding-bottom: 12px;">
+                                    <!-- <ion-skeleton-text animated>
+                                50
+                              </ion-skeleton-text>   -->
+                                    20
+                                </p>
+                                <p style="color: #AFAFAF ; font-size: 12px;padding-bottom: 12px;">
+                                    <!-- <ion-skeleton-text animated>
+                              50
+                            </ion-skeleton-text>   -->
+                                    10
+                                </p>
+                            </ion-col>
+                            <ion-col>
+                                <div style="border: solid 1px #AFAFAF; height:240px; width: 0.1px;">
+
+                                </div>
+                            </ion-col>
+                            <ion-col size="10">
+                                <!-- <ion-row class="ion-no-padding">
+                      <ion-col size="2" class="ion-no-padding">
+                        <ion-skeleton-text animated style="width: 20px; height: 150px;">
+                        </ion-skeleton-text>
+                      </ion-col>
+                      <ion-col size="2" class="ion-no-padding">
+                        <ion-skeleton-text animated style="width: 20px; height: 150px;">
+                        </ion-skeleton-text>
+                      </ion-col>
+                      <ion-col size="2" class="ion-no-padding">
+                        <ion-skeleton-text animated style="width: 20px; height: 150px;">
+                        </ion-skeleton-text>
+                      </ion-col>
+                      <ion-col size="2" class="ion-no-padding">
+                        <ion-skeleton-text animated style="width: 20px; height: 150px;">
+                        </ion-skeleton-text>
+                      </ion-col>
+                      <ion-col size="2" class="ion-no-padding">
+                        <ion-skeleton-text animated style="width: 20px; height: 150px;">
+                        </ion-skeleton-text>
+                      </ion-col>
+                      <ion-col size="2" class="ion-no-padding">
+                        <ion-skeleton-text animated style="width: 20px; height: 150px;">
+                        </ion-skeleton-text>
+                      </ion-col>
+                    </ion-row> -->
+                            </ion-col>
+                        </ion-row>
+
+                        <div style="border: solid 1px #AFAFAF; height:1px; width: 600px;"></div>
+                        <ion-row>
+                            <ion-col size="1">
+                                <span style="color: #AFAFAF ; font-size: 12px">0</span>
+                            </ion-col>
+                            <ion-col size="1">
+                                <div style="border: solid 1px #AFAFAF; height:30px; width: 1px;"></div>
+                            </ion-col>
+                            <ion-col size="10">
+                                <ion-row>
+                                    <ion-col size="1.5">
+                                        <span style="color: #AFAFAF; font-size: 12px;">01</span>
+                                    </ion-col>
+                                    <ion-col size="1.5">
+                                        <span style="color: #AFAFAF; font-size: 12px;">02</span>
+                                    </ion-col>
+                                    <ion-col size="1.5">
+                                        <span style="color: #AFAFAF; font-size: 12px;">03</span>
+                                    </ion-col>
+                                    <ion-col size="1.5">
+                                        <span style="color: #AFAFAF; font-size: 12px;">04</span>
+                                    </ion-col>
+                                    <ion-col size="1.5">
+                                        <span style="color: #AFAFAF; font-size: 12px;">05</span>
+                                    </ion-col>
+                                    <ion-col size="1.5">
+                                        <span style="color: #AFAFAF; font-size: 12px;">06</span>
+                                    </ion-col>
+                                    <ion-col size="1.5">
+                                        <span style="color: #AFAFAF; font-size: 12px;">07</span>
+                                    </ion-col>
+                                    <ion-col size="1.5">
+                                        <span style="color: #AFAFAF; font-size: 12px;">08</span>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-col>
+                        </ion-row>
+                        <!-- <div id="bar-chart-container">
+              
+              <canvas  #barCanvas>
+              
+              </canvas>
+            </div> -->
+                    </ion-card-content>
+                </ion-card>
+                <!-- </div> -->
+                <!-- SKELETON BAR GRAPH end -->
+
+            </ion-slide>
+            <ion-slide class="slide1">
+                <ion-card *ngIf="servicespie" class="slidercard">
+                    <ion-card-header class="ion-no-padding headerbottom">
+                        <ion-item lines="none">
+                            <h5 class="side_label">{{servicetitle}}</h5>
+                            <ion-select mode="md" class="select-text"
+                                (ionChange)="handelChangeService($event,'servicesDonut')" value="pestamp"
+                                interface="popover">
+                                <ion-select-option value="prelim">Sales Proposal</ion-select-option>
+                                <ion-select-option value="permit">Permit</ion-select-option>
+                                <ion-select-option value="pestamp">Pe Stamp</ion-select-option>
+                                <ion-select-option value="all">All</ion-select-option>
+                            </ion-select>
+                        </ion-item>
+                    </ion-card-header>
+                    <ion-card-content>
+                        <div style="padding-top: 12px;" mode="md" class="current" [ngStyle]="getOverlayStyle()">
+                            <span class="tot-text">{{totalcountpie}}
+                                Total</span>
+                        </div>
+                        <canvas id="doughnutCanvas" #doughnutCanvas
+                            style="position: relative; height:20vh; width:40vw"></canvas>
+                    </ion-card-content>
+                </ion-card>
+
+                <!-- Dougnut Skeleton starts -->
+                <ion-card *ngIf="!servicespie" class="slidercard">
+                    <ion-card-header class="ion-no-padding headerbottom">
+                        <ion-skeleton-text [animated]="true" style="width: 50%; height: 22px;">
+                        </ion-skeleton-text>
+                    </ion-card-header>
+                    <ion-card-content style="margin-top: 40px;">
+                        <!-- <div style="padding-top: 12px;" mode="md" class="current" [ngStyle]="getOverlayStyle()">
+        <span style="font-size: 18px; font-weight: 600;">Total</span>
+    </div>
+    <div class="ion-text-center skeletondiv"  style="border-radius: 100%; " >
+      <ion-skeleton-text  [animated]="true" class="ion-text-center skel" animated style="border-radius: 50%; width: 200px; height: 200px;">
+      </ion-skeleton-text>
+    </div> -->
+                        <div class="skeletondiv">
+                            <div class="div1 ion-text-center"><span class="skeltext">Total</span></div>
+                        </div>
+                    </ion-card-content>
+
+                </ion-card>
+                <!-- Doughnut skeleton ends -->
+            </ion-slide>
+        </ion-slides>
+
+        <!-- SLIDE ONE ENDS HERE -->
+
+
+        <!-- SLIDE TWO STARTS HERE -->
+        <ion-title mode="md" class="heading">Task Report</ion-title>
+
+        <ion-slides class="slides" pager>
+            <ion-slide class="slide1">
+                <ion-card class="slidercard">
+                    <div *ngIf="isTR">
+                        <ion-card-header class="ion-no-padding headerbottom">
+                            <ion-item lines="none">
+                                <h5 class="side_label">{{tasktitle}}</h5>
+                                <ion-select mode="md" class="select-text" value="pestamp"
+                                    (ionChange)="handleChange($event,'taskRepDonut')" interface="popover">
+                                    <ion-select-option value="prelim">Sales Proposal</ion-select-option>
+                                    <ion-select-option value="permit">Permit</ion-select-option>
+                                    <ion-select-option value="pestamp">Pe Stamp</ion-select-option>
+                                    <!-- <ion-select-option value="all">All</ion-select-option> -->
+                                </ion-select>
+                            </ion-item>
+                        </ion-card-header>
+
+
+                        <ion-card-content>
+
+                            <div>
+                                <div mode="md" class="current" [ngStyle]="getOverlayStyle()">
+                                    <span class="tot-text">{{totalCount}} Total</span>
+                                </div>
+                                <canvas #doughnutCanvasTR id="doughnutCanvasTR"
+                                    style="position: relative; height:20vh; width:40vw"></canvas>
+                            </div>
+
+                            <ion-card-subtitle style="margin-left: 10px;">
+
+                                <!-- <div style="height: 9px; width:9px; color:#FBB814"> -->
+                                <!-- <span style="height: 9px; width:9px; background-color:#FBB814;"></span><span style="color:#AFAFAF;">Sales Proposal</span> -->
+                                <!-- </div> -->
+                                <div style="padding-top: 12px;" class="flex-container">
+                                    <div style="padding-right: 5px;">
+                                        <div class='boxx greenstatus'></div><span class="approvalspan">Accept
+                                            ({{acceptedCount}})</span>
+                                    </div>
+                                    <div style="padding-right: 5px;">
+                                        <div class='boxx redstatus'></div><span class="approvalspan">Not Accept
+                                            ({{notacceptedCount}})</span>
+                                    </div>
+                                    <div style="padding-right: 5px;">
+                                        <div class='boxx yellowstatus'></div><span class="approvalspan">Total
+                                            ({{totalCount}}) </span>
+                                    </div>
+                                </div>
+                            </ion-card-subtitle>
+                        </ion-card-content>
+                    </div>
+                    <div *ngIf="!isTR">
+                        <ion-card-header>
+                            <ion-skeleton-text [animated]="true" style="width: 50%; height: 22px;">
+                            </ion-skeleton-text>
+                        </ion-card-header>
+                        <div class="line"></div>
+                        <ion-card-header>
+                            <ion-skeleton-text [animated]="true" style="width: 50%; height: 22px;">
+                            </ion-skeleton-text>
+                        </ion-card-header>
+                        <ion-card-content>
+                            <div class="skeletondiv">
+                                <div class="div1 ion-text-center"><span class="skeltext">Total</span></div>
+                            </div>
+                        </ion-card-content>
+                    </div>
+                </ion-card>
+
+
+
+            </ion-slide>
+
+            <ion-slide class="slide1">
+                <ion-card class="slidercard">
+                    <div *ngIf="isTR">
+                        <ion-card-header class="ion-no-padding headerbottom">
+                            <ion-item lines="none">
+                                <h5 class="side_label">Task Report</h5>
+                                <ion-select mode="md" class="select-text" value="all"
+                                    (ionChange)="handleChange($event,'taskRepBar')" interface="popover">
+                                    <ion-select-option value="thisweek">This Week</ion-select-option>
+                                    <ion-select-option value="thismonth">This Month</ion-select-option>
+                                    <ion-select-option value="lastmonth">Last month</ion-select-option>
+                                    <ion-select-option value="all">All</ion-select-option>
+
+                                </ion-select>
+                            </ion-item>
+                        </ion-card-header>
+                        <ion-card-content>
+                            <div style="height: 350px;" id="bar-chart-container-big">
+                                <canvas id="barCanvasBig" #barCanvasBig></canvas>
+                            </div>
+                        </ion-card-content>
+                    </div>
+
+                    <div *ngIf="!isTR">
+                        <ion-card-header>
+                            <ion-row>
+                                <ion-col size="9">
+                                    <ion-skeleton-text animated style="width: 90%;">
+                                    </ion-skeleton-text>
+                                </ion-col>
+                                <ion-col size="3">
+                                    <ion-skeleton-text animated style="width: 90%;">
+                                    </ion-skeleton-text>
+                                </ion-col>
+                            </ion-row>
+                        </ion-card-header>
+                        <div class="line"></div>
+                        <ion-card-content>
+                            <ion-row>
+                                <ion-col size="1">
+                                    <p style="color: #AFAFAF ;font-size: 12px ;padding-bottom: 12px;">
+                                        50
+                                    </p>
+                                    <p style="color: #AFAFAF ;font-size: 12px;padding-bottom: 12px;">
+
+                                        40
+                                    </p>
+                                    <p style="color: #AFAFAF ;font-size: 12px;padding-bottom: 12px;">
+
+                                        30
+                                    </p>
+                                    <p style="color: #AFAFAF ;font-size: 12px;padding-bottom: 12px;">
+
+                                        20
+                                    </p>
+                                    <p style="color: #AFAFAF ;font-size: 12px;padding-bottom: 12px;">
+
+                                        10
+                                    </p>
+                                </ion-col>
+                                <ion-col>
+                                    <div style="border: solid 1px #AFAFAF; height:220px; width: 1px;">
+
+                                    </div>
+                                </ion-col>
+                                <ion-col size="10">
+                                    <ion-row class="ion-no-padding">
+                                        <ion-col size="2" class="ion-no-padding">
+                                            <ion-skeleton-text animated style="width: 20px; height: 210px;">
+                                            </ion-skeleton-text>
+                                        </ion-col>
+                                        <ion-col size="2" class="ion-no-padding">
+                                            <ion-skeleton-text animated style="width: 20px; height: 210px;">
+                                            </ion-skeleton-text>
+                                        </ion-col>
+                                        <ion-col size="2" class="ion-no-padding">
+                                            <ion-skeleton-text animated style="width: 20px; height: 210px;">
+                                            </ion-skeleton-text>
+                                        </ion-col>
+                                        <ion-col size="2" class="ion-no-padding">
+                                            <ion-skeleton-text animated style="width: 20px; height: 210px;">
+                                            </ion-skeleton-text>
+                                        </ion-col>
+                                        <ion-col size="2" class="ion-no-padding">
+                                            <ion-skeleton-text animated style="width: 20px; height: 210px;">
+                                            </ion-skeleton-text>
+                                        </ion-col>
+                                        <ion-col size="2" class="ion-no-padding">
+                                            <ion-skeleton-text animated style="width: 20px; height: 210px;">
+                                            </ion-skeleton-text>
+                                        </ion-col>
+                                    </ion-row>
+                                </ion-col>
+                            </ion-row>
+
+                            <div style="border: solid 1px #AFAFAF; height:1px; width: 600px;"></div>
+                            <ion-row>
+                                <ion-col size="1">
+                                    <span style="color: #AFAFAF ;">0</span>
+                                </ion-col>
+                                <ion-col size="1">
+                                    <div style="border: solid 1px #AFAFAF; height:30px; width: 1px;"></div>
+                                </ion-col>
+                                <ion-col size="10">
+                                    <ion-row>
+                                        <ion-col size="2">
+                                            <span style="color: #AFAFAF ;font-size: 12px">0</span>
+                                        </ion-col>
+                                        <ion-col size="2">
+                                            <span style="color: #AFAFAF ; font-size: 12px">10</span>
+                                        </ion-col>
+                                        <ion-col size="2">
+                                            <span style="color: #AFAFAF ; font-size: 12px">20</span>
+                                        </ion-col>
+                                        <ion-col size="2">
+                                            <span style="color: #AFAFAF ;font-size: 12px">30</span>
+                                        </ion-col>
+                                        <ion-col size="2">
+                                            <span style="color: #AFAFAF ;font-size: 12px ">40</span>
+                                        </ion-col>
+                                        <ion-col size="2">
+                                            <span style="color: #AFAFAF ; font-size: 12px">50</span>
+                                        </ion-col>
+                                    </ion-row>
+                                </ion-col>
+                            </ion-row>
+
+                        </ion-card-content>
+                    </div>
+                </ion-card>
+            </ion-slide>
+        </ion-slides>
+
+
+        <!-- SLIDE TWO ENDS HERE -->
+
+
+
+
+        <!-- SLIDE THREE STARTS HERE -->
+
+        <ion-title style="margin-bottom: 20px;" mode="md" class="heading">Average Production Time</ion-title>
+
+        <ion-slides mode="md" class="slides" [options]="sliderConfig">
+            <ion-slide mode="md" class="slide ">
+                <ion-card *ngIf="salesproposalcurrent || salesproposalcurrent == 0 " style="width: 100%; height: 100%;"
+                    class="mini-card ion-padding">
+                    <div>
+                        <div style="margin-top: -5px;" class="progress-wrapper">
+                            <div class="current" [ngStyle]="getOverlayStyle()"><span class="hrs-text">{{
+                                    salesproposalcurrent
+                                    }}Hrs</span></div>
+                            <round-progress [current]="salesproposalcurrent" [max]="max" [background]="background"
+                                [radius]="radius" [stroke]="stroke" [rounded]="rounded" [clockwise]="clockwise"
+                                [responsive]="responsive" [duration]="duration" [animation]="animation"
+                                [animationDelay]="animationDelay">
+                            </round-progress>
+                            <!-- <p>Hello</p> -->
+                        </div>
+                        <p style="margin-top: -5px;">
+                            <span style="vertical-align: middle;"><img src="/assets/images/Prelim.svg" alt=""></span>
+                            <ion-text style="vertical-align: middle;" class="mini-title">Sales Proposal
+                            </ion-text>
+                        </p>
+                    </div>
+
+                </ion-card>
+
+                <!-- SKELETON Progress GRAPH start -->
+
+                <ion-card *ngIf="!salesproposalcurrent && salesproposalcurrent !== 0">
+                    <div>
+
+                        <ion-card-content>
+                            <div class="skeletondiv">
+                                <div class="divmini ion-text-center"><span class="miniskeltext">Hrs</span></div>
+                            </div>
+                            <div class="ion-text-center">
+                                <ion-text>
+                                    <ion-skeleton-text [animated]="true" style="width: 50%; height: 15px;">
+                                    </ion-skeleton-text>
+                                </ion-text>
+                            </div>
+                        </ion-card-content>
+                    </div>
+                </ion-card>
+                <!-- SKELETON Progress GRAPH end -->
+
+
+            </ion-slide>
+
+            <ion-slide class="slide ">
+                <ion-card *ngIf="permitcurrent || permitcurrent == 0 " style="width: 100%; height: 100%;"
+                    class="mini-card ion-padding">
+                    <div>
+                        <div style="margin-top: -5px;" class="progress-wrapper">
+                            <div class="current" [ngStyle]="getOverlayStyle()"><span class="hrs-text">{{
+                                    permitcurrent
+                                    }}Hrs</span></div>
+                            <round-progress [current]="permitcurrent" [max]="max" [background]="background"
+                                [radius]="radius" [stroke]="stroke" [rounded]="rounded" [clockwise]="clockwise"
+                                [responsive]="responsive" [duration]="duration" [animation]="animation"
+                                [animationDelay]="animationDelay"></round-progress>
+                            <!-- <p>Hello</p> -->
+                        </div>
+                        <p style="margin-top: -5px;">
+                            <span style="vertical-align: middle;"><img src="../../../assets/images/permitimage.svg"
+                                    alt=""></span>
+                            <ion-text style="vertical-align: middle;" class="mini-title">Permit</ion-text>
+                        </p>
+                    </div>
+
+                </ion-card>
+
+
+                <!-- SKELETON Progress GRAPH start -->
+
+                <ion-card *ngIf="!permitcurrent && permitcurrent !== 0">
+                    <div>
+
+                        <ion-card-content>
+                            <div class="skeletondiv">
+                                <div class="divmini ion-text-center"><span class="miniskeltext">Hrs</span></div>
+                            </div>
+                            <div class="ion-text-center">
+                                <ion-text>
+                                    <ion-skeleton-text [animated]="true" style="width: 50%; height: 15px;">
+                                    </ion-skeleton-text>
+                                </ion-text>
+                            </div>
+                        </ion-card-content>
+                    </div>
+                </ion-card>
+                <!-- SKELETON Progress GRAPH end -->
+
+
+            </ion-slide>
+
+            <ion-slide *ngIf="pestampcurrent || pestampcurrent == 0 " mode="md" class="slide ">
+                <ion-card style="width: 100%; height: 100%;" class="mini-card ion-padding">
+                    <div>
+                        <div style="margin-top: -5px;" class="progress-wrapper">
+                            <div class="current" [ngStyle]="getOverlayStyle()"><span class="hrs-text">{{
+                                    pestampcurrent
+                                    }}Hrs</span></div>
+                            <round-progress [current]="pestampcurrent" [max]="max" [background]="background"
+                                [radius]="radius" [stroke]="stroke" [rounded]="rounded" [clockwise]="clockwise"
+                                [responsive]="responsive" [duration]="duration" [animation]="animation"
+                                [animationDelay]="animationDelay"></round-progress>
+                            <!-- <p>Hello</p> -->
+                        </div>
+                        <p style="margin-top: -5px;">
+                            <span style="vertical-align: middle;"><img src="/assets/images/pestamp.svg" alt=""></span>
+                            <ion-text style="vertical-align: middle;" class="mini-title">PE Stamp</ion-text>
+                        </p>
+                    </div>
+
+                </ion-card>
+
+                <!-- SKELETON Progress GRAPH start -->
+
+                <ion-card *ngIf="!pestampcurrent && pestampcurrent !== 0">
+                    <div>
+
+                        <ion-card-content>
+                            <div class="skeletondiv">
+                                <div class="divmini ion-text-center"><span class="miniskeltext">Hrs</span></div>
+                            </div>
+                            <div class="ion-text-center">
+                                <ion-text>
+                                    <ion-skeleton-text [animated]="true" style="width: 50%; height: 15px;">
+                                    </ion-skeleton-text>
+                                </ion-text>
+                            </div>
+                        </ion-card-content>
+                    </div>
+                </ion-card>
+                <!-- SKELETON Progress GRAPH end -->
+
+            </ion-slide>
+            <!-- <ion-slide class="slide ">
+        <ion-card mode="md" class="mini-card ion-no-padding">
+          <ion-card-content class="container">
+            <div class="progress-wrapper">
+              <div class="current" [ngStyle]="getOverlayStyle()"><span class="hrs-text"
+                  style="font-size: 20px; vertical-align:middle ;">{{ current }}Hrs</span></div>
+              <round-progress [current]="current" [max]="max" [background]="background" [radius]="radius"
+                [stroke]="stroke" [rounded]="rounded" [clockwise]="clockwise" [responsive]="responsive"
+                [duration]="duration" [animation]="animation" [animationDelay]="animationDelay"></round-progress>
+            </div>
+            <div style="margin-bottom: 5px;"> <span style="vertical-align: middle;"><img src="/assets/icon/Prelim.svg"
+                  alt=""></span>
+              <ion-text style="vertical-align: middle;" class="mini-title">Permit</ion-text>
+            </div>
+          </ion-card-content>
+
+        </ion-card>
+      </ion-slide> -->
+
+            <!-- <ion-slide class="slide ">
+        <ion-card mode="md" class="mini-card ion-no-padding">
+          <ion-card-content class="container">
+            <div class="progress-wrapper">
+              <div class="current" [ngStyle]="getOverlayStyle()"><span class="hrs-text"
+                  style="font-size: 20px; vertical-align:middle ;">{{ current }}Hrs</span></div>
+              <round-progress [current]="current" [max]="max" [background]="background" [radius]="radius"
+                [stroke]="stroke" [rounded]="rounded" [clockwise]="clockwise" [responsive]="responsive"
+                [duration]="duration" [animation]="animation" [animationDelay]="animationDelay"></round-progress>
+            </div>
+            <div style="margin-bottom: 5px;"> <span style="vertical-align: middle;"><img src="/assets/icon/Prelim.svg"
+                  alt=""></span>
+              <ion-text style="vertical-align: middle;" class="mini-title">PE Stamp</ion-text>
+            </div>
+          </ion-card-content>
+
+        </ion-card>
+      </ion-slide> -->
+        </ion-slides>
+
+
+        <!-- SLIDE THREE ENDS HERE -->
+
+
+
+        <!-- SLIDE FOUR STARTS HERE -->
+        <ion-title mode="md" class="heading">Location</ion-title>
+        <ion-slides class="slides" pager>
+            <ion-slide class="slidestate1">
+                <ion-card *ngIf="states" class="sliderstatecard">
+
+                    <div>
+                        <ion-card-header class="ion-no-padding headerbottom">
+                            <ion-item lines="none">
+
+                                <ion-label> <span style="font-size: 22px;font-weight: 600;">{{statenamelength}}
+                                    </span><br><span style="font-size: 14px; color: #AFAFAF;">Total
+                                        States</span></ion-label>
+                                <ion-select mode="md" class="select-text" value="all" interface="popover"
+                                    (ionChange)="handleChangeLocation($event,'locationBar')">
+                                    <ion-select-option value="thisweek">This Week</ion-select-option>
+                                    <ion-select-option value="lastmonth">Last Month</ion-select-option>
+                                    <ion-select-option value="year">This Month</ion-select-option>
+                                    <ion-select-option value="all">All</ion-select-option>
+
+                                </ion-select>
+                            </ion-item>
+                        </ion-card-header>
+                        <ion-card-content>
+                            <div style="height: 350px;" id="bar-chart-container">
+                                <canvas id="barCanvas" #barCanvas></canvas>
+                            </div>
+                        </ion-card-content>
+                    </div>
+                </ion-card>
+                <ion-card *ngIf="!states" class="slidercard">
+                    <div>
+                        <ion-card-header class="ion-no-padding headerbottom">
+                            <ion-row>
+                                <ion-col size="9">
+                                    <ion-skeleton-text animated style="width: 90%;">
+                                    </ion-skeleton-text>
+                                </ion-col>
+                                <ion-col size="3">
+                                    <ion-skeleton-text animated style="width: 90%;">
+                                    </ion-skeleton-text>
+                                </ion-col>
+                            </ion-row>
+                        </ion-card-header>
+                        <div class="line"></div>
+                        <ion-card-content>
+
+                            <ion-row style="margin-top: 40px;">
+                                <ion-col size="1">
+                                    <p style="color: #AFAFAF ;font-size: 12px ;padding-bottom: 12px;">
+                                        50
+                                    </p>
+                                    <p style="color: #AFAFAF ;font-size: 12px;padding-bottom: 12px;">
+
+                                        40
+                                    </p>
+                                    <p style="color: #AFAFAF ;font-size: 12px;padding-bottom: 12px;">
+
+                                        30
+                                    </p>
+                                    <p style="color: #AFAFAF ;font-size: 12px;padding-bottom: 12px;">
+
+                                        20
+                                    </p>
+                                    <p style="color: #AFAFAF ;font-size: 12px;padding-bottom: 12px;">
+
+                                        10
+                                    </p>
+                                </ion-col>
+                                <ion-col>
+                                    <div style="border: solid 1px #AFAFAF; height:175px; width: 1px;">
+
+                                    </div>
+                                </ion-col>
+                                <ion-col size="10">
+                                    <ion-row class="ion-no-padding">
+                                        <ion-col size="2" class="ion-no-padding">
+                                            <ion-skeleton-text animated style="width: 20px; height: 160px;">
+                                            </ion-skeleton-text>
+                                        </ion-col>
+                                        <ion-col size="2" class="ion-no-padding">
+                                            <ion-skeleton-text animated style="width: 20px; height: 160px;">
+                                            </ion-skeleton-text>
+                                        </ion-col>
+                                        <ion-col size="2" class="ion-no-padding">
+                                            <ion-skeleton-text animated style="width: 20px; height: 160px;">
+                                            </ion-skeleton-text>
+                                        </ion-col>
+                                        <ion-col size="2" class="ion-no-padding">
+                                            <ion-skeleton-text animated style="width: 20px; height: 160px;">
+                                            </ion-skeleton-text>
+                                        </ion-col>
+                                        <ion-col size="2" class="ion-no-padding">
+                                            <ion-skeleton-text animated style="width: 20px; height: 160px;">
+                                            </ion-skeleton-text>
+                                        </ion-col>
+                                        <ion-col size="2" class="ion-no-padding">
+                                            <ion-skeleton-text animated style="width: 20px; height: 160px;">
+                                            </ion-skeleton-text>
+                                        </ion-col>
+                                    </ion-row>
+                                </ion-col>
+                            </ion-row>
+
+                            <div style="border: solid 1px #AFAFAF; height:1px; width: 600px;"></div>
+                            <ion-row>
+                                <ion-col size="1">
+                                    <span style="color: #AFAFAF ;">0</span>
+                                </ion-col>
+                                <ion-col size="1">
+                                    <div style="border: solid 1px #AFAFAF; height:30px; width: 1px;"></div>
+                                </ion-col>
+                                <ion-col size="10">
+                                    <ion-row>
+                                        <ion-col size="2">
+                                            <span style="color: #AFAFAF ;font-size: 12px">0</span>
+                                        </ion-col>
+                                        <ion-col size="2">
+                                            <span style="color: #AFAFAF ; font-size: 12px">10</span>
+                                        </ion-col>
+                                        <ion-col size="2">
+                                            <span style="color: #AFAFAF ; font-size: 12px">20</span>
+                                        </ion-col>
+                                        <ion-col size="2">
+                                            <span style="color: #AFAFAF ;font-size: 12px">30</span>
+                                        </ion-col>
+                                        <ion-col size="2">
+                                            <span style="color: #AFAFAF ;font-size: 12px ">40</span>
+                                        </ion-col>
+                                        <ion-col size="2">
+                                            <span style="color: #AFAFAF ; font-size: 12px">50</span>
+                                        </ion-col>
+                                    </ion-row>
+                                </ion-col>
+                            </ion-row>
+
+                        </ion-card-content>
+
+
+                    </div>
+                </ion-card>
+            </ion-slide>
+
+            <ion-slide class="slidestate1">
+                <ion-card class="sliderstatecard">
+                    <div *ngIf="!StateDonutSkeleton">
+                        <ion-card-header class="ion-no-padding headerbottom">
+                            <ion-item lines="none">
+
+                                <ion-label> <span
+                                        style="font-size: 16px;font-weight: 600;text-transform:capitalize;">{{zerothkey}}
+                                    </span><br><span style="font-size: 14px; color: #AFAFAF;">States</span>
+                                </ion-label>
+                                <ion-select mode="md" class="select-text" value="week" interface="popover"
+                                    (ionChange)="getStateDetails($event)">
+                                    <ion-select-option *ngFor="let item of statename" value="{{item}}">{{item}}
+                                    </ion-select-option>
+                                    <!-- <ion-select-option value="lastmonth">Last Month</ion-select-option> -->
+                                    <!-- <ion-select-option value="year">Last Year</ion-select-option> -->
+                                    <!-- <ion-select-option value="all">All</ion-select-option> -->
+
+                                </ion-select>
+                            </ion-item>
+                        </ion-card-header>
+
+
+                        <ion-card-content>
+
+                            <div id="Statechart">
+                                <div mode="md" class="current" [ngStyle]="getOverlayStyle()">
+                                    <span *ngIf="statecountpie " class="tot-text">{{statecountpie}} Total</span>
+                                    <span *ngIf="iszerothvalue" class="tot-text">{{zerothstatecountpie}}
+                                        Total</span>
+                                </div>
+                                <canvas id="doughnutCanvasState" #doughnutCanvasState
+                                    style="position: relative; height:20vh; width:40vw"></canvas>
+                            </div>
+                        </ion-card-content>
+                    </div>
+                    <!-- Dougnut Skeleton starts -->
+                    <div *ngIf="StateDonutSkeleton" class="slidercard">
+                        <ion-card-header class="ion-no-padding headerbottom">
+                            <ion-skeleton-text [animated]="true" style="width: 50%; height: 22px;">
+                            </ion-skeleton-text>
+                        </ion-card-header>
+                        <ion-card-content style="margin-top: 40px;">
+
+                            <div class="skeletondiv">
+                                <div class="div1 ion-text-center"><span class="skeltext">Total</span></div>
+                            </div>
+                        </ion-card-content>
+
+                    </div>
+                </ion-card>
+                <!-- Doughnut skeleton ends -->
+            </ion-slide>
+        </ion-slides>
+        <!-- <h2>Ḷine Chart NGX</h2> -->
+
+        <!-- SLIDE FOUR ENDS HERE -->
+    </ion-grid>
+</ion-content>

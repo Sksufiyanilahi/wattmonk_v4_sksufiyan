@@ -1,0 +1,110 @@
+.searchStyle {
+    padding: 5px 6px;
+   border-radius: 4px;
+   background: #FFFFFF;
+   margin-left: 10px;
+   margin-right: 10px;
+
+}
+
+
+.butt{
+ text-transform: none;
+ font-size: 10px;
+ font-weight: 400;
+ line-height: 15px;
+ letter-spacing: 0em;
+ text-align: center;
+     float: right;
+ background: #333029;
+color:#fff;
+height: 38px;
+width: 87px;
+//left: 243px;
+//top: 136px;
+border-radius: 8px;
+padding: 12px;
+padding-right:12px;
+
+
+}
+
+
+
+.alertClass {
+ background-color: wheat;
+}
+
+.chatbutton {
+ float: right;
+ margin-top: 0px;
+ margin-right: 5px;
+}
+
+.searchbar-clear-icon { display: none !important; }
+a {
+ text-decoration: none;
+ color: #FBB200;
+}
+.home {
+ 
+ 
+ //styleName: Title 3(R);
+font-family: 'Lexend';
+font-size: 20px;
+font-weight: 400;
+line-height: 25px;
+letter-spacing: 0em;
+text-align: center;
+
+ 
+ 
+  
+ }
+ 
+ 
+.searchbar-search-icon { display:none; width:0; height:0; }
+
+.searchbar-search-icon.sc-ion-searchbar-md {
+   display: none;
+   width: 0;
+   height: 0;
+}
+.searchbar-search-icon.sc-ion-searchbar-ios {
+   display: none;
+   width: 0;
+   height: 0;
+}
+.searchbar-input-container.sc-ion-searchbar-md {
+ .searchbar-input {
+   --placeholder-font-style:'Lexend';
+   height: 40px;
+   padding-inline-start: 5px;
+   padding-inline-end: 2px;
+
+   font-weight: 400;
+font-size: 12px;
+line-height: 15px;
+/* identical to box height */
+
+
+/* Gray 4 */
+
+color: #BDBDBD;
+   background: #FFFFFF;
+   border-radius: 8px;  }
+}
+.sc-ion-input-md-h {
+ --padding-top: 10px;
+ --padding-end: 0;
+ --padding-bottom: 10px;
+ --padding-start: 8px;
+ font-size: inherit;
+}
+.sc-ion-input-ios-h {
+ --padding-top: 10px;
+ --padding-end: 0;
+ --padding-bottom: 10px;
+ --padding-start: 8px;
+ font-size: inherit;
+}

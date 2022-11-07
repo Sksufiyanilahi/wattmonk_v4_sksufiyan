@@ -1,0 +1,124 @@
+.segtext {
+  // width: 79px;
+  height: 15px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px !important;
+  line-height: 15px;
+  color: #4C483D;
+  margin: auto;
+}
+
+.datetime-modal {
+  --background: rgba(0, 0, 0, 0.2);
+  display: flex;
+
+  ion-datetime {
+    max-width: 350px;
+    margin: auto;
+  }
+}
+
+ion-tab-button {
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+.cal_icon {
+  font-size: 12px;
+  margin-right: 7px;
+  display: inline-block;
+  vertical-align: middle
+}
+
+.arr_icon {
+  margin-left: 9px;
+  display: inline-block;
+  vertical-align: middle
+}
+
+.left_arr {
+  margin-right: 9px;
+  display: inline-block;
+  vertical-align: middle
+}
+
+.tabdiv {
+  // flex: 1 1 auto;
+  // margin-right: 5px;
+}
+
+.box {
+  display: flex;
+justify-content: space-between;
+// width: 100%;
+}
+
+.tab-bar {
+  background: none !important;
+  border: none !important;
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.tab_btn {
+  --color: #828282;
+  --color-selected: #4C483D;
+  display: table-cell;
+  background: rgba(0, 0, 0, 0.055);
+  height: 32px;
+  min-height: 32px;
+  font-size: 12px;
+  // width: 110px;
+  padding: 0 8px;
+
+}
+
+.tab_btn[aria-selected="true"] {
+  height: 32px;
+  min-height: 32px;
+  display: table-cell;
+  // margin: 10px;
+  font-size: 12px;
+  background: linear-gradient(45.7deg, #FBB200 -69.25%, #FDCF27 101.61%);
+  color: #4C483D;
+  --color-checked: #FBB200;
+  // border-bottom: 3px solid #fff;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border-radius: 4px;
+}
+
+
+
+.cont {
+  display: flex;
+  justify-content: center;
+}
+
+.listnew {
+  background: unset;
+}
+
+.itemlist {
+  background: unset;
+
+}
+
+ion-item {
+  --ion-background-color: transparent !important;
+}
+
+.datetime {
+  // padding: 0 0 0 15px;
+  font-family: 'Lexend';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  color: #333029;
+  margin-bottom: 35px;
+}

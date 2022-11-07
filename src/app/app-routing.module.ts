@@ -1,391 +1,430 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { AuthGuardService } from './auth-guard.service';
+import { AuthGuardService } from './services/auth-guard/auth-guard.service';
 
 const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     {
-        path: 'forgot-password',
-        loadChildren: () => import('./forgot-password/forgot-password.module').then(m => m.ForgotPasswordPageModule)
-    },
-    {
         path: 'login',
-        loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule)
-    },
-    {
-        path: 'homepage',
-        loadChildren: () => import('./homepage/homepage.module').then(m => m.HomepagePageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'schedule',
-        loadChildren: () => import('./schedule/schedule.module').then(m => m.SchedulePageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'profile',
-        loadChildren: () => import('./profile/profile.module').then(m => m.ProfilePageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'notification',
-        loadChildren: () => import('./notification/notification.module').then(m => m.NotificationPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'map-page',
-        loadChildren: () => import('./map-page/map-page.module').then(m => m.MapPagePageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'gallery/:id',
-        loadChildren: () => import('./gallery/gallery.module').then(m => m.GalleryPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'homepagedetail',
-        loadChildren: () => import('./homepagedetail/homepagedetail.module').then(m => m.HomepagedetailPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'survey-detail/:id',
-        loadChildren: () => import('./survey-detail/survey-detail.module').then(m => m.SurveyDetailPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'design-details/:id',
-        loadChildren: () => import('./design-details/design-details.module').then(m => m.DesignDetailsPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'activity/:id',
-        loadChildren: () => import('./activity-details/activity-details.module').then(m => m.ActivityDetailsPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'message',
-        loadChildren: () => import('./message/message.module').then(m => m.MessagePageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'chat/:id',
-        loadChildren: () => import('./chat/chat.module').then(m => m.ChatPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'changepassword',
-        loadChildren: () => import('./change-password/change-password.module').then(m => m.ChangePasswordPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'surveyoroverview',
-        loadChildren: () => import('./surveyoroverview/surveyoroverview.module').then(m => m.SurveyoroverviewPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'designoverview',
-        loadChildren: () => import('./designoverview/designoverview.module').then(m => m.DesignoverviewPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'searchbar',
-        loadChildren: () => import('./searchbar/searchbar.module').then(m => m.SearchbarPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'declinepage',
-        loadChildren: () => import('./declinepage/declinepage.module').then(m => m.DeclinepagePageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'paymentgateway',
-        loadChildren: () => import('./paymentgateway/paymentgateway.module').then(m => m.PaymentgatewayPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'activity/:id/:name',
-        loadChildren: () => import('./activity-details/activity-details.module').then(m => m.ActivityDetailsPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'search-bar1',
-        loadChildren: () => import('./search-bar1/search-bar1.module').then(m => m.SearchBar1PageModule),
-        canActivate: [AuthGuardService]
-    }, {
-        path: 'stripe',
-        loadChildren: () => import('./stripe/stripe.module').then(m => m.StripePageModule),
-        canActivate: [AuthGuardService]
+        loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
     },
     {
         path: 'activity-details',
-        loadChildren: () => import('./activity-details/activity-details.module').then(m => m.ActivityDetailsPageModule),
+        loadChildren: () => import('./pages/activity-details/activity-details.module').then(m => m.ActivityDetailsPageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'analystoverview',
-        loadChildren: () => import('./analystoverview/analystoverview.module').then(m => m.AnalystoverviewPageModule),
+        path: 'activity-details/:id',
+        loadChildren: () => import('./pages/activity-details/activity-details.module').then(m => m.ActivityDetailsPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'activity-details/:id/:name',
+        loadChildren: () => import('./pages/activity-details/activity-details.module').then(m => m.ActivityDetailsPageModule),
         canActivate: [AuthGuardService]
     },
     {
         path: 'add-money',
-        loadChildren: () => import('./add-money/add-money.module').then(m => m.AddMoneyPageModule),
+        loadChildren: () => import('./pages/add-money/add-money.module').then(m => m.AddMoneyPageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'email-model',
-        loadChildren: () => import('./email-model/email-model.module').then(m => m.EmailModelPageModule),
+        path: 'assign',
+        loadChildren: () => import('./pages/assign/assign.module').then(m => m.AssignPageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'resendpagedialog',
-        loadChildren: () => import('./resendpagedialog/resendpagedialog.module').then(m => m.ResendpagedialogPageModule),
+        path: 'calling-screen',
+        loadChildren: () => import('./pages/calling-screen/calling-screen.module').then(m => m.CallingScreenPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'analyst-overview',
+        loadChildren: () => import('./pages/analyst-overview/analyst-overview.module').then(m => m.AnalystOverviewPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'change-password',
+        loadChildren: () => import('./pages/change-password/change-password.module').then(m => m.ChangePasswordPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'chat/:id',
+        loadChildren: () => import('./pages/chat/chat.module').then(m => m.ChatPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'chat-add-member/:id',
+        loadChildren: () => import('./pages/chat-add-member/chat-add-member.module').then(m => m.ChatAddMemberPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'chat-members-list/:id',
+        loadChildren: () => import('./pages/chat-members-list/chat-members-list.module').then(m => m.ChatMembersListPageModule),
         canActivate: [AuthGuardService]
     },
     {
         path: 'chat-tabs',
-        loadChildren: () => import('./chat-tabs/chat-tabs.module').then(m => m.ChatTabsPageModule),
+        loadChildren: () => import('./pages/chat-tabs/chat-tabs.module').then(m => m.ChatTabsPageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'groupchat',
-        loadChildren: () => import('./groupchat/groupchat.module').then(m => m.GroupchatPageModule),
+        path: 'client-home',
+        loadChildren: () => import('./pages/client-home/client-home.module').then(m => m.ClientHomePageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'groups',
-        loadChildren: () => import('./chat-tabs/groups/groups.module').then(m => m.GroupsPageModule),
+        path: 'client-schedule',
+        loadChildren: () => import('./pages/client-schedule/client-schedule.module').then(m => m.ClientSchedulePageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'payment-modal',
-        loadChildren: () => import('./payment-modal/payment-modal.module').then(m => m.PaymentModalPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'statistics',
-        loadChildren: () => import('./statistics/statistics.module').then(m => m.StatisticsPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'statistics-details',
-        loadChildren: () => import('./statistics-details/statistics-details.module').then(m => m.StatisticsDetailsPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'permit-design-details/:id',
-        loadChildren: () => import('./permit-design-details/permit-design-details.module').then(m => m.PermitDesignDetailsPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'permitschedule',
-        loadChildren: () => import('./permitschedule/permitschedule.module').then(m => m.PermitschedulePageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'permitschedule/:id',
-        loadChildren: () => import('./permitschedule/permitschedule.module').then(m => m.PermitschedulePageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'permithomepage',
-        loadChildren: () => import('./permithomepage/permithomepage.module').then(m => m.PermithomepagePageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'permitdesignoverview',
-        loadChildren: () => import('./permitdesignoverview/permitdesignoverview.module').then(m => m.PermitdesignoverviewPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'statsoverviewdetails',
-        loadChildren: () => import('./statsoverviewdetails/statsoverviewdetails.module').then(m => m.StatsoverviewdetailsPageModule),
+        path: 'coming-soon',
+        loadChildren: () => import('./pages/coming-soon/coming-soon.module').then(m => m.ComingSoonPageModule),
         canActivate: [AuthGuardService]
     },
     {
         path: 'coupon-offers-modal',
-        loadChildren: () => import('./coupon-offers-modal/coupon-offers-modal.module').then(m => m.CouponOffersModalPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'onboarding',
-        loadChildren: () => import('./onboarding/onboarding.module').then(m => m.OnboardingPageModule),
+        loadChildren: () => import('./pages/coupon-offers-modal/coupon-offers-modal.module').then(m => m.CouponOffersModalPageModule),
         canActivate: [AuthGuardService]
     },
     {
         path: 'dashboard',
-        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardPageModule),
+        loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'decline',
+        loadChildren: () => import('./pages/decline/decline.module').then(m => m.DeclinePageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'design-details/:id',
+        loadChildren: () => import('./pages/design-details/design-details.module').then(m => m.DesignDetailsPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'design-tracker',
+        loadChildren: () => import('./pages/design-tracker/design-tracker.module').then(m => m.DesignTrackerPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'design-overview',
+        loadChildren: () => import('./pages/design-overview/design-overview.module').then(m => m.DesignOverviewPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'email-model',
+        loadChildren: () => import('./pages/email-model/email-model.module').then(m => m.EmailModelPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'filter',
+        loadChildren: () => import('./pages/filter/filter.module').then(m => m.FilterPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'forgot-password',
+        loadChildren: () => import('./pages/forgot-password/forgot-password.module').then(m => m.ForgotPasswordPageModule)
+    },
+    {
+        path: 'gallery/:id',
+        loadChildren: () => import('./pages/gallery/gallery.module').then(m => m.GalleryPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'group-chat',
+        loadChildren: () => import('./pages/group-chat/group-chat.module').then(m => m.GroupChatPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'groups',
+        loadChildren: () => import('./pages/chat-tabs/groups/groups.module').then(m => m.GroupsPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'group-details/:id',
+        loadChildren: () => import('./pages/group-details/group-details.module').then(m => m.GroupDetailsPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'group-schedule/:id',
+        loadChildren: () => import('./pages/group-schedule/group-schedule.module').then(m => m.GroupSchedulePageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'home',
+        loadChildren: () => import('./pages/home/home.module').then(m => m.HomePageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'home-details',
+        loadChildren: () => import('./pages/home-details/home-details.module').then(m => m.HomeDetailsPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'job-list',
+        loadChildren: () => import('./pages/job-list/job-list.module').then(m => m.JobListPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'job-list-model',
+        loadChildren: () => import('./pages/job-list-model/job-list-model.module').then(m => m.JobListModelPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'logout',
+        loadChildren: () => import('./pages/logout/logout.module').then(m => m.LogoutPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'map',
+        loadChildren: () => import('./pages/map/map.module').then(m => m.MapPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'master-details',
+        loadChildren: () => import('./pages/master-details/master-details.module').then(m => m.MasterDetailsPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'messages',
+        loadChildren: () => import('./pages/messages/messages.module').then(m => m.MessagesPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'notification',
+        loadChildren: () => import('./pages/notification/notification.module').then(m => m.NotificationPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'onboarding',
+        loadChildren: () => import('./pages/onboarding/onboarding.module').then(m => m.OnboardingPageModule),
         canActivate: [AuthGuardService]
     },
     {
         path: 'onhold',
-        loadChildren: () => import('./onhold/onhold.module').then(m => m.OnholdPageModule),
+        loadChildren: () => import('./pages/onhold/onhold.module').then(m => m.OnholdPageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'waitingforacceptance',
-        loadChildren: () => import('./waitingforacceptance/waitingforacceptance.module').then(m => m.WaitingforacceptancePageModule),
+        path: 'payment-modal',
+        loadChildren: () => import('./pages/payment-modal/payment-modal.module').then(m => m.PaymentModalPageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'unassigned',
-        loadChildren: () => import('./unassigned/unassigned.module').then(m => m.UnassignedPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'revision',
-        loadChildren: () => import('./revision/revision.module').then(m => m.RevisionPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'pestamp-schedule',
-        loadChildren: () => import('./pestamp-schedule/pestamp-schedule.module').then(m => m.PestampSchedulePageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'pestamp-schedule/:id',
-        loadChildren: () => import('./pestamp-schedule/pestamp-schedule.module').then(m => m.PestampSchedulePageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'pestamp-homepage',
-        loadChildren: () => import('./pestamp-homepage/pestamp-homepage.module').then(m => m.PestampHomepagePageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'pestamp-design-details/:id',
-        loadChildren: () => import('./pestamp-design-details/pestamp-design-details.module').then(m => m.PestampDesignDetailsPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'pestamp-payment-modal',
-        loadChildren: () => import('./pestamp-payment-modal/pestamp-payment-modal.module').then(m => m.PestampPaymentModalPageModule),
-        canActivate: [AuthGuardService]
-    },
-    {
-        path: 'camera/:id/:type/:city/:state',
-        loadChildren: () => import('./surveyprocess/surveyprocess.module').then(m => m.SurveyprocessPageModule),
+        path: 'payment-gateway',
+        loadChildren: () => import('./pages/payment-gateway/payment-gateway.module').then(m => m.PaymentGatewayPageModule),
         canActivate: [AuthGuardService]
     },
     {
         path: 'peengineer',
-        loadChildren: () => import('./peengineer/peengineer.module').then(m => m.PEengineerPageModule),
+        loadChildren: () => import('./pages/peengineer/peengineer.module').then(m => m.PeengineerPageModule),
+        canActivate: [AuthGuardService]
+    },{
+        path: 'peengineerfilterpage',
+        loadChildren: () => import('./pages/peengineerfilterpage/peengineerfilterpage.module').then(m => m.peengineerFilterpagePageModule)
+    },
+    {
+        path: 'permit-design-details/:id',
+        loadChildren: () => import('./pages/permit-design-details/permit-design-details.module').then(m => m.PermitDesignDetailsPageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'comingsoon',
-        loadChildren: () => import('./comingsoon/comingsoon.module').then(m => m.ComingsoonPageModule),
+        path: 'permit-design-overview',
+        loadChildren: () => import('./pages/permit-design-overview/permit-design-overview.module').then(m => m.PermitDesignOverviewPageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'pestampdelivermodal',
-        loadChildren: () => import('./pestampdelivermodal/pestampdelivermodal.module').then(m => m.PestampdelivermodalPageModule),
+        path: 'permit-home',
+        loadChildren: () => import('./pages/permit-home/permit-home.module').then(m => m.PermitHomePageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'callingscreen',
-        loadChildren: () => import('./callingscreen/callingscreen.module').then(m => m.CallingscreenPageModule),
+        path: 'permit-schedule/:id',
+        loadChildren: () => import('./pages/permit-schedule/permit-schedule.module').then(m => m.PermitSchedulePageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'teamschedule',
-        loadChildren: () => import('./teamschedule/teamschedule.module').then(m => m.TeamschedulePageModule),
+        path: 'permit-schedule',
+        loadChildren: () => import('./pages/permit-schedule/permit-schedule.module').then(m => m.PermitSchedulePageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'teamschedule/:id',
-        loadChildren: () => import('./teamschedule/teamschedule.module').then(m => m.TeamschedulePageModule),
+        path: 'pestamp-design-details/:id',
+        loadChildren: () => import('./pages/pestamp-design-details/pestamp-design-details.module').then(m => m.PestampDesignDetailsPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'pestamp-home',
+        loadChildren: () => import('./pages/pestamp-home/pestamp-home.module').then(m => m.PestampHomePageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'pestamp-payment-modal',
+        loadChildren: () => import('./pages/pestamp-payment-modal/pestamp-payment-modal.module').then(m => m.PestampPaymentModalPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'pestamp-schedule',
+        loadChildren: () => import('./pages/pestamp-schedule/pestamp-schedule.module').then(m => m.PestampSchedulePageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'pestamp-schedule/:id',
+        loadChildren: () => import('./pages/pestamp-schedule/pestamp-schedule.module').then(m => m.PestampSchedulePageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'pestamp-deliver-modal',
+        loadChildren: () => import('./pages/pestamp-deliver-modal/pestamp-deliver-modal.module').then(m => m.PestampDeliverModalPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'profile',
+        loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfilePageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'profile-edit-modal',
+        loadChildren: () => import('./pages/profile-edit-modal/profile-edit-modal.module').then(m => m.ProfileEditModalPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'resend-dialog',
+        loadChildren: () => import('./pages/resend-dialog/resend-dialog.module').then(m => m.ResendDialogPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'reset-password',
+        loadChildren: () => import('./pages/reset-password/reset-password.module').then(m => m.ResetPasswordPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'revision',
+        loadChildren: () => import('./pages/revision/revision.module').then(m => m.RevisionPageModule),
         canActivate: [AuthGuardService]
     },
     {
         path: 'sales-proposal',
-        loadChildren: () => import('./sales-proposal/sales-proposal.module').then(m => m.SalesProposalPageModule),
+        loadChildren: () => import('./pages/sales-proposal/sales-proposal.module').then(m => m.SalesProposalPageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'userregistration',
-        loadChildren: () => import('./userregistration/userregistration.module').then(m => m.UserregistrationPageModule),
-        // canActivate: [AuthGuardService]
-    },
-    {
-        path: 'profile-edit-modal',
-        loadChildren: () => import('./profile-edit-modal/profile-edit-modal.module').then(m => m.ProfileEditModalPageModule),
+        path: 'schedule',
+        loadChildren: () => import('./pages/schedule/schedule.module').then(m => m.SchedulePageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'teamdetails/:id',
-        loadChildren: () => import('./teamdetails/teamdetails.module').then(m => m.TeamdetailsPageModule),
+        path: 'search-bar',
+        loadChildren: () => import('./pages/search-bar/search-bar.module').then(m => m.SearchBarPageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'teamhomepage',
-        loadChildren: () => import('./teamhomepage/teamhomepage.module').then(m => m.TeamhomepagePageModule),
+        path: 'settings',
+        loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsPageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'groupschedule',
-        loadChildren: () => import('./groupschedule/groupschedule.module').then(m => m.GroupschedulePageModule),
+        path: 'sorting-filter',
+        loadChildren: () => import('./pages/sorting-filter/sorting-filter.module').then(m => m.SortingFilterPageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'groupschedule/:id',
-        loadChildren: () => import('./groupschedule/groupschedule.module').then(m => m.GroupschedulePageModule),
+        path: 'start-survey/:id/:type',
+        loadChildren: () => import('./pages/start-survey/start-survey.module').then(m => m.StartSurveyPageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'groupdetails',
-        loadChildren: () => import('./groupdetails/groupdetails.module').then(m => m.GroupdetailsPageModule),
+        path: 'statistics',
+        loadChildren: () => import('./pages/statistics/statistics.module').then(m => m.StatisticsPageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'clientschedule',
-        loadChildren: () => import('./clientschedule/clientschedule.module').then(m => m.ClientschedulePageModule),
+        path: 'statistics-details',
+        loadChildren: () => import('./pages/statistics-details/statistics-details.module').then(m => m.StatisticsDetailsPageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'clienthomepage',
-        loadChildren: () => import('./clienthomepage/clienthomepage.module').then(m => m.ClienthomepagePageModule),
+        path: 'stats-overview-details',
+        loadChildren: () => import('./pages/stats-overview-details/stats-overview-details.module').then(m => m.StatsOverviewDetailsPageModule),
         canActivate: [AuthGuardService]
     },
     {
-        path: 'filterpage',
-        loadChildren: () => import('./filterpage/filterpage.module').then(m => m.FilterpagePageModule)
-    },
-    {
-        path: 'design-tracker',
-        loadChildren: () => import('./design-tracker/design-tracker.module').then(m => m.DesignTrackerPageModule)
-    },
-    {
-        path: 'startsurvey/:id/:type',
-        loadChildren: () => import('./startsurvey/startsurvey.module').then(m => m.StartsurveyPageModule),
+        path: 'stripe',
+        loadChildren: () => import('./pages/stripe/stripe.module').then(m => m.StripePageModule),
         canActivate: [AuthGuardService]
     },
-  {
-    path: 'masterdetailpage',
-    loadChildren: () => import('./masterdetailpage/masterdetailpage.module').then( m => m.MasterdetailpagePageModule)
-  },
-  {
-    path: 'resetpassword',
-    loadChildren: () => import('./resetpassword/resetpassword.module').then( m => m.ResetpasswordPageModule)
-  },
-  {
-    path: 'joblisting',
-    loadChildren: () => import('./joblisting/joblisting.module').then( m => m.JoblistingPageModule),
-    canActivate: [AuthGuardService]
-  },
-  {
-    path: 'joblistingmodel',
-    loadChildren: () => import('./joblistingmodel/joblistingmodel.module').then( m => m.JoblistingmodelPageModule),
-    canActivate: [AuthGuardService]
-  },
-
+    {
+        path: 'survey-details/:id',
+        loadChildren: () => import('./pages/survey-details/survey-details.module').then(m => m.SurveyDetailsPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'survey-required-model',
+        loadChildren: () => import('./pages/survey-required-model/survey-required-model.module').then(m => m.SurveyRequiredModelPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'surveyor-overview',
+        loadChildren: () => import('./pages/surveyor-overview/surveyor-overview.module').then(m => m.SurveyorOverviewPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'survey-process',
+        loadChildren: () => import('./pages/survey-process/survey-process.module').then(m => m.SurveyProcessPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'team-details/:id',
+        loadChildren: () => import('./pages/team-details/team-details.module').then(m => m.TeamDetailsPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'team-home',
+        loadChildren: () => import('./pages/team-home/team-home.module').then(m => m.TeamHomePageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'team-schedule',
+        loadChildren: () => import('./pages/team-schedule/team-schedule.module').then(m => m.TeamSchedulePageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'team-schedule/:id',
+        loadChildren: () => import('./pages/team-schedule/team-schedule.module').then(m => m.TeamSchedulePageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'unassigned',
+        loadChildren: () => import('./pages/unassigned/unassigned.module').then(m => m.UnassignedPageModule),
+        canActivate: [AuthGuardService]
+    },
+    {
+        path: 'user-registration',
+        loadChildren: () => import('./pages/user-registration/user-registration.module').then(m => m.UserRegistrationPageModule)
+    },
+    {
+        path: 'waiting-for-acceptance',
+        loadChildren: () => import('./pages/waiting-for-acceptance/waiting-for-acceptance.module').then(m => m.WaitingForAcceptancePageModule),
+        canActivate: [AuthGuardService]
+    }
+    ,
+    {
+        path: 'paypal-payment',
+        loadChildren: () => import('./pages/paypal-payment/paypal-payment.module').then(m => m.PaypalPaymentPageModule),
+        canActivate: [AuthGuardService]
+    },{
+        path: 'unassigned',
+        loadChildren: () => import('./pages/unassigned/unassigned.module').then(m => m.UnassignedPageModule),
+        canActivate: [AuthGuardService]
+    },
 ];
 
 @NgModule({
     imports: [
-        RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules, relativeLinkResolution: 'legacy' })
+        RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
     ],
     exports: [RouterModule]
 })
-export class AppRoutingModule {
-}
-
+export class AppRoutingModule { }

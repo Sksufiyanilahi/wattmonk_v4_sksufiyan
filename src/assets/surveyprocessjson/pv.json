@@ -921,7 +921,7 @@
                   "imagequality": 60,
                   "imageuploadname": "atticrequiredshoturl",
                   "capturedshotinfo": "Attic Required Shot",
-                  "question": "What's the distance between two rafts?",
+                  "question": "What's the distance between two rafts(Inches)?",
                   "shotinfo": "Capture Attic Required Shot",
                   "promptquestion": false,
                   "shotstatus": false,

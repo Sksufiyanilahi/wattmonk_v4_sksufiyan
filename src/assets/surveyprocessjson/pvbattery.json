@@ -286,7 +286,7 @@
                         "questioninfo":"Provide Spacing Details",
                         "shotstatus": false,
                         "promptquestion": false,
-                        "question" : "What's the distance between two rafts?",
+                        "question" : "What's the distance between two rafts(Inches)?",
                         "actions" : ["Confirm"],
                         "result" : "",
                         "questionstatus": false,

@@ -1,0 +1,82 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>onboarding</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-content>
+  <!-- New Design start -->
+    <div class="maindiv">
+        <form [formGroup]="userregistrationForm" novalidate>
+            <div>
+                <p class="mainhead">Account Information</p>
+                <p class="subheadone">Welcome let's help you get started</p>
+                <p class="subheadtwo">Please fill the below mention details, to help you serve better.</p>
+            </div>
+            <ion-grid style="padding: 0px 0px 0px 0px; ">
+                <p class="subheadthree">Company Details</p>
+                <ion-row>
+                    <ion-col style="padding: 0px 7px 0px 0px; " size="6">
+                        <ion-label class="label-input">Company Name*</ion-label>
+                        <div class="divtwo">
+                            <ion-input class="input_form" type="text" placeholder="Ex. Tesla" required
+                                formControlName="company_name"></ion-input>
+                        </div>
+                        <div class="error-box"
+                                *ngIf="userregistrationForm.get('company_name').invalid && userregistrationForm.get('company_name').dirty ||  (userregistrationForm.get('company_name').touched && userregistrationForm.get('company_name').invalid) && userregistrationForm.get('company_name').pristine">
+                                <span class="error">{{getErrorMessage(userregistrationForm.get('company_name'))}}</span>
+                            </div>
+                    </ion-col>
+                    <ion-col style="padding: 0px 0px 0px 7px; " size="6">
+                        <ion-label class="label-input">License No*</ion-label>
+                        <div class="divtwo">
+                            <ion-input type="text" placeholder="Ex. Tesla" required class="inputform"
+                                formControlName="license_no"></ion-input>
+                        </div>
+                        <div class="error-box"
+                        *ngIf="userregistrationForm.get('license_no').invalid && userregistrationForm.get('license_no').dirty ||  (userregistrationForm.get('license_no').touched && userregistrationForm.get('license_no').invalid) && userregistrationForm.get('license_no').pristine">
+                        <span class="error">{{getErrorMessage(userregistrationForm.get('license_no'))}}</span>
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+            <div style="margin-top: 24px;">
+                <ion-label class="label-input">Company Address*</ion-label>
+                <div class="divtwo">
+                    <!-- <ion-input type="text" class="inputform" placeholder="Ex. USA" autocapitalize="words"
+                        formControlName="company_address" autocomplete="off" (ionChange)="updateSearchResults($event)"
+                        (ionClear)="onCancel()" debounce="300" (ionFocus)="forAutoComplete($event)"
+                        (ionBlur)="onBlur()"></ion-input> -->
+                    <ion-input type="text" placeholder="Ex. Enter a location" required class="inputform"
+                        formControlName="company_address"></ion-input>
+                    <img class="iconform" src="../../../assets/icon/Location.svg" alt="">
+                </div>
+                <!-- <ion-list style="padding:0px" *ngIf="!isSelectSearchResult">
+                    <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
+                        <span>
+                            {{ item.description }}
+                        </span>
+                    </ion-item>
+                </ion-list> -->
+                <div class="error-box" *ngIf="userregistrationForm.get('company_address').invalid && userregistrationForm.get('company_address').dirty ||  (userregistrationForm.get('company_address').touched && userregistrationForm.get('company_address').invalid) && userregistrationForm.get('company_address').pristine">
+                <span class="error">{{getErrorMessage(userregistrationForm.get('company_address'))}}</span>
+            </div>
+            </div>
+            <div style="margin-top: 24px;">
+                <ion-label class="label-input">Upload Logo</ion-label>
+                <div (click)="openPhotoGalleryToSelectPic($event)" class="divthree">
+                    <img *ngIf="capturedImage" class="imgselected" [src]="capturedImage" alt="">
+                    <img *ngIf="capturedImage == ''" class="divthreeimg" src="../../../assets/icon/upload.svg" alt="">
+                    <p *ngIf="capturedImage == ''" class="divdetails"> Drag and drop or click the browse file to attach</p>
+                </div>
+            </div>
+            <ion-button class="btn1" expand="full" type="submit"
+            (click)="registerUser()" >
+                <ion-label class="btn-label" > Get Started </ion-label>
+            </ion-button>
+            <!-- <p class="registeredText">Already registered?<a style="color: #FBB814;margin-top: 0px;"
+                (click)="gotoSignIn()"> Sign in </a></p> -->
+        </form>
+    </div>
+    <!-- New Design end -->
+</ion-content>

@@ -1,0 +1,130 @@
+<ion-row>
+    <ion-col size="2">
+        <ion-button fill="clear" size="small" class="back_butt" (click)="goBack()">
+            Back
+        </ion-button>
+    </ion-col>
+    <ion-col  >
+        
+                <h1 class=" home"  >Activity </h1>
+                <!--<span class="home">{{activity_details?.name}}</span>
+                <span class="home" *ngIf="name=='pestamp'" >{{activity_details?.personname}}</span>-->
+            
+    </ion-col><ion-col size="2"></ion-col>
+</ion-row>
+
+
+<ion-content>
+<!--<p style="text-align: center; font-size:large; color:black; border:none;margin-bottom:0px ;">Activities</p>
+<p style="text-align: center; margin-top: 0px;"><span class="chipdetail" style="background-color: rgb(246, 77, 10);"
+*ngIf="activity_details?.status == 'requestdeclined'">On Hold</span>
+<span class="chipdetail" style="background-color: rgb(109, 187, 26);"
+*ngIf="activity_details?.status == 'requestaccepted' || activity_details?.status == 'accepted'">Accepted</span>
+<span class="chipdetail" style="background-color: rgb(246, 77, 10);"
+*ngIf="activity_details?.status == 'reviewfailed'">Review Failed</span>
+<span class="chipdetail" style="background-color: rgb(109, 187, 26);"
+*ngIf="activity_details?.status == 'reviewpassed'">Review Passed</span>
+<span class="chipdetail" style="background-color: rgb(109, 187, 26);"
+*ngIf="activity_details?.status == 'delivered'">Delivered</span>
+<span class="chipdetail" style="background-color: rgb(109, 187, 26);"
+*ngIf="activity_details?.status == 'designcompleted' || activity_details?.status == 'completed'">Completed</span>
+<span class="chipdetail" style="background-color: #1289A7;;"
+*ngIf="activity_details?.status == 'created'">Unassigned</span>
+<span class="chipdetail" style="background-color: #1289A7;;"
+*ngIf="activity_details?.status == 'designassigned'">Design Assigned</span>
+<span class="chipdetail" style="background-color: #1289A7;;"
+*ngIf="activity_details?.status == 'reviewassigned'">In Review</span>
+<span class="chipdetail" style="background-color: #1289A7;;" *ngIf="activity_details?.type != 'survey' && activity_details?.status == 'assigned'">In
+Stamping</span>
+<span class="chipdetail"
+*ngIf="activity_details?.status == 'outsourced' && (userData.role.name=='ContractorAdmin' || userData.role.name=='ContractorSuperAdmin')"
+style="background-color: #95afc0;">Waiting for acceptance</span>
+<span *ngIf="activity_details?.status=='assigned'" class="chipdetail" style="background-color: #FBB200;">
+pending
+</span>
+</p>-->
+
+<ion-grid class="padd padd-list" *ngIf="activity_details">
+<!-- <ion-spinner name="dots" *ngIf="!showLoader"></ion-spinner> -->
+<ng-container *ngIf="activity_details.length;else noNotification">
+<ion-row class="padd padd-top">
+<ion-col size="12" class="padd padd-col" *ngFor="let activities of activity_details; let i = index">
+  <ion-card class="custom-card" style="margin-top:8px;margin-bottom:8px; " >
+ 
+      
+   <div class="flex">
+     <div size="3">
+       <div class="pro">
+         
+        
+        
+        <!-- <ion-img *ngIf="activity_details.type == 'permit' && activity_details.requesttype == 'permit'   "
+        class="profile-icon" src="./assets/icon/notification-icons/permit.svg"></ion-img> -->
+ 
+        <ion-img *ngIf="activity_details.type == 'permit'"
+        class="profile-icon" src="./assets/icon/notification-icons/permit.svg"></ion-img>
+        
+      <!-- <ion-img *ngIf="activity_details.type == 'design' && activity_details.requesttype == 'prelim' "
+        class="profile-icon" src="./assets/icon/notification-icons/prelim.svg"></ion-img> -->
+
+        <ion-img *ngIf="activity_details.type == 'prelim'"
+        class="profile-icon" src="./assets/icon/notification-icons/prelim.svg"></ion-img>
+      
+      <ion-img *ngIf="activity_details.type == 'survey' " class="profile-icon"
+        src="./assets/icon/notification-icons/survey.svg"></ion-img>
+      
+      <ion-img *ngIf="activity_details.type == 'pestamp'  " class="profile-icon"
+        src="./assets/icon/notification-icons/pestamp.svg"></ion-img>
+      
+        
+      </div>
+    </div><div size="9"></div>
+  </div>
+
+    <div class="demo">
+     
+      <div  >
+        <!--<h4 class="tit">hye
+    </h4>-->
+    <p class="message">{{activities.attributes.activity}}</p>
+
+
+
+      <ion-row class="padd"  *ngIf="!userAccessRights?.viewonly">
+        <ion-col size="6" class="paddc author" style="margin:0px;" 
+        *ngIf="activities.performer !==null && userData.role.type!=='clientsuperadmin'">{{activities.attributes.performer?.firstname}}
+        {{activities.attributes.performer?.lastname}}</ion-col>
+    <ion-col size="6" class="paddc author " style="margin:0px;"  *ngIf="userData.role.type=='clientsuperadmin' && activities?.performer?.id != userData.parent.id"
+        >
+        <!-- WattMonk -->
+        {{activities.attributes.performer?.firstname}} {{activities.attributes.performer?.lastname}}
+    </ion-col> <ion-col size="6" class="paddc author" style="margin:0px;" *ngIf="userData.role.type=='clientsuperadmin' && activities.performer?.id == userData.parent.id">{{activities.performer?.firstname}}
+                {{activities.attributes.performer?.lastname}}</ion-col><ion-col class="6" style="margin:0px;float:right;" class="recordupdatedon">
+           Updated {{utilities.formatDateInTimeAgo(activities.attributes.updatedAt)}}</ion-col>
+           
+
+         </ion-row>
+        </div>
+    </div>
+    
+  </ion-card>
+</ion-col>
+</ion-row>
+</ng-container>
+<ng-template #noNotification>
+<ion-row *ngIf="activity_details.length==0">
+<ion-col  style="text-align: center;margin-top: 40%;">
+  <ion-img style="height: 25px;
+  margin-top: 30%;
+  margin-bottom: 5px;"src="./assets/icon/SadEmoji.svg"></ion-img>
+  <div style="font-weight: 600;">
+    Yet to break the ice
+  </div>
+</ion-col>
+</ion-row>
+</ng-template>
+</ion-grid>
+
+
+
+</ion-content>

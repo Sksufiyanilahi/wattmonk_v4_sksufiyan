@@ -1,28 +1,260 @@
+//new changes ////@at-root
+body {
+
+  background: #fff;
+}
+
+ion-app {
+  --width: 100vw;
+
+}
+
+ion-content {
+  --background: #fff !important;
+}
+
+ion-toolbar {
+
+  --background: #fff !important;
+
+
+}
+
 ion-item.selected {
   --color: var(--ion-color-primary);
 }
 
-.matBadge {
-  top: 0;
+.overlay {
+
+
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
 }
 
 .matBadge {
   position: absolute;
   top: 16px;
-  border: 1px solid #fff;
-  right: 30px;
-  font-size: 9px;
-  background: #f44336;
-  color: #fff;
-  min-width: 20px;
-  padding: 0 5px;
-  height: 20px;
-  border-radius: 10px;
+  right: 10px;
+  margin-right: 0%;
+  float: right;
+
+
+
+
+  display: flex;
+  vertical-align: middle;
+  background: linear-gradient(45.7deg, rgba(251, 178, 0, 0.5) -69.25%, rgba(253, 207, 39, 0.5) 101.61%);
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 10px;
+  padding: 5px;
+  border-radius: 4px;
   text-align: center;
-  line-height: 19px;
-  display: block;
+  color: #000000;
+  //styleName: Caption 2(R);
+
+
+  .bagd {
+    font-family: 'Lexend';
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 12.5px;
+    letter-spacing: 0em;
+    color: #000000;
+  }
 }
 
-.safe-area {
-  // margin-top: 20px !important;
+.safe-area {}
+
+.menu_da {
+
+  font-family: 'Lexend';
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #595959;
+  height: 54px;
+  left: 16px;
+  top: 0px;
+  border-radius: 8px;
+  padding: 15px, 10px, 15px, 10px;
+  --min-height: 54px;
+  width: 100%;
+
+
+}
+
+.active {
+
+  height: 54px;
+
+  left: 16px;
+  right: 16px;
+  top: 0px;
+  border-radius: 8px;
+  padding: 15px, 10px, 15px, 10px;
+
+  --min-height: 54px;
+
+  color: #333029;
+  --background: #FBB8142E;
+  background: #FBB8142E;
+
+
+  font-family: 'Lexend';
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0em;
+  text-align: left;
+  border: 1px solid #FBB200;
+
+
+
+
+}
+
+ion-list {}
+
+
+.menu-list {
+  margin-top: 10px;
+
+  ion-img {
+    height: 16px;
+    width: 14px;
+  }
+}
+
+.profile_img {
+
+
+  /* Auto layout */
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 14px 15px 13px;
+  gap: 10px;
+
+  width: 58px;
+  height: 58px;
+
+  /* Gradient */
+
+  background: linear-gradient(45.7deg, #FBB200 -69.25%, #FDCF27 101.61%);
+  border-radius: 64px;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 28px;
+  /* identical to box height */
+
+  margin-left: 16px;
+  color: #916700;
+
+
+}
+
+.profile_image {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+
+
+  width: 58px;
+  height: 58px;
+
+  /* Gradient */
+
+  border-radius: 64px;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 28px;
+}
+
+.profile-name {
+  color: #333029;
+  //styleName: Title 3(R);
+  font-family: 'Lexend';
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 25px;
+  letter-spacing: 0em;
+  text-align: left;
+  word-wrap: break-word;
+
+}
+
+
+.drawer {
+
+
+  width: 100vw;
+  height: 541px;
+
+
+  /* #FFFFFF */
+
+  background: #FFFFFF;
+  box-shadow: 0px -13px 27px rgba(56, 40, 0, 0.06);
+  border-radius: 24px 24px 0px 0px;
+
+
+}
+
+ion-bottom-drawer {
+
+  --padding: 0 !important;
+  padding: 0 !important;
+
+  --background: #aa5555 !important;
+  background: #FFFFFF !important;
+
+  position: absolute;
+  bottom: 0;
+  min-height: initial;
+  top: initial;
+  height: 177px;
+  --border-top-left-radius: 25px;
+  --border-top-right-radius: 25px;
+
+  ion-content {
+    --background: #FFFFFF !important;
+    left: 0px;
+    top: 303px;
+
+    /* #FFFFFF */
+
+    background: #FFFFFF;
+    box-shadow: 0px -13px 27px rgba(56, 40, 0, 0.06);
+    border-radius: 24px 24px 0px 0px;
+  }
+
+
+}
+
+.log_butt {
+
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 14px;
 }

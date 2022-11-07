@@ -1,0 +1,130 @@
+.notification-icon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .home{
+    font-size: 22px;
+    margin-left: 6px;
+  }
+  
+  .notification-badge {
+    font-size: 10px;
+    margin-left: -15px;
+    margin-top: -20px;
+  }
+  
+  .notification-padding {
+    position: relative;
+    padding: 8px;
+  }
+  
+  
+  .badge {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #FBB200;
+    color: white;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    font-size: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid white;
+  }
+  
+  ion-searchbar.custom {
+    --background: none;
+    --box-shadow: none;
+    background: white;
+    border-radius: 0.5em;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    max-height: 40px;
+  }
+  
+  
+  .titleTab {
+    text-align: center;
+    color: #898989;
+    //     border-bottom: 2px solid #D9726D;
+  }
+  
+  .titleBorder {
+    width: 70px;
+    border-bottom: 3px solid #D9726D;
+    border-radius: 2px;
+  }
+  
+  .cardText {
+    margin: 0px;
+  }
+  
+  .card_detail {
+    margin: 0px;
+    color: #3960B8;
+  }
+  
+  .tab {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    padding-bottom: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .bottom-bar {
+    margin: 8px;
+    border-radius: 50px;
+    box-shadow: 0 -2px 8px 0 rgba(0, 0, 0, 0.1);
+    border: 2px solid white;
+    background: #FFFAEB;
+  }
+  
+  .tabText {
+    margin-left: 8px;
+    font-size: 1em;
+  }
+  
+  .tab-icon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .fab-position {
+    bottom: 18px;
+  }
+  
+  .ht_wt{
+  height:62px;
+  width:62px;
+  }
+  
+  ion-fab-button {
+    --border-width: 2px;
+    --border-style: solid;
+    --box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.3);
+    --border-color: white;
+    --background: #FBB200;
+  }
+  
+  ion-tab-bar {
+    --border: none;
+  }
+  
+  ion-tab-button {
+    font-size: 1em;
+    --color: #9E9E9E;
+    --color-selected: #FBB200;
+  }
+  
+  ion-tab-button[aria-selected=true] {
+    border-bottom: 3px solid #FBB200;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+  }
+  

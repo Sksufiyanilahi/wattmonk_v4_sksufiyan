@@ -8,16 +8,6 @@
 *.tmp.*
 *.sublime-project
 *.sublime-workspace
-.idea
-.idea/*
-*.idea
-.vscode
-.vscode/*
-*.vscode
-*.zip
-*.rar
-*.keystore
-*.apk
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
@@ -27,6 +17,7 @@ $RECYCLE.BIN/
 log.txt
 npm-debug.log*
 
+/.angular
 /.idea
 /.ionic
 /.sass-cache
@@ -39,9 +30,3 @@ npm-debug.log*
 /platforms
 /plugins
 /www
-/ios
-/android
-# built application files
-
-
-package-lock.json

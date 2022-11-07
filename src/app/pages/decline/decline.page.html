@@ -1,0 +1,68 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>Confirm</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-content>
+  <ion-grid>
+  <h4 style="font-weight: bold;margin-bottom:0px !important;padding: 10px;">Are you sure?</h4>
+      <ion-row>
+        <ion-col>
+          <h6 style="margin-top:0px;padding: 2px;">Please specify the reason</h6>
+          <textarea placeholder="Reason*" [(ngModel)]="reason" (input)="detectchange()" style="width: 100%;" required></textarea>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="value!='pestamp'">
+        <ion-col>
+          <h6 style="margin:0px 0 0px 0;">Attachment</h6>
+
+            <ion-input type="text" placeholder="Select Attachment" [(ngModel)]="filename" readonly (click)="selectAttachment()" style="border-bottom:1px solid grey"  > <ion-icon name="attach-outline" style="float: right;text-align:right ;"></ion-icon></ion-input>
+
+         <small *ngIf="exceedfileSize > 26214400" style="color:red">File size should not be greater than 25MB.</small>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="value=='pestamp'">
+        <ion-col size="12">
+      
+            <ng-container>
+                <ion-item class="ion-no-padding" (click)="decline.click()">
+                    <ion-label position="floating" class="label">Attachment</ion-label>
+                        <input type="file" #decline class="form_input"  (change)="uploadPestampDeclineFile($event)" style="margin-top: 12px;">
+                        <ion-icon name="attach-outline" slot="end" style="margin-top:21px"></ion-icon>
+                    </ion-item>
+                    <div *ngFor="let file of pestampDeclineList;let i = index">
+                        <ion-item>
+                            <ion-col size="11">
+                                {{file.name}}
+                            </ion-col>
+                            <ion-col size="1" (click)="removeArc(i)">x</ion-col>
+                        </ion-item>
+                    </div>
+                    </ng-container>
+                    
+                </ion-col>
+                <!-- <ng-container *ngIf="design && design.atticphotos !==null">
+                  <div *ngFor="let arc of design.atticphotos;let i=index">
+                     <ion-item>
+                         <ion-col size="auto"> {{arc.name}}{{arc.ext}}</ion-col>
+                         
+                        
+    
+                     </ion-item>
+                 
+                     
+                 </div> 
+              </ng-container> -->
+        
+      </ion-row>
+    </ion-grid>
+    <footer style="text-align: right;margin:12px;">
+      <ion-button fill="clear" (click)="cancel()">Cancel</ion-button>
+      <ion-button fill="clear" (click)="submit()" [disabled]="enableDisable">Submit</ion-button>
+    </footer>
+  <!-- <div class=_padding>
+    <p>Decline the design Request</p>
+    <textarea placeholder="Reason*" style="width: 100%;"></textarea>
+  </div> -->
+</ion-content>

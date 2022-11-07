@@ -1,0 +1,186 @@
+<ion-content class="login-container" scrollY="false" #content id="content">
+    <div>
+        <div class="top-block" [style.height.px]="innerHeight / 3">
+            <div class="img-block">
+                <img src="./assets/images/wattmonk_logo.svg" />
+            </div>
+            <img class="one" src="assets/icon/splash/1.svg">
+            <img class="two" src="assets/icon/splash/2.svg">
+            <img class="three" src="assets/icon/splash/3.svg">
+            <img class="four" src="assets/icon/splash/4.svg">
+            <img class="five" src="assets/icon/splash/5.svg">
+            <img class="six" src="assets/icon/splash/6.svg">
+            <img class="seven" src="assets/icon/splash/7.svg">
+            <img class="eight" src="assets/icon/splash/2.svg">
+            <img class="nine" src="assets/icon/splash/2.svg">
+            <img class="ten1" src="assets/icon/splash/2.svg">
+            <img class="ten" src="assets/icon/splash/2.svg">
+        </div>
+        <div class="left-round-shape" [style.top.px]="(innerHeight / 3) - 5"></div>
+        <div class="right-round-shape" [style.top.px]="(innerHeight / 3) - 5"></div>
+        <div class="bottom-block" [style.height.px]="innerHeight > 660 ? (innerHeight - (innerHeight / 3)) - 55 : 375">
+            <div class="page-title" [ngClass]="innerHeight > 660 ? 'page-title-padding-40': 'page-title-padding-20'">
+                Sign In
+            </div>
+            <div class="form-block">
+                <form [formGroup]="loginForm" novalidate>
+                    <div>
+                        <span class="field-name">Email*</span>
+                        <ion-input type="email" class="form_input" placeholder="Ex. john@wattmonk.com"
+                            formControlName="identifier">
+                        </ion-input>
+                    </div>
+                    <div class="error_div">
+                        <div
+                            *ngIf="loginForm.get('identifier').hasError('pattern') && loginForm.get('identifier').dirty">
+                            <span class="error">{{emailError}}</span>
+                        </div>
+                        <div
+                            *ngIf="loginForm.get('identifier').value === '' && loginForm.get('identifier').dirty ||  (loginForm.get('identifier').touched && loginForm.get('identifier').invalid) && loginForm.get('identifier').pristine">
+                            <span class="error">{{fieldRequired}}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="password-field">
+                            <span class="field-name ion-float-left">Password*</span>
+                            <span class="ion-float-right">
+                                <a class="actionlink" [routerLink]="['/forgot-password']"
+                                    routerDirection="forward">Forgot password?</a>
+                            </span>
+                            <span style="clear: both;"></span>
+                        </div>
+                        <ion-input type="password" placeholder="***********" class="form_input password_input"
+                            [type]="getType()" formControlName="password">
+                        </ion-input>
+                        <div class="eye_box">
+                            <ion-img src="/assets/icon/new/openeye.svg" *ngIf="!this.isActiveToggleTextPassword"
+                                (click)="toggleTextPassword()" slot="end">
+                            </ion-img>
+                            <ion-img src="/assets/icon/new/closeeye.svg" *ngIf="this.isActiveToggleTextPassword"
+                                (click)="toggleTextPassword()" slot="end">
+                            </ion-img>
+                        </div>
+                    </div>
+                    <div class="error_div">
+                        <div
+                            *ngIf="loginForm.get('password').value === '' && loginForm.get('password').dirty ||  (loginForm.get('password').touched && loginForm.get('password').invalid) && loginForm.get('password').pristine">
+                            <span class="error">{{fieldRequired}}</span>
+                        </div>
+                    </div>
+                    <ion-button class="signin-btn" expand="block" (click)="login()">
+                        {{ buttonTitle }}
+                    </ion-button>
+                    <p class="registration-text">Don't have an account yet? <a class="signupaction-link"
+                            [routerLink]="['/user-registration']">Sign up</a></p>
+                </form>
+            </div>
+        </div>
+        <app-footer></app-footer>
+        <!-- <div class="footer-block" [ngClass]="innerHeight > 660 ? 'bottom-25':'bottom-5'">
+            <div class="company-text">
+                <span>© WattMonk Technologies Private Limited. All Rights Reserved.</span>
+            </div>
+            <div class="policy-service-text">
+                <span>
+                    <a (click)="privacy()">Privacy Policy</a> | <a (click)="agreement()">Service Agreement</a>
+                </span>
+            </div>
+        </div> -->
+    </div>
+</ion-content>
+
+<!-- <ion-content >
+
+<app-header style="position: relative;"></app-header>
+
+
+
+<div class="left-round-shape"></div>
+      
+
+    <ion-grid class="form-background" style="border-radius: 24px 0px 0px 0px ;
+    ">
+        <ion-row class="ion-align-items-center">
+            <ion-col size="12" >
+                <span class="subtitle">
+                    Sign In
+                </span>
+            </ion-col>
+        </ion-row>
+        <ion-row class="login_for" >
+            <ion-col size="12" >
+                <form [formGroup]="loginForm" novalidate>
+                   
+                        <ion-row class="">
+                            <ion-col size="12">
+                                <span class="input-placeholder">Email*</span>
+                               
+                                    <ion-input type="email"  class="form_input" placeholder="Ex. john@wattmonk.com"
+                                        formControlName="identifier">
+                                    </ion-input>
+                               
+                                <div class="error_div">
+                                    <div
+                                        *ngIf="loginForm.get('identifier').hasError('pattern') && loginForm.get('identifier').dirty">
+                                        <span class="error">{{emailError}}</span>
+                                    </div>
+                                    <div
+                                        *ngIf="loginForm.get('identifier').value === '' && loginForm.get('identifier').dirty ||  (loginForm.get('identifier').touched && loginForm.get('identifier').invalid) && loginForm.get('identifier').pristine">
+                                        <span class="error">{{fieldRequired}}</span>
+                                    </div>
+                                </div>
+                            </ion-col>
+
+                            <ion-col size="12"  class="" >
+                                
+                                <p style="margin-bottom: 0px;"><span class="input-placeholder">Password*</span><a class="actionlink"
+                                        [routerLink]="['/forgot-password']" routerDirection="forward" style="text-decoration: none;">Forgot password?</a>
+                            </p>
+                                
+
+                                    <ion-input type="password" placeholder="***********" class="form_input password_input" [type]="getType()"
+                                        formControlName="password">
+                                    </ion-input>
+                                    <div class="eye_box">
+
+                                        <ion-img src="/assets/icon/new/openeye.svg" style="width:16px;height: 16px;"  *ngIf="!this.isActiveToggleTextPassword"
+                                        (click)="toggleTextPassword()" slot="end"></ion-img>
+                                        <ion-img src="/assets/icon/new/closeeye.svg" style="width:16px;height: 16px;" *ngIf="this.isActiveToggleTextPassword"
+                                        (click)="toggleTextPassword()" slot="end"></ion-img>
+                                       
+                                    </div>
+
+                               
+
+                                <div class="error_div">
+                                    <div
+                                        *ngIf="loginForm.get('password').value === '' && loginForm.get('password').dirty ||  (loginForm.get('password').touched && loginForm.get('password').invalid) && loginForm.get('password').pristine">
+                                        <span class="error">{{fieldRequired}}</span>
+                                    </div>
+                                </div>
+                            </ion-col>
+                            <ion-col size="12" style="left: 13px;" class="forgot-password-text">
+                          </ion-col>
+                            <ion-col></ion-col>
+                            <ion-col size="12"  class="">
+                                <ion-button class="SignInBtn" (click)="login()">
+                                  {{ buttonTitle }}
+                                </ion-button>
+                            </ion-col>
+							
+							<ion-col class="">
+                                <p class="registrationtext">Don't have an account yet? <a class="signupactionlink"
+                                        [routerLink]="['/user-registration']">Sign up</a></p>
+                            </ion-col>
+                        </ion-row>
+                       
+                   
+                </form>
+            </ion-col>
+        </ion-row>
+       
+        
+    </ion-grid>
+
+</ion-content>
+<app-footer></app-footer> -->

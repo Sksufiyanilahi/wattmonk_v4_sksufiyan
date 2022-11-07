@@ -1,0 +1,140 @@
+
+
+<ion-content >
+  <ion-grid >
+    <ion-row >
+        <ion-col size="12">
+            <h1 class="dip_tit">Please Confirm</h1>
+            <div class="dip">Are you sure you want to logout?</div>
+        </ion-col>
+    </ion-row>
+    <ion-row style="bottom:0;margin-top: 20px;" class="padd">
+        <ion-col size="6" >
+            <ion-button  class="buttcan"   fill="clear" (click)="log_ou()">
+                Yes
+            </ion-button>
+        </ion-col>
+        <ion-col size="6" >
+            <ion-button   class="buttcc" fill="clear" (click)="dismiss()">
+                No
+            </ion-button>
+        </ion-col>
+        
+    </ion-row>
+</ion-grid>
+  
+
+</ion-content>
+
+
+<!---
+<ion-content>
+  <form [formGroup]="filterform" novalidate style="overflow:scroll">
+    <div style="margin-top: 3px;">
+
+      <ion-label>Company Filters</ion-label>
+      <div>
+        <ion-searchbar class="searchbar-input-container.sc-ion-searchbar-md" debounce="1500" placeholder="Search "
+          (ionChange)="filterCompany($event)"></ion-searchbar>-->
+        <!-- <ion-searchbar class="searchbar-input-container.sc-ion-searchbar-md" debounce="0" placeholder="Search "
+          (ionChange)="filterCompany()" [(ngModel)]="searchTerm" [ngModelOptions]="{standalone: true}">
+
+        </ion-searchbar> -->
+    <!---- </div>
+      <ion-list>
+        <ion-radio-group (ionChange)="clientSelected($event)" formControlName="client">
+          <ion-item lines="none" style="margin-top: -10px;" *ngFor="let entry of clientList; let i=index">
+
+            <ion-label style="color: gray;font-size: small;">{{entry.companyname}}</ion-label>
+            <ion-radio mode="md" slot="end" name="check" [value]='entry' checked="false"></ion-radio>
+
+          </ion-item>
+        </ion-radio-group>
+      </ion-list>
+      <a style="color: black;
+    font-size: small;
+    margin-left: 40px;
+    font-weight: bold;" (click)="viewAll()">View All</a>
+
+    </div>-->
+    <!-- <mat-divider></mat-divider> -->
+    <!-- <div style="margin-top: 3px;" *ngIf="segmentValue=='newDesign'">
+  
+  <ion-label>Status Filters</ion-label>
+  <ion-list>
+  <ion-radio-group (ionChange)="valueChanged($event)" formControlName="status">
+      <ion-item lines="none">
+      <ion-label style="color: gray;font-size: small;">On Hold</ion-label>
+      
+      <ion-radio value="onhold" checked="false"></ion-radio>
+    
+      <ion-label style="color: gray;font-size: small;">Revision</ion-label>
+     
+      <ion-radio value="revision" checked="false"></ion-radio>
+    </ion-item>
+    </ion-radio-group>
+  </ion-list>
+  
+   
+</div> -->
+    <!-- <div  style="margin-top: 3px;" *ngIf="segmentValue=='InDesign'">
+    
+  <ion-label>Design Assigned To</ion-label>
+  <ion-list>
+    <ion-radio-group (ionChange)="designerSelected($event)" formControlName="designer">
+   <ion-item lines="none" style="margin-top: -10px;" *ngFor="let entry of designerList; let i=index">
+    
+     <ion-label style="color: gray;font-size: small;">{{entry.firstname}} {{entry.lastname}}</ion-label>
+     <ion-radio  mode="md" slot="end" name="check" [value]='entry.id' checked="false"></ion-radio>
+   
+   </ion-item>
+  </ion-radio-group>
+  </ion-list>
+  <a style="color: black;
+  font-size: small;
+  margin-left: 40px;
+  font-weight: bold;" href="#" >View All</a>
+
+</div>
+
+<div  style="margin-top: 3px;" *ngIf="segmentValue=='InReview'">
+    
+  <ion-label>Review Assigned To</ion-label>
+  <ion-list>
+    <ion-radio-group (ionChange)="analystSelected($event)" formControlName="analyst">
+   <ion-item lines="none" style="margin-top: -10px;" *ngFor="let entry of analystsList; let i=index">
+    
+     <ion-label style="color: gray;font-size: small;">{{entry.firstname}} {{entry.lastname}}</ion-label>
+     <ion-radio  mode="md" slot="end" name="check" [value]='entry.id' checked="false"></ion-radio>
+   
+   </ion-item>
+  </ion-radio-group>
+  </ion-list>
+  <a style="color: black;
+  font-size: small;
+  margin-left: 40px;
+  font-weight: bold;" href="#" >View All</a>
+
+</div> -->
+    <!-- <mat-divider></mat-divider> -->
+    <!-- <div  style="margin-top: 3px;">
+  <ion-label>Assigned To</ion-label>
+  <ion-list>
+    <ion-item lines="none" style="margin-top: -10px;" *ngFor="let entry2 of form3;let i=index">
+      <ion-label style="color: gray;font-size: small;">{{entry2.val}}</ion-label>
+      <ion-checkbox [ngModel]="checkedIdx2 == i"(ngModelChange)="$event ? checkedIdx2 = i : checkedIdx2 = -1"   mode="md" slot="end" [(ngModel)]="entry2.isChecked"></ion-checkbox>
+    </ion-item>
+   </ion-list>
+</div> 
+<a style="color: black;
+font-size: small;
+margin-left: 40px;
+font-weight: bold;"  >Clear All</a>-->
+ <!----</form>
+  <a style="color: black;
+font-size: small;
+margin-left: 40px;
+font-weight: bold;" (click)="updateRadioValue()">Clear All</a>
+  <ion-button style="float: right;color: black;font-weight: bold;" (click)="applyFilter()">Apply</ion-button>
+
+</ion-content>-->

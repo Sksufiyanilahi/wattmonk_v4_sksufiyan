@@ -1,0 +1,116 @@
+
+body{background: #fff;  
+}
+ion-content {
+  --background: #fff !important;
+}
+
+
+
+
+mat-divider{
+margin-left: 10px;
+  margin-right: 10px;
+ // margin-top: 5px;
+  color: gray;
+}
+ion-icon {
+font-size: 30px;//Preferred size here
+margin-left: 10px;
+}
+
+.small-modal{
+  &::part(content) {
+    position: absolute;
+    bottom: 0;
+    min-height: initial;
+    top: initial;
+    height: 95%;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+}
+}
+
+ion-radio{
+  
+--border-radius:3px;
+--background: linear-gradient(45.7deg, #FBB200 -69.25%, #FDCF27 101.61%);
+}
+
+
+.label{
+
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+
+}
+ion-label{
+ 
+  .tit{
+
+    font-family: 'Lexend';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    /* identical to box height */
+    
+    
+    --color: #000000;
+  
+  }
+
+
+ 
+
+}
+
+
+.hed{
+  font-family: 'Lexend';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 15px;
+  color:  #999999;
+}
+
+
+.obd_class{
+
+
+padding: 0px;
+
+margin: 0px;
+
+
+
+}
+
+
+ion-toolbar{
+
+  --background:  #fff !important;
+
+}
+
+.filetresearc{
+
+padding: 5px;
+
+margin: 5px;
+  --background:  none !important;
+
+
+
+}
+
+
+
+
+ion-item-divider{
+
+  --background:none;
+
+}

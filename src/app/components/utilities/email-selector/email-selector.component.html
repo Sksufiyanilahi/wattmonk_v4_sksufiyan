@@ -1,0 +1,70 @@
+<ion-card >
+  <div class="row">
+    <div class="col-11">
+        <h4 class="dialogformtitle">Select the Emails</h4>
+    </div>
+    <div class="col-1">
+        <ion-button mat-icon-button>
+            <img class="dialogclose" src="../../../../../assets/close.svg" />
+        </ion-button>
+    </div>
+  </div>
+  <div mat-dialog-content>
+    
+  <ion-list  class="matlist">
+    
+    <ion-label class="selectall">
+        <ion-input type="checkbox"  name="selectall" [value]="TeamData" (change)="selectAll($event)"></ion-input>&nbsp;&nbsp;
+         Select All
+      </ion-label>
+    <ion-item-option [ngClass]="[ i%2 == 0 ? 'itemcard even' : 'itemcard odd']"
+     *ngFor="let item of example; let i = index ">
+        <input  type="checkbox" [(ngModel)]="item.checked"> 
+        <a class="listitem1">{{item.firstname}}</a>
+        <a class="listitem1">{{item.lastname}}</a>
+        <a class="listitem2">{{item.name}}</a>
+        <a class="listitem">({{item.email}})</a>
+    </ion-item-option> 
+    
+  
+  </ion-list>
+  
+  </div>
+  <div style="padding-top: 16px; padding-left: 16px; ">
+  <ion-textarea id="inputemails" style="width: 50%; height: 60px; word-wrap: break-word;" type="email"  matInput multiple placeholder="john@gmail.com,troy@gmail.com"></ion-textarea>
+  </div>
+  <ion-button mat-raised-button class="sendButton" (click)="SendMail()">Send</ion-button>
+  </ion-card>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+  <mat-list-item class="primary-imenu-item" role="listitem">
+    <mat-form-field class="select-form">  
+    <mat-select
+        placeholder="Emails"
+        name="Emails"
+        class="filter-select" 
+        multiple 
+        #emailsSelect="ngModel"
+         ngModel >
+        <mat-option disabled="disabled" class="filter-option">
+            <input type="checkbox"(click)="selectAll(checkAll.checked, emailsSelect, teamMember)" #checkAll>
+            {{Emails}}
+        </mat-option> 
+        <mat-option >{{data.design.email}}</mat-option>
+    </mat-select>
+    </mat-form-field>
+  </mat-list-item>
+  <button mat-button>Submit</button>
+  </form> -->

@@ -1,0 +1,134 @@
+<div>
+    <ion-toolbar>
+        <ion-row style="margin-top: 10px;">
+            <ion-col size="6">
+                <h4 class="tit_mod" style="margin-left: 16px;margin-top:6px;">Assign Survey</h4>
+            </ion-col>
+            <ion-col class="time" size="5" offset="-0.9" style="display: flex;align-items: center;">
+                <div style="background-color: transparent;margin-left:4px;margin-left: 4px;border: 1px solid #E5E5E5;padding: 3px 5px;border-radius: 4px;" class="whitechip">
+                    <ion-label class="wclabel">{{ assignedDateTime | date : 'dd MMM yyyy | hh:mm a' }}</ion-label>
+                </div>
+            </ion-col>
+            <ion-col size="1" offset="0.9">
+
+                <ion-button fill="clear" size="small" style="float: right;" class="ion-no-padding" (click)="dismiss()">
+                    <ion-icon name="close-outline" style="color: #333029; font-size:30px"></ion-icon>
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-toolbar>
+</div>
+
+<ion-content>
+    <form [formGroup]="assignForm">
+        <ion-grid class="ad_mar">
+
+            <!-- <ion-row>
+                <ion-col size="12"> -->
+            <!--<app-user-selector (assigneeData)=getassignedata($event) placeholder="Assign"
+                    [assignees]="listOfAssignees" [reviewAssigned]=reviewAssignedTo
+                    formControlName="assignedto"></app-user-selector>-->
+
+            <span class="input-placeholder" *ngIf="required">*</span>
+            <!-- <div >
+              <ion-label class="subhead">Self Assign Requests</ion-label>
+          </div>
+          <ion-row class="ion-align-items-center">
+              <ion-col  size="12" class="padd" id="pre" 
+              >
+              <ion-item lines="none">
+                  <ion-thumbnail slot="start">
+                      <img  
+                          src="../../../assets/icon/new/user.svg" class="assignee-image1" />
+                      
+  
+                  </ion-thumbnail>
+                  <ion-label>
+                      <h2 style="text-transform: capitalize;">Bassie Cooper</h2>
+                  </ion-label>
+  
+                  <ion-badge (click)="wrong()" tabindex="1"   class="badgeApp" slot="end"><span
+                      style="color:#333029;">&#10005;</span></ion-badge>
+  
+                  <ion-badge (click)="right()" tabindex="2"   style="margin-left:-0.5px;" class="badgeApp" slot="end"><span
+                          style="color:#333029;">&#x2713;</span></ion-badge>
+  
+                        
+  
+              </ion-item>
+          </ion-col>
+  
+          </ion-row> -->
+            <!-- <div>
+                <ion-label class="subhead">Surveyors</ion-label>
+            </div> -->
+            <ion-row class="ion-align-items-center" *ngFor="let assignee of filteredAssignees"
+                (click)="selectAssignee(assignee)" class="demom">
+                <ion-col size="12" class="padd" id="pre" *ngIf="assignee.id==reviewAssigned?.id"
+                    [class.active]="assignee.selected" [class.preselected]="!assignee.selected ">
+                    <ion-item lines="none">
+                        <ion-thumbnail slot="start">
+                            <img *ngIf="assignee.contractorlogo && assignee.contractorlogo.logo"
+                                [src]="assignee.contractorlogo.logo.url" class="assignee-image1" />
+                            <img *ngIf="!assignee.contractorlogo || !assignee.contractorlogo.logo"
+                                src="/assets/icon/new/user.svg" class="assignee-image" />
+
+                        </ion-thumbnail>
+                        <ion-label>
+                            <h2 style="text-transform: capitalize;">{{assignee?.firstname=='Ankit' ? 'Wattmonk' :
+                                assignee?.firstname}} </h2>
+                            <p>{{assignee?.lastname=="Sheoran" ? '' : assignee?.lastname}}</p>
+                        </ion-label>
+
+                        <ion-badge class="badgere" slot="end"><span style="margin:auto;">{{assignee?.jobcount}}</span>
+                        </ion-badge>
+
+                    </ion-item>
+                </ion-col>
+                <ion-col size="12" id="pre" class="padd" *ngIf="assignee.id !=reviewAssigned?.id"
+                    [class.active]="assignee.selected" [class.preselected]="!assignee.selected ">
+                    <ion-item lines="none">
+                        <ion-thumbnail slot="start">
+                            <img *ngIf="assignee.contractorlogo && assignee.contractorlogo.logo"
+                                [src]="assignee.contractorlogo.logo.url" class="assignee-image1" />
+                            <img *ngIf="!assignee.contractorlogo || !assignee.contractorlogo.logo"
+                                src="/assets/icon/new/user.svg" class="assignee-image" />
+
+                        </ion-thumbnail>
+                        <ion-label>
+                            <h2 style="text-transform: capitalize;">{{assignee?.firstname=='Ankit' ? 'Wattmonk' :
+                                assignee?.firstname}} </h2>
+                            <p>{{assignee?.lastname=="Sheoran" ? '' : assignee?.lastname}}</p>
+                        </ion-label>
+
+                        <ion-badge class="badgere" slot="end"><span style="margin:auto;">{{assignee?.jobcount}}</span>
+                        </ion-badge>
+
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <!-- </ion-col>
+            </ion-row> -->
+        </ion-grid>
+    </form>
+
+</ion-content>
+
+
+<div class="flex bottom_buu" style="padding-bottom:30px;background-color: #fff;">
+
+    <div style="width:100%; margin-left:16px;">
+        <ion-button size="large" class="buttcan" fill="clear" (click)="dismiss()">
+            {{ isBtnAssignText? 'Assign Later' : 'Cancel' }}
+        </ion-button>
+    </div>
+    <div style="width:5%"></div>
+    <div style="width:100% ;margin-right:16px;">
+        <ion-button size="large" class="buttcc" fill="clear" (click)="assignToSurveyor()">
+            <!-- <ion-label>{{txt1}}</ion-label>   -->
+            <!-- <ion-label>Confirm</ion-label>   -->
+            <ion-label>Assign Survey</ion-label>
+
+        </ion-button>
+    </div>
+</div>

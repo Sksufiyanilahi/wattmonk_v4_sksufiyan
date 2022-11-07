@@ -1,0 +1,1311 @@
+<ion-row class="ion-align-items-center ion-padding-start">
+    <ion-col size="2">
+        <ion-button fill="clear" size="small" class="ion-no-padding" style="color:#595959" (click)="goBack()">
+            Back
+        </ion-button>
+        <!-- <ion-buttons slot="start">
+                    <ion-back-button></ion-back-button>
+                </ion-buttons> -->
+    </ion-col>
+    <ion-col>
+        <h5 class="ion-no-margin ion-padding title">{{utils.isspecificClient
+            ? "Add Designs" : " Permit Design"}} </h5>
+    </ion-col>
+    <ion-col size="2"></ion-col>
+</ion-row>
+<!-- <ion-row class="ion-padding-start ion-padding-end mrT"  style="background: #ffffff;">
+    <ion-col size="9"  style="background: #ffffff; font-size:small;">
+        <p></p>
+
+        {{address == "" ? "No Address Found" : address}}
+
+    </ion-col>
+
+    <ion-col class="ion-text-end" *ngIf="!tabsDisabled" size="3">
+        <p></p>
+        <span [routerLink]="['/map-page']" routerDirection="forward" style="color: #4E6FB0;">
+            Change
+        </span>
+    </ion-col>
+    <ion-col class="ion-text-end" *ngIf="tabsDisabled" size="3">
+        <p></p>
+        <span   style="color:grey;">
+            Change
+        </span>
+    </ion-col>
+</ion-row> -->
+
+
+<ion-content class="ion-padding-start ion-padding-end ion-padding-bottom">
+
+    <form [formGroup]="desginForm" novalidate style="overflow:scroll">
+        <ion-grid style="position: relative;">
+            <ion-row class="ion-align-items-center ion-justify-content-center" *ngIf="!isClient">
+                <ion-col size="12">
+
+                    <span class="input-placeholder">Company Name*</span>
+                    <ion-select (ionChange)="onCompanyChanged($event)" placeholder="Ex. Solar Ltd"
+                        class="form_input select_div" ok-text="" cancel-text="" formControlName="companyname"
+                        interface="popover" [required]="companyrequi">
+                        <ion-select-option *ngFor="let company of getCompanies,let i" [value]="company">
+                            {{company.attributes.username}}
+                        </ion-select-option>
+
+                    </ion-select>
+
+                    <!-- <mat-form-field style="width: 100%; height: 45px;" class="ion-no-padding">
+                            <span style="font-size: smaller;color: #6C6C6C;">Company Name</span>
+                            <input [(ngModel)]="proxyValue" type="text" class="form_input font-size" matInput [matAutocomplete]="auto11" formControlName="companyname">
+                            <mat-autocomplete #auto11="matAutocomplete" (optionSelected)="onCompanyChanged($event)">
+                              <mat-option *ngFor="let company of filteredCompanies | async" [value]="company"
+                              class="font">{{company.companyname}}</mat-option>
+                            </mat-autocomplete>
+                          </mat-form-field>
+                      <div style="height: 5px;">
+                          <div *ngIf="desginForm.get('companyname').hasError('pattern') && desginForm.get('companyname').dirty">
+                              <span class="error">{{companyError}}</span>
+                          </div>
+                      </div> -->
+                </ion-col>
+
+            </ion-row>
+            <ion-row>
+                <ion-col>
+
+                    <span class="input-placeholder">Name* (Same as utility bill)</span>
+                    <ion-input [disabled]="nonEditableField" type="text" placeholder="Ex. John Deo" class="form_input"
+                        autocapitalize="words" formControlName="name"></ion-input>
+
+                    <div style="height: 5px;">
+                        <div *ngIf="desginForm.get('name').hasError('pattern') && desginForm.get('name').dirty">
+                            <span class="error">{{nameError}}</span>
+                        </div>
+                        <div *ngIf="desginForm.get('name').value === '' && desginForm.get('name').dirty">
+                            <span class="error">{{fieldRequired}}</span>
+                        </div>
+                    </div>
+                </ion-col>
+            </ion-row>
+            <ion-row class="ion-align-items-center ion-justify-content-center">
+                <ion-col>
+                    <span class="input-placeholder">Email*</span>
+                    <ion-input class="form_input" type="email" autocapitalize="none" placeholder="Ex. John@wattmonk.com"
+                        autocomplete="off" formControlName="email" [disabled]="fieldDisabled"></ion-input>
+
+                    <div style="height: 5px;">
+                        <div *ngIf="desginForm.get('email').hasError('pattern') && desginForm.get('email').dirty">
+                            <span class="error">{{emailError}}</span>
+                        </div>
+                        <div *ngIf="desginForm.get('email').value === '' && desginForm.get('email').dirty">
+                            <span class="error">{{fieldRequired}}</span>
+                        </div>
+                    </div>
+                </ion-col>
+            </ion-row>
+            <ion-row class="ion-align-items-center ion-justify-content-center">
+                <ion-col>
+                    <span class="input-placeholder">Phone*</span>
+                    <ion-input [disabled]="nonEditableField" class="form_input" type="tel" autocapitalize="none"
+                        placeholder="Ex. 1234567890" autocomplete="off" (keypress)="NumbersOnly($event)" (keyup)="updateTNVal($event)"
+                        (focus)="filterByTN(desginForm.get('phone').value)"
+                        formControlName="phone" minLength="8" maxLength="15"></ion-input>
+
+                    <div style="height: 5px;">
+                        <div *ngIf="desginForm.get('phone').hasError('pattern') && desginForm.get('phone').dirty">
+                            <span class="error">{{phoneError}}</span>
+                        </div>
+                        <!--    <div *ngIf="desginForm.get('phone').value === '' && desginForm.get('phone').dirty">
+                          <span class="error">{{fieldRequired}}</span>
+                      </div>-->
+                    </div>
+                </ion-col>
+            </ion-row>
+
+<!-- Address -->
+<ion-row>
+    <ion-col>
+        <span class="input-placeholder">Address*</span>
+        <ion-input type="text" class="form_input" autocapitalize="words" formControlName="address"
+            autocomplete="off" placeholder="Ex. usa " (ionChange)="updateSearchResults($event)"
+            (ionClear)="onCancel()" debounce="300" (ionFocus)="forAutoComplete($event)" (ionBlur)="onBlur()"
+            [disabled]="fieldDisabled"></ion-input>
+        <!-- <ion-item class="ion-no-padding">
+  <span class="input-placeholder" >Shipping Address*</span>
+  <ion-input type="text" class="form_input" autocapitalize="words"
+              formControlName="shippingaddress" autocomplete="off"></ion-input>
+</ion-item> -->
+        <!-- <ion-list *ngIf="autocompleteItems.length > 0 && autoCompleteOff"> -->
+        <ion-list style="padding:0px" *ngIf="!isSelectSearchResult && designId == 0">
+            <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
+                <span>
+                    {{ item.description }}
+                </span>
+            </ion-item>
+        </ion-list>
+        <div style="height: 5px;">
+            <div *ngIf="desginForm.get('address').hasError('pattern') && desginForm.get('address').dirty">
+                <span class="error">{{addressError}}</span>
+            </div>
+            <div *ngIf="desginForm.get('address').value === '' && desginForm.get('address').dirty">
+                <span class="error">{{fieldRequired}}</span>
+            </div>
+        </div>
+
+
+        <!-- <ion-item *ngIf="autocompleteItems.length === 0" lines="none">
+  <span class="ion-text-center">
+      Search for address
+  </span>
+</ion-item> -->
+    </ion-col>
+</ion-row>
+
+
+
+
+<ion-row>
+    <ion-col>
+        <span class="input-placeholder">Address on utility bill*</span>
+        <ion-input type="text" class="form_input" autocapitalize="words" formControlName="typingaddress"
+            autocomplete="off" placeholder="Ex. usa " 
+            [disabled]="fieldDisabled"></ion-input>
+        <!-- <ion-item class="ion-no-padding">
+  <span class="input-placeholder" >Shipping Address*</span>
+  <ion-input type="text" class="form_input" autocapitalize="words"
+              formControlName="shippingaddress" autocomplete="off"></ion-input>
+</ion-item> -->
+        <!-- <ion-list *ngIf="autocompleteItems.length > 0 && autoCompleteOff"> -->
+        <ion-list style="padding:0px" *ngIf="!isSelectSearchResult && designId == 0">
+            <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
+                <span>
+                    {{ item.description }}
+                </span>
+            </ion-item>
+        </ion-list>
+        <div style="height: 5px;">
+            <div *ngIf="desginForm.get('typingaddress').hasError('pattern') && desginForm.get('typingaddress').dirty">
+                <span class="error">{{addressError}}</span>
+            </div>
+            <div *ngIf="desginForm.get('typingaddress').value === '' && desginForm.get('typingaddress').dirty">
+                <span class="error">{{fieldRequired}}</span>
+            </div>
+        </div>
+
+
+        <!-- <ion-item *ngIf="autocompleteItems.length === 0" lines="none">
+  <span class="ion-text-center">
+      Search for address
+  </span>
+</ion-item> -->
+    </ion-col>
+</ion-row>
+<ion-row>
+    <ion-col size="6">
+
+        <span class="input-placeholder">State*</span>
+        <ion-input class="form_input" placeholder="Ex. U.P " type="text" autocapitalize="words"
+            autocomplete="off" formControlName="state"></ion-input>
+        <div style="height: 5px;">
+            <div *ngIf="desginForm.get('state').dirty && desginForm.get('state').hasError('pattern')">
+                <span class="error">{{"Invalid"}}</span>
+            </div>
+            <!-- <div *ngIf="desginForm.get('monthlybill').hasError('pattern') && desginForm.get('monthlybill').dirty">
+          <span class="error">{{annualunitError}}</span>
+      </div> -->
+        </div>
+    </ion-col>
+    <ion-col size="6">
+
+        <span class="input-placeholder">City*</span>
+        <ion-input class="form_input" placeholder="Ex. abc" type="text" autocapitalize="words"
+            autocomplete="off" formControlName="city"></ion-input>
+        <div style="height: 5px;">
+            <div *ngIf="desginForm.get('city').dirty && desginForm.get('city').hasError('pattern')">
+                <span class="error">{{"Invalid"}}</span>
+            </div>
+            <!-- <div *ngIf="desginForm.get('monthlybill').hasError('pattern') && desginForm.get('monthlybill').dirty">
+          <span class="error">{{annualunitError}}</span>
+      </div> -->
+        </div>
+    </ion-col>
+</ion-row>
+<ion-row class="ion-align-items-center ion-justify-content-center">
+    <ion-col size="6">
+        <span style="display: none;">Job Type*</span>
+        <span class="input-placeholder">Job Type*</span>
+        <ion-select [disabled]="nonEditableField" class="form_input select_div" placeholder="Ex. abc  "
+            ok-text="" cancel-text="" formControlName="jobtype" interface="popover">
+            <ion-select-option value="pvbattery">PV+Battery</ion-select-option>
+            <ion-select-option value="battery">Battery</ion-select-option>
+            <ion-select-option value="pv">PV</ion-select-option>
+        </ion-select>
+
+    </ion-col>
+     <ion-col size="6">
+        <span class="input-placeholder">Property Type*</span>
+        <ion-select class="form_input" placeholder="Ex. Residential" ok-text="" cancel-text=""
+            formControlName="projecttype" interface="popover" (ionChange)="PropertyTypeOption($event)">
+            <ion-select-option value="residential">Residential</ion-select-option>
+            <ion-select-option value="commercial">Commercial</ion-select-option>
+            <!-- <ion-select-option value="detachedbuildingorshop">Detached building or shop
+                </ion-select-option>
+                <ion-select-option value="carport">Carport</ion-select-option> -->
+        </ion-select>
+
+
+    </ion-col>
+    
+</ion-row>
+
+<ion-row class="ion-align-items-center ion-justify-content-center">
+    <ion-col size="6">
+        <span class="input-placeholder">New Construction</span>
+
+        <!-- <span style="display: none;">New construction</span> -->
+        <!-- <span class="input-placeholder">new construction</span> -->
+        <ion-select (ionChange)="showUpload($event)" class="form_input select_div" ok-text=""
+            placeholder="Ex. abc" cancel-text="" formControlName="newconstruction" interface="popover"
+            value="false">
+            <ion-select-option value="true">Yes</ion-select-option>
+            <ion-select-option value="false">No</ion-select-option>
+        </ion-select>
+    </ion-col>
+
+    <ion-col size="6">
+        <span style="display: none;">Mounting Type*</span>
+        <span class="input-placeholder">Mounting Type*</span>
+        <!-- <span class="input-placeholder">mounting type</span> -->
+        <ion-select class="form_input select_div" (ionChange)="eventcheck($event)" placeholder="Ex. abc  "
+            ok-text="" cancel-text="" formControlName="mountingtype" interface="popover">
+            <ion-select-option value="roof">Roof</ion-select-option>
+            <ion-select-option value="ground">Ground</ion-select-option>
+            <ion-select-option value="both">Both</ion-select-option>
+        </ion-select>
+    </ion-col>
+</ion-row>
+
+
+
+
+
+
+
+            <ion-row class="ion-align-items-center ion-justify-content-center">
+                <ion-col size="12" *ngIf="propertytypevalue =='commercial'">
+
+                    <span class="input-placeholder">Solar Capacity (Kw)*</span>
+                    <ion-input class="form_input" placeholder="Ex. 6000 " type="tel" (ionInput)="numberfield($event)"
+                        formControlName="monthlybill" maxLength="15"></ion-input>
+                    <div style="height: 5px;">
+                        <div
+                            *ngIf="desginForm.get('monthlybill').dirty && desginForm.get('monthlybill').hasError('min') && !desginForm.get('monthlybill').hasError('pattern')">
+                            <span class="error">{{"zero value is not accepted"}}</span>
+                        </div>
+                        <div
+                            *ngIf="desginForm.get('monthlybill').dirty && desginForm.get('monthlybill').hasError('pattern') && !desginForm.get('monthlybill').hasError('min')">
+                            <span class="error">{{"Annual units should be a valid number"}}</span>
+                        </div>
+                        <!-- <div *ngIf="desginForm.get('monthlybill').hasError('pattern') && desginForm.get('monthlybill').dirty">
+                            <span class="error">{{annualunitError}}</span>
+                        </div> -->
+                    </div>
+                </ion-col>
+                
+                <ion-col size="12" *ngIf="desginForm.get('state').value.toLowerCase() =='texas' || desginForm.get('state').value.toLowerCase() =='tx'">
+
+
+                    <span class="input-placeholder">ESI ID</span>
+                    <ion-input class="form_input" placeholder="Ex. 10004324300" type="number" autocapitalize="words"
+                        autocomplete="off" formControlName="esiid"></ion-input>
+                    <div style="height: 5px;">
+                        <div *ngIf="desginForm.get('esiid').dirty && desginForm.get('esiid').hasError('pattern')">
+                            <span class="error">{{"Invalid"}}</span>
+                        </div>
+                        <!-- <div *ngIf="desginForm.get('monthlybill').hasError('pattern') && desginForm.get('monthlybill').dirty">
+                      <span class="error">{{annualunitError}}</span>
+                  </div> -->
+                    </div>
+                </ion-col>
+            </ion-row>
+            <!----New Edit => 20220324 -->
+            <ion-row>
+                <ion-col size="6">
+
+
+                    <span class="input-placeholder">Module Count*</span>
+                    <ion-input class="form_input" type="tel" autocapitalize="none" autocomplete="off"
+                        formControlName="modulecount" placeholder="Ex. 123  " maxLength="7"
+                        [disabled]="modulecountdisable"></ion-input>
+                    <div style="height: 5px;">
+                        <div
+                            *ngIf="desginForm.get('modulecount').dirty && desginForm.get('modulecount').hasError('pattern')">
+                            <span class="error">{{"Invalid"}}</span>
+                        </div>
+                        <!-- <div *ngIf="desginForm.get('monthlybill').hasError('pattern') && desginForm.get('monthlybill').dirty">
+                      <span class="error">{{annualunitError}}</span>
+                  </div> -->
+                    </div>
+                </ion-col>
+                
+            </ion-row>
+            
+            <ion-row class="ion-align-items-center ion-justify-content-center">
+                <ion-col size="6">
+                    <span class="input-placeholder">Module Make*</span>
+                    <mat-select formControlName="modulemake" placeholder="Ex. abc " class="form_input select_div" (openedChange)="openedChange($event)"  (click)="fetchModuleMakesData()">
+                        <ion-searchbar class="custom-searchbar" formControlName="modulemakefilter" debounce="1500"
+                            placeholder="Module make" [(ngModel)]="searchedValue"></ion-searchbar>
+                        <mat-option *ngFor="let modulemake of filteredModuleMakes | async" [value]="modulemake.attributes.name"
+                            (onSelectionChange)="fetchModuleModelsData($event,modulemake)" class="font">
+                            {{modulemake.attributes.name | titlecase}}
+                        </mat-option>
+                    </mat-select>
+
+
+                    <!-- <input type="text" class="form_input font-size" matInput [matAutocomplete]="auto"
+                                        autocomplete="off" formControlName="modulemake" required>
+            
+                                    <mat-autocomplete #auto="matAutocomplete">
+                                        <mat-option *ngFor="let modulemake of filteredModuleMakes | async" [value]="modulemake.name"
+                                            (onSelectionChange)="fetchModuleModelsData($event,modulemake)" class="font">
+                                            {{modulemake.name}}
+                                        </mat-option>
+                                    </mat-autocomplete>-->
+                    <div style="height: 5px;">
+                        <div
+                            *ngIf="desginForm.get('modulemake').hasError('pattern') && desginForm.get('modulemake').dirty">
+                            <span class="error">{{moduleAndInverterError}}</span>
+                        </div>
+                    </div>
+                </ion-col>
+                <ion-col size="6">
+                    <span class="input-placeholder">Module Model*</span>
+                    <mat-select placeholder="Ex.  abc" formControlName="modulemodel" class="form_input select_div" (openedChange)="openedChangeMM($event)" (click)="loadModuleModelsData()">
+                        <ion-searchbar class="custom-searchbar" formControlName="modulemodelfilter" debounce="1500"
+                            placeholder="Module Model" [(ngModel)]="searchedValueModel"></ion-searchbar>
+
+                        <mat-option class="font" *ngFor="let modulemodel of filteredModuleModels | async"
+                            [value]="modulemodel.attributes.name" (onSelectionChange)="setSelectedModuleModel(modulemodel)">
+                            {{modulemodel.attributes.name | titlecase}}</mat-option>
+
+                    </mat-select>
+                    <!----<input type="text" class="form_input font-size" matInput [matAutocomplete]="auto1"
+                                        autocomplete="off" formControlName="modulemodel" required>
+            
+                                    <mat-autocomplete #auto1="matAutocomplete">
+                                        <mat-option class="font" *ngFor="let modulemodel of filteredModuleModels | async"
+                                            [value]="modulemodel.name" (onSelectionChange)="setSelectedModuleModel(modulemodel)">
+                                            {{modulemodel.name}}</mat-option>
+                                    </mat-autocomplete>-->
+                    <div style="height: 5px;">
+                        <div
+                            *ngIf="desginForm.get('modulemodel').hasError('pattern') && desginForm.get('modulemodel').dirty">
+                            <span class="error">{{moduleAndInverterError}}</span>
+                        </div>
+                    </div>
+                </ion-col>
+            </ion-row>
+            <div *ngIf="desginForm.get('modulemake').value === 'others' && desginForm.get('modulemake').dirty">
+                <span class="error">Please enter module make / module model in comment</span>
+            </div>
+            <ng-container *ngIf="numberOfInverters.length>0">
+                <ion-row class="ion-align-items-center ion-justify-content-center"
+                    *ngFor="let inverters of numberOfInverters; let i = index">
+                    <ion-col size="6">
+                        <span class="input-placeholder">Inverter Make*</span>
+
+                        <mat-select placeholder="Ex. abc " [formControlName]="inverters.invertermake"
+                            class="form_input select_div" (openedChange)="openedChangeInverter($event,i)" (click)="invertercou(i)">
+                            <ion-searchbar class="custom-searchbar" [formControlName] = "inverters.invertermakefilter"
+                                debounce="1500" placeholder="Inverters make" (click)="invertercou(i)"></ion-searchbar>
+
+                            <mat-option class="font"
+                                *ngFor="let invertermake of inverters.filteredInverterMakes | async"
+                                [value]="invertermake.attributes.name"
+                                (onSelectionChange)="fetchInverterModelsData($event,invertermake,i)">
+                                {{invertermake.attributes.name | titlecase}}
+                            </mat-option>
+
+                        </mat-select>
+                        
+                        <div style="height: 5px;">
+                            <div
+                                *ngIf="desginForm.get('invertermake').hasError('pattern') && desginForm.get('invertermake').dirty">
+                                <span class="error">{{moduleAndInverterError}}</span>
+                            </div>
+                        </div>
+                    </ion-col>
+                    <ion-col size="6">
+                        <span class="input-placeholder">Inverter Model*</span>
+                        <mat-select placeholder="Ex. abc " (openedChange)="openedChangeInverterM($event,i)"    (click)="loadInverterModelsData()" [formControlName]="inverters.invertermodel"
+                            class="form_input select_div" [readonly]="invertermake.value.length<3"
+                            [disabled]="inverters.invertermakedisable">
+                            <ion-searchbar class="custom-searchbar" [formControlName]="inverters.invertermodelfilter" 
+                                debounce="1500" placeholder="Inverters model"></ion-searchbar>
+
+                            <mat-option class="font"
+                                *ngFor="let invertermodel of inverters.filteredInverterModels | async"
+                                [value]="invertermodel.attributes.name"
+                                (onSelectionChange)="setSelectedInverterModel(invertermodel , i)">
+                                {{invertermodel.attributes.name | titlecase}}</mat-option>
+
+                        </mat-select>
+                        
+                        <div style="height: 5px;">
+                            <div
+                                *ngIf="desginForm.get('invertermodel').hasError('pattern') && desginForm.get('invertermodel').dirty">
+                                <span class="error">{{moduleAndInverterError}}</span>
+                            </div>
+                        </div>
+                    </ion-col>
+                    <ion-col size="6">
+
+                        <span class="input-placeholder">Inverters count*</span>
+                        <!-- <span style="display: none;">Project Type</span> -->
+                        <!-- <span class="input-placeholder">project type</span> -->
+                        <ion-input placeholder="Ex. 123" class="form_input" type="tel" autocapitalize="none"
+                            autocomplete="off" [formControlName]="inverters.inverterscount" maxLength="3"
+                            [disabled]="inverters.invertercountdisable"
+                            (ionChange)="invertersCountError($event, inverters, i)">
+                        </ion-input>
+
+                        <div style="height: 5px">
+                            <div *ngIf="inverters.isCountError">
+                                <span class="error">{{ "Invalid" }}</span>
+                            </div>
+                            <!-- <div *ngIf="desginForm.get('monthlybill').hasError('pattern') && desginForm.get('monthlybill').dirty">
+                                    <span class="error">{{annualunitError}}</span>
+                                </div> -->
+                        </div>
+                    </ion-col>
+                    <ion-col size="6" *ngIf="i==0"><span class="input-placeholder">Add new inverter</span>
+                        <button class="addinvert" (click)="adddesigninverters()">
+                            <ion-icon name="add"></ion-icon>
+                        </button>
+                    </ion-col>
+                    <ion-col size="6" *ngIf="i>0"><span class="input-placeholder" (click)="removedesigninverters(i)">
+                            <ion-icon name="trash"></ion-icon>
+                            Remove
+                        </span>
+                    </ion-col>
+                    <ion-col size="12">
+                        <div *ngIf="inverters.inveretereror">
+                            <span class="error">Please enter inverter make / inverter model in comment</span>
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </ng-container>
+           
+            <ng-container *ngIf="designbattries.length>0 && desginForm.get('jobtype').value =='pvbattery'">
+                <ion-row class="ion-align-items-center ion-justify-content-center"
+                    *ngFor="let batteries of designbattries; let index = index">
+                    <ion-col size="6">
+                        <span class="input-placeholder">Battery Make*</span>
+
+                        <mat-select placeholder="Ex. abc " [formControlName]="batteries.batterymake"
+                            class="form_input select_div" (click)="batterycou(index)">
+                            <ion-searchbar class="custom-searchbar" [formControlName]="batteries.batterymake"
+                                debounce="1500" placeholder="Battery make" (click)="batterycou(index)"></ion-searchbar>
+
+                            
+                            <mat-option class="font" *ngFor="let battery of batteries.batterymakes " [value]="battery.name"
+                      (onSelectionChange)="setSelectedBatteryMake(battery,$event,index)">
+                      {{ battery.name | titlecase}}
+                    </mat-option>
+
+                        </mat-select>
+                        
+                       
+                    </ion-col>
+                    <ion-col size="6">
+                        <span class="input-placeholder">Battery Model*</span>
+                        <mat-select placeholder="Ex. abc " [formControlName]="batteries.batterymodel"
+                            class="form_input select_div" >
+                            <ion-searchbar class="custom-searchbar" [formControlName]="batteries.batterymodel"
+                                debounce="1500" placeholder="Battery model"></ion-searchbar>
+
+                            <mat-option class="font"
+                            *ngFor="let battery of batteries.batterymodels" [value]="battery.name"
+                            (onSelectionChange)="setSelectedBatteryModel(battery,$event,index)">
+                                {{battery.name | titlecase}}</mat-option>
+
+                        </mat-select>
+                        
+                        <div style="height: 5px;">
+                            
+                        </div>
+                    </ion-col>
+                    <ion-col size="6">
+
+                        <span class="input-placeholder">Number of batteries *</span>
+                        <!-- <span style="display: none;">Project Type</span> -->
+                        <!-- <span class="input-placeholder">project type</span> -->
+                        <ion-input placeholder="Ex. 123" class="form_input" type="tel" autocapitalize="none"
+                            autocomplete="off" [formControlName]="batteries.batteriescount" maxLength="3"
+                            
+                            (ionChange)="batteriescountChange($event, 'battery', index)">
+                        </ion-input>
+
+                        <div style="height: 5px">
+                            <div *ngIf="batteries.isCountError1">
+                                <span class="error">{{ "Invalid" }}</span>
+                            </div>
+                            <!-- <div *ngIf="desginForm.get('monthlybill').hasError('pattern') && desginForm.get('monthlybill').dirty">
+                                    <span class="error">{{annualunitError}}</span>
+                                </div> -->
+                        </div>
+                    </ion-col>
+                    <ion-col size="6" *ngIf="index==0"><span class="input-placeholder">Add new batteries</span>
+                        <button class="addinvert" (click)="addMoreBatteries()">
+                            <ion-icon name="add"></ion-icon>
+                        </button>
+                    </ion-col>
+                    <ion-col size="6" *ngIf="index>0"><span class="input-placeholder" (click)="DeleteBattries(index)">
+                            <ion-icon name="trash"></ion-icon>
+                            Remove
+                        </span>
+                    </ion-col>
+                   
+
+                    <ion-col size="12" *ngIf="batterycombinerboxshow">
+                        <span class="input-placeholder">Combiner box for batteries?*</span>
+    
+                        <ion-radio-group [formControlName]="batteries.batterycombinerbox">
+                            <ion-row>
+                                <ion-col size="6">
+                                    <ion-item lines="none">
+                                        <span class="margin" style="font-size: 12px;">Yes</span>
+                                        <ion-radio slot="start" class="whiteradioitem" mode='md' [disabled]="fieldDisabled"
+                                            value="true"></ion-radio>
+                                    </ion-item>
+                                </ion-col>
+                                <ion-col size="6">
+                                    <ion-item lines="none">
+                                        <span class="margin" style="font-size: 12px;">No</span>
+                                        <ion-radio slot="start" class="whiteradioitem" mode='md' [disabled]="fieldDisabled"
+                                            value="false"></ion-radio>
+                                    </ion-item>
+                                </ion-col>
+    
+                            </ion-row>
+                        </ion-radio-group>
+                    </ion-col>
+                </ion-row>
+            </ng-container>
+
+            <ion-row class="ion-align-items-center ion-justify-content-center">
+                <ion-col size="12" *ngIf="isinvertertypestring">
+                    <span class="input-placeholder">Do you want an optimizer ? </span>
+
+                    <ion-radio-group formControlName="isoptimizeradded" (ionChange)="isoptimizeradded($event)">
+                        <ion-row>
+                            <ion-col size="6">
+                                <ion-item lines="none">
+                                    <span class="margin" style="font-size: 12px;">Yes</span>
+                                    <ion-radio slot="start" class="whiteradioitem" mode='md' [disabled]="fieldDisabled"
+                                        value="true"></ion-radio>
+                                </ion-item>
+                            </ion-col>
+                            <ion-col size="6">
+                                <ion-item lines="none">
+                                    <span class="margin" style="font-size: 12px;">No</span>
+                                    <ion-radio slot="start" class="whiteradioitem" mode='md' [disabled]="fieldDisabled"
+                                        value="false"></ion-radio>
+                                </ion-item>
+                            </ion-col>
+
+                        </ion-row>
+                    </ion-radio-group>
+                </ion-col>
+
+                <ion-col size="12" *ngIf="isoptimizeraddedval == 'true'">
+                    <span class="input-placeholder">Optimizer*</span>
+
+                    <mat-select formControlName="optimizer" placeholder="Ex. abc " class="form_input select_div">
+                        
+                           <!--- <mat-option *ngFor="let optimizers of optimizerslist " [value]="optimizers.name"
+                            (onSelectionChange)="setSelectedoptimizerId(optimizers)">{{ optimizers.name }}</mat-option>-->
+                            <mat-option (onSelectionChange)="selectedOptimizerID = null" value="Others">Others</mat-option>
+                    </mat-select>
+
+                    <div *ngIf="desginForm.get('optimizer').value === 'others' && desginForm.get('optimizer').dirty">
+                        <span class="error">Please enter Optimizer in comment</span>
+                    </div>
+                </ion-col>
+                <ion-col size="6">
+
+                    <!-- <ion-item class="ion-no-padding">
+                        <span class="input-placeholder" >Utility*</span>
+                        <ion-input type="text" class="form_input" autocapitalize="words" formControlName="Utility"
+                            autocomplete="off"></ion-input>
+                    </ion-item> -->
+                    <span class="input-placeholder">Utility*</span>
+                    <!----<input type="text" class="form_input font-size" matInput [matAutocomplete]="auto5"
+                                autocomplete="off" formControlName="Utility" required>
+
+                           <mat-autocomplete #auto5="matAutocomplete"  class="form_input select_div" >
+                                <mat-option *ngFor="let utility of filteredUtilityMakes | async" [value]="utility.name"
+                                    (onSelectionChange)="fetchUtilityData(utility)" class="font">{{utility.name}}
+                                </mat-option>
+                            </mat-autocomplete>-->
+
+                    <mat-select formControlName="Utility" placeholder="Ex. abc" class="form_input select_div" (click)="fetchUtilityname()">
+                        <ion-searchbar class="custom-searchbar" formControlName="Utility" debounce="1500"
+                            placeholder="Utility" ></ion-searchbar>
+
+                        <mat-option *ngFor="let utility of filteredUtilityMakes | async" [value]="utility.name"
+                            (onSelectionChange)="fetchUtilityData(utility)" class="font">{{utility.name}}
+                        </mat-option>
+                    </mat-select>
+                    <div style="height: 5px;">
+                        <div *ngIf="desginForm.get('Utility').hasError('pattern') && desginForm.get('Utility').dirty">
+                            <span class="error">{{fieldRequired}}</span>
+                        </div>
+                    </div>
+                </ion-col>
+
+
+                <ion-col size="6">
+                    <span class="input-placeholder">AHJ Name*</span>
+                    
+
+                    <mat-select formControlName="ahjname" placeholder="Ex. abc" class="form_input select_div" (click)="fetchahjname()">
+                        <ion-searchbar class="custom-searchbar" formControlName="ahjname" debounce="1500"
+                            placeholder="Module Model"></ion-searchbar>
+                        <mat-option *ngFor="let ahjs of filteredahjsMakes | async" [value]="ahjs.name" class="font"
+                            (onSelectionChange)="setSelectedahjs(ahjs)">{{ahjs.name}}
+                        </mat-option>
+                    </mat-select>
+
+
+                    <!-- <ion-item class="ion-no-padding">
+                        <span class="input-placeholder" >AHJ Name*</span>
+                        <ion-input type="text" class="form_input" autocapitalize="words" formControlName="ahjname"
+                            autocomplete="off"></ion-input>
+                    </ion-item> -->
+
+
+                    <div style="height: 5px;">
+                        <div *ngIf="desginForm.get('ahjname').hasError('pattern') && desginForm.get('ahjname').dirty">
+                            <span class="error">{{fieldRequired}}</span>
+                        </div>
+                    </div>
+                </ion-col>
+                
+
+            </ion-row>
+        
+
+          
+
+            <ion-row>
+                <ion-col size="6">
+                    <span class="input-placeholder">Risk Category</span>
+                    <ion-select placeholder="Risk Category" formControlName="riskcat" placeholder="Ex. abc"
+                        class="form_input select_div" ok-text="" cancel-text="" interface="popover">
+                        <ion-select-option value="I">I</ion-select-option>
+                        <ion-select-option value="II">II</ion-select-option>
+                        <ion-select-option value="III">III</ion-select-option>
+                        <ion-select-option value="IV">IV</ion-select-option>
+                    </ion-select>
+                </ion-col>
+                <ion-col size="6">
+                    <span class="input-placeholder">Exposure Category*</span>
+                    <ion-select placeholder="Exposure Category" formControlName="exposurecategory" placeholder="Ex. abc"
+                        class="form_input select_div" ok-text="" cancel-text="" interface="popover">
+                        <ion-select-option value="A">A</ion-select-option>
+                        <ion-select-option value="B">B</ion-select-option>
+                        <ion-select-option value="C">C</ion-select-option>
+                        <ion-select-option value="D">D</ion-select-option>
+                    </ion-select>
+
+                    <div style="height: 5px;">
+                        <div *ngIf="desginForm.get('exposurecategory').hasError('pattern') && desginForm.get('exposurecategory').dirty">
+                            <span class="error">{{fieldRequired}}</span>
+                        </div>
+                    </div>
+                </ion-col>
+
+                <ion-col size="6">
+                    <span class="input-placeholder">Electric Codes*</span>
+                    <mat-select placeholder="Electric Codes" formControlName="nec" placeholder="Ex. abc"
+                        class="form_input select_div" ok-text="" cancel-text="" interface="popover">
+                        <mat-option value="2003" *ngIf="desginForm.get('state').value?.toLowerCase() !='california'">2003</mat-option>
+                <mat-option value="2005" *ngIf="desginForm.get('state').value?.toLowerCase() !='california'">2005</mat-option>
+                <mat-option value="2008" *ngIf="desginForm.get('state').value?.toLowerCase() !='california'">2008</mat-option>
+                <mat-option value="2011" *ngIf="desginForm.get('state').value?.toLowerCase() !='california'">2011</mat-option>
+                <mat-option value="2014" *ngIf="desginForm.get('state').value?.toLowerCase() !='california'">2014</mat-option>
+                <mat-option value="2017" *ngIf="desginForm.get('state').value?.toLowerCase() !='california'">2017</mat-option>
+                <mat-option value="2020" *ngIf="desginForm.get('state').value?.toLowerCase() !='california'">2020</mat-option>
+                <mat-option value="2017" *ngIf="desginForm.get('state').value?.toLowerCase() =='california'">CEC2017</mat-option>
+                <mat-option value="2019" *ngIf="desginForm.get('state').value?.toLowerCase() =='california'">CEC2019</mat-option>
+                    </mat-select>
+
+                    <div style="height: 5px;">
+                        <div *ngIf="desginForm.get('nec').hasError('pattern') && desginForm.get('nec').dirty">
+                            <span class="error">{{fieldRequired}}</span>
+                        </div>
+                    </div>
+                </ion-col>
+
+                <ion-col size="6">
+                    <span class="input-placeholder">IRC*</span>
+                    <mat-select placeholder="IRC" formControlName="irc" placeholder="Ex. abc"
+                        class="form_input select_div" ok-text="" cancel-text="" interface="popover">
+                        <mat-option value="2006">2006</mat-option>
+                <mat-option value="2009">2009</mat-option>
+                <mat-option value="2012">2012</mat-option>
+                <mat-option value="2015">2015</mat-option>
+                <mat-option value="2018">2018</mat-option>
+                <mat-option value="2021">2021</mat-option>
+                    </mat-select>
+
+                    <div style="height: 5px;">
+                        <div *ngIf="desginForm.get('irc').hasError('pattern') && desginForm.get('irc').dirty">
+                            <span class="error">{{fieldRequired}}</span>
+                        </div>
+                    </div>
+                </ion-col>
+
+
+
+
+            </ion-row>
+
+
+            <ion-row class="ion-margin-top">
+                <span class="input-placeholder">Governing Codes * </span>
+            </ion-row>
+            <ion-row class="ion-margin-top">
+                <ion-col size="12" class="ion-no-padding">
+                    <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3" formControlName="governingcode"
+                        placeholder="Start Typing here" required>
+                    </ion-textarea>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="12" *ngIf="desginForm.get('jobtype').value =='pvbattery' || desginForm.get('jobtype').value =='battery'">
+                    <span class="input-placeholder">Battery Backup</span>
+
+                    <ion-radio-group formControlName="batterybackup">
+                        <ion-row>
+                            <ion-col size="6">
+                                <ion-item lines="none">
+                                    <span class="margin" style="font-size: 12px;">Whole</span>
+                                    <ion-radio slot="start" class="whiteradioitem" mode='md' [disabled]="fieldDisabled"
+                                        value="whole"></ion-radio>
+                                </ion-item>
+                            </ion-col>
+                            <ion-col size="6">
+                                <ion-item lines="none">
+                                    <span class="margin" style="font-size: 12px;">Partial</span>
+                                    <ion-radio slot="start" class="whiteradioitem" mode='md' [disabled]="fieldDisabled"
+                                        value="partial"></ion-radio>
+                                </ion-item>
+                            </ion-col>
+
+                        </ion-row>
+                    </ion-radio-group>
+                </ion-col>
+                <ion-col size="12">
+                    <span class="input-placeholder">Fire setback
+                    </span>
+                    <ion-radio-group formControlName="fire" (ionChange)="showfire($event)">
+                        <ion-row>
+                            <ion-col size="auto">
+                                <ion-item lines="none">
+                                    <span class="margin" style="font-size: 12px;">Yes</span>
+                                    <ion-radio slot="start" class="whiteradioitem" mode='md' [disabled]="fieldDisabled"
+                                        value="true"></ion-radio>
+                                </ion-item>
+                            </ion-col>
+                            <ion-col size="auto">
+                                <ion-item lines="none">
+                                    <span class="margin" style="font-size: 12px;">No</span>
+                                    <ion-radio slot="start" class="whiteradioitem" mode='md' [disabled]="fieldDisabled"
+                                        value="false"></ion-radio>
+                                </ion-item>
+                            </ion-col>
+
+                        </ion-row>
+                    </ion-radio-group>
+                </ion-col>
+                <ion-col size="12">
+                    <span class="input-placeholder">Financing Type
+                    </span>
+
+                    <ion-radio-group formControlName="financing" (ionChange)="financing($event)">
+                        <ion-row>
+                            <ion-col size="auto">
+                                <ion-item lines="none">
+                                    <span class="margin" style="font-size: 12px;">Cash or Loan</span>
+                                    <ion-radio slot="start" class="whiteradioitem" mode='md' [disabled]="fieldDisabled"
+                                        value="cashloan"></ion-radio>
+                                </ion-item>
+                            </ion-col>
+                            <ion-col size="auto">
+                                <ion-item lines="none">
+                                    <span class="margin" style="font-size: 12px;">Lease</span>
+                                    <ion-radio slot="start" class="whiteradioitem" mode='md' [disabled]="fieldDisabled"
+                                        value="lease"></ion-radio>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                    </ion-radio-group>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="financ == 'lease'">
+                <ion-col>
+                    <span class="input-placeholder">Do you require meter for lessor?
+                    </span>
+                    <ion-radio-group formControlName="meterlessor" (ionChange)="showMeterLessor($event)">
+                        <ion-row>
+                            <ion-col size="auto">
+                                <ion-item lines="none">
+                                    <span class="margin" style="font-size: 12px;">Yes</span>
+                                    <ion-radio slot="start" class="whiteradioitem" mode='md' [disabled]="fieldDisabled"
+                                        value="true">
+                                    </ion-radio>
+                                </ion-item>
+                            </ion-col>
+                            <ion-col size="auto">
+                                <ion-item lines="none">
+                                    <span class="margin" style="font-size: 12px;">No</span>
+                                    <ion-radio slot="start" class="whiteradioitem" mode='md' [disabled]="fieldDisabled"
+                                        value="false">
+                                    </ion-radio>
+                                </ion-item>
+                            </ion-col>
+
+                        </ion-row>
+                    </ion-radio-group>
+                </ion-col>
+            </ion-row>
+
+
+
+            <ion-row style="margin-top: 20px;" *ngIf="propertytypevalue == 'residential'">
+                <span class="input-placeholder">Residential Type*</span>
+            </ion-row>
+            <ion-radio-group formControlName="propertysubtype" *ngIf="propertytypevalue == 'residential'">
+                <ion-row>
+                    <ion-col size="auto">
+                        <ion-item lines="none">
+                            <span class="margin" style="font-size: 12px;">House</span>
+                            <ion-radio slot="start" class="whiteradioitem" mode='md' [disabled]="fieldDisabled"
+                                value="house"></ion-radio>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col size="auto">
+                        <ion-item lines="none">
+                            <span class="margin" style="font-size: 12px;">CarPort</span>
+                            <ion-radio slot="start" class="whiteradioitem" mode='md' [disabled]="fieldDisabled"
+                                value="carport"></ion-radio>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+            </ion-radio-group>
+            <ion-row style="margin-top: 20px;" *ngIf="propertytypevalue == 'commercial'">
+                <span class="input-placeholder">Commercial Type*</span>
+            </ion-row>
+            <ion-radio-group formControlName="propertysubtype" *ngIf="propertytypevalue == 'commercial'">
+                <ion-row>
+                    <ion-col size="auto">
+                        <ion-item lines="none">
+                            <span class="margin" style="font-size: 12px;">Detached Building or Shop</span>
+                            <ion-radio slot="start" class="whiteradioitem" mode='md' [disabled]="fieldDisabled"
+                                value="detachedbuildingorshop">
+                            </ion-radio>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col size="auto">
+                        <ion-item lines="none">
+                            <span class="margin" style="font-size: 12px;">CarPort</span>
+                            <ion-radio slot="start" class="whiteradioitem" mode='md' [disabled]="fieldDisabled"
+                                value="carport"></ion-radio>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+            </ion-radio-group>
+
+
+
+            <!-- condition base roof type-->
+            <ion-row>
+                <ion-col size="12" *ngIf='(showValue=="roof" ||showValue== "both")'>
+                    <span style="display: none;">Roof Type</span>
+                    <span class="input-placeholder">Roof type*</span>
+                    <ion-select class="form_input select_div" placeholder="Ex. abc  " ok-text="" cancel-text=""
+                        formControlName="rooftype" interface="popover">
+                        <ion-select-option value="flat">Flat</ion-select-option>
+                        <ion-select-option value="pitch">Pitch</ion-select-option>
+                        <ion-select-option value="both">Both</ion-select-option>
+                    </ion-select>
+                </ion-col>
+                <ion-col size="12" *ngIf='(showValue=="ground" || showValue=="both")'>
+                    <span class="input-placeholder" style="font-size: 13px;">Tilt for ground mount system*</span>
+                    <ion-input class="form_input" placeholder="Ex. 123  " type="tel"
+                        formControlName="tiltofgroundmountingsystem" maxlength="5">
+                    </ion-input>
+                    <div style="height: 5px;">
+                        <div
+                            *ngIf="desginForm.get('tiltofgroundmountingsystem').dirty && desginForm.get('tiltofgroundmountingsystem').hasError('pattern')">
+                            <span class="error">{{"It should be a valid number"}}</span>
+                        </div>
+                        <div
+                            *ngIf="desginForm.get('tiltofgroundmountingsystem').hasError('pattern') && desginForm.get('tiltofgroundmountingsystem').dirty">
+                            <span class="error">{{tiltforgroundError}}</span>
+                        </div>
+                    </div>
+                </ion-col>
+            </ion-row>
+            <!--upload box-->
+            <ion-row *ngIf="uploadbox == 'true'">
+                <ion-col size="12">
+
+                   
+
+
+
+                    <ng-container>
+                        <ion-item class="ion-no-padding" >
+                            <span class="input-placeholder">Architectural design*</span>
+                           <!---- <input type="file" #f class="form_input" (change)="files($event)" style="margin-top: 12px"
+                                formControlName="architecturaldesign" />
+                            <ion-icon name="attach-outline" slot="end" style="margin-top: 21px"></ion-icon>-->
+                        </ion-item>
+
+                        <div class="row architectureuploadrow">
+                            <div class="col align-items-center architectureuploadcol">
+                              <mat-error  style="font-size: 10px; margin-left: 16px"
+                                *ngIf="archFiles.length == 0">Uploading architectural design is required.
+                              </mat-error>
+                              <div class="multiple-dropzone"  ngx-dropzone
+                                [multiple]="true" (change)="files($event)"  accept=".png, .jpg, .jpeg,.heic,application/pdf">
+                                <ngx-dropzone-label>
+                                  <div>
+                                    <img class="addimage" src="../assets/icon/add.svg" />
+                                    <h6 style="font-size: 14px;">
+                                      Browse Architectural Design of
+                                      your house.
+                                    </h6>
+                                  </div>
+                                </ngx-dropzone-label>
+                                <div *ngFor="let f of archFiles;let i=index">
+                                 
+                                  <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                                    [file]="f" [removable]="true" (removed)="removeArc(f,i)">
+                                    <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                                  </ngx-dropzone-preview>
+                                  <ngx-dropzone-preview *ngIf="f.isImage" class="imagepreview"
+                                    ngProjectAs="ngx-dropzone-preview" [file]="f" [removable]="true"
+                                    (removed)="removeArc(f,i)">
+                                    <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                                  </ngx-dropzone-preview>
+
+
+                                  <!--ngx-dropzone-image-preview-->
+                                </div>
+                              </div>
+                            </div>
+              
+              
+                          </div>
+
+                        <!--<div *ngFor="let urls of arcFileUrl; let i = index">
+                            <div style="height:50px; width: 50px">{{i + 1 }}</div>
+                        </div>
+                         <ion-row>
+
+                            <ion-col size="12">
+                                <ion-slides pager="false" [options]="slideOptsTwo" #slideWithNav2 (ionSlideDidChange)="
+                        SlideDidChange(arcFileUrl, slideWithNav2)
+                      ">
+                                    <ion-slide *ngFor="let urls of arcFileUrl; let i = index">
+                                        <div>
+                                            <img [src]="urls" style="
+                              height: 10rem;
+                              width: 10rem;
+                              border: 3px solid black;
+                            " alt="file" />
+
+                                            <ion-icon class="remove" name="close-circle-outline" (click)="removeArc(urls,i)">
+                                            </ion-icon>
+                                        </div>
+                                    </ion-slide>
+                                </ion-slides>
+                            </ion-col>
+
+                        </ion-row> -->
+                    </ng-container>
+
+                </ion-col>
+
+                <ion-col size="12">
+                    <ion-slides [options]="slideOptsThree">
+                        <ng-container *ngIf="design && design.architecturaldesign !== null">
+                            <ion-slide *ngFor="let arc of design.architecturaldesign; let i = index">
+
+                                <div>
+                                    <img [src]="arc.ext !== ('.png' || '.jpg' || '.jpeg' || '.gif') ? 'assets/icon/file.png' : arc.url "
+                                        style="height: 10rem; width: 10rem; border: 3px solid black" alt="file" />
+                                    <ion-icon class="remove" name="close-circle-outline" (click)="remove(arc, i)">
+                                    </ion-icon>
+                                </div>
+
+
+                            </ion-slide>
+
+                        </ng-container>
+                    </ion-slides>
+                </ion-col>
+
+            </ion-row>
+
+
+            <!-----Design => 20220324 -->
+
+
+
+
+
+
+
+
+            <ion-row>
+                <ion-col size="12">
+
+
+
+                   
+
+                    <ng-container>
+                        <ion-item class="ion-no-padding" >
+                            <span class="input-placeholder">Attachments</span>
+
+                            
+                        </ion-item>
+
+
+                        <div class="row architectureuploadrow">
+                            <div class="col align-items-center architectureuploadcol">
+                              
+                              <div class="multiple-dropzone"  ngx-dropzone
+                                [multiple]="true" (change)="permitfiles($event)" accept=".png, .jpg, .jpeg,.heic,application/pdf">
+                                <ngx-dropzone-label>
+                                  <div>
+                                    <img class="addimage" src="../assets/icon/add.svg" />
+                                    <h6 style="font-size: 14px;">
+                                        Browse files to attach.
+                                    </h6>
+                                  </div>
+                                </ngx-dropzone-label>
+                                <div *ngFor="let f of permitFiles;let i=index">
+                                  
+                                  <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                                    [file]="f" [removable]="true" (removed)="removePermit(f,i)">
+                                    <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                                  </ngx-dropzone-preview>
+                                  <ngx-dropzone-preview *ngIf="f.isImage" class="imagepreview"
+                                    ngProjectAs="ngx-dropzone-preview" [file]="f" [removable]="true"
+                                    (removed)="removePermit(f,i)">
+                                    <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                                  </ngx-dropzone-preview>
+
+
+                                  <!--ngx-dropzone-image-preview-->
+                                </div>
+                              </div>
+                            </div>
+              
+              
+                          </div>
+                        <!--<ion-row>
+                           
+                            <ion-col size="12">
+                                <ion-slides pager="false" [options]="slideOptsTwo" #slideWithNav2
+                                    (ionSlideDidChange)="SlideDidChange(imageurls, slideWithNav2)">
+                                    <ion-slide *ngFor="let url of imageurls; let i = index">
+                                        <div>
+                                            <img [src]="url" style="
+                              height: 10rem;
+                              width: 10rem;
+                              border: 3px solid black;
+                            " alt="file" />
+
+                                            <ion-icon class="remove" name="close-circle-outline"
+                                                (click)="removePermit(url, i)"></ion-icon>
+                                        </div>
+                                    </ion-slide>
+                                </ion-slides>
+                            </ion-col>
+                            
+                        </ion-row>-->
+                    </ng-container>
+                    <!-- <ion-item class="ion-no-padding"> -->
+                    <!-- <ion-input class="form_input" type="file" placeholder="Upload Architectural design"
+                                    (ionChange)="files($event)"  multiple></ion-input> -->
+                    <!-- <span class="input-placeholder">architectural design*</span>
+                                    <p style="margin-top: 10px;" *ngFor="let architecture of architecturalData;let i=index"><ion-row style="display:flex;align-items: flex-end;" ><ion-col style="display:flex;align-items: flex-end;"><span style="-webkit-text-stroke: thin;" *ngIf="architecture.value!=''" class="input-placeholder">{{architecture?.name}}</span></ion-col>
+                                        <ion-col style="display:flex;align-items: flex-end;"> <ion-icon name="close-circle-outline" *ngIf="architecture.name!=''" (click)="remove(architecture,architecture?.id)"></ion-icon></ion-col></ion-row></p>
+                                    <ion-input type="file"  class="form_input"  (change)="files($event)" style="margin-top: 12px;" formControlName="architecturaldesign" placeholder="Upload Architectural design" multiple></ion-input>
+                                </ion-item> -->
+                </ion-col>
+                <!-- <ion-item> -->
+                <!-- <span class="input-placeholder">architectural design*</span> -->
+                <!-- <ng-container *ngIf="design && design.attachments !== null"> -->
+                <ion-col size="12">
+                    <ion-slides [options]="slideOptsThree">
+                        <ng-container *ngIf="design && design.attachments !== null">
+
+                            <ion-slide *ngFor="let attach of design?.attachments; let i = index">
+                                <div>
+                                    <img [src]="attach.ext !== ('.png' || '.jpg' || '.jpeg' || '.gif') ? 'assets/icon/file.png' : attach.url "
+                                        style="height: 10rem; width: 10rem; border: 3px solid black" alt="file" />
+                                    <ion-icon class="remove" name="close-circle-outline"
+                                        (click)="removeattachment(attach, i)"></ion-icon>
+                                </div>
+                            </ion-slide>
+                        </ng-container>
+                    </ion-slides>
+                </ion-col>
+                <!-- </ng-container> -->
+            </ion-row>
+
+
+
+
+
+            <ion-row>
+                <ion-col size="12">
+                    <ng-container>
+                        <ion-item class="ion-no-padding" >
+                            <span class="input-placeholder">Module Layout Design</span>
+
+                            <!--<input #m type="file" class="form_input" (change)="modulelayoutdesign($event)"
+                                style="margin-top: 12px" formArrayName="moduleslayoutdesign" multiple />
+                            <ion-icon name="attach-outline" slot="end" style="margin-top: 21px"></ion-icon>-->
+                        </ion-item>
+
+
+
+                        <div class="row architectureuploadrow">
+                            <div class="col align-items-center architectureuploadcol">
+                              
+                              <div class="multiple-dropzone"  ngx-dropzone
+                                [multiple]="true" (change)="modulelayoutdesign($event)" >
+                                <ngx-dropzone-label>
+                                  <div>
+                                    <img class="addimage" src="../assets/icon/add.svg" />
+                                    <h6 style="font-size: 14px;">
+                                        Browse files to Module Layout Design.
+                                    </h6>
+                                  </div>
+                                </ngx-dropzone-label>
+                                <div *ngFor="let f of moduleFiles;let i=index">
+                                 
+                                  <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                                    [file]="f" [removable]="true" (removed)="removemodulelayout(f,i)">
+                                    <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                                  </ngx-dropzone-preview>
+                                  <ngx-dropzone-preview *ngIf="f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview" [file]="f" [removable]="true"
+                                    (removed)="removemodulelayout(f,i)">
+                                    <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                                  </ngx-dropzone-preview>
+
+                                  <!--ngx-dropzone-image-preview-->
+                                </div>
+                              </div>
+                            </div>
+              
+              
+                          </div>
+
+                       <!---<ion-row>
+                            <ion-col size="12">
+                                <ion-slides pager="false" [options]="slideOptsTwo" #slideWithNav2
+                                    (ionSlideDidChange)="SlideDidChange(moduleFileUrl, slideWithNav2)">
+                                    <ion-slide *ngFor="let url of moduleFileUrl; let i = index">
+                                        <div>
+                                            <img [src]="url" style="
+                              height: 10rem;
+                              width: 10rem;
+                              border: 3px solid black;
+                            " alt="file" />
+
+                                            <ion-icon class="remove" name="close-circle-outline"
+                                                (click)="removemodulelayout(url,i)"></ion-icon>
+                                        </div>
+                                    </ion-slide>
+                                </ion-slides>
+                            </ion-col>
+
+                        </ion-row>-->
+
+                    </ng-container>
+
+                </ion-col>
+
+                <ion-col size="12">
+                    <ion-slides [options]="slideOptsThree">
+                        <ng-container *ngIf="design && design.designgeneralinformation.moduleslayoutdesign !== null">
+
+                            <ion-slide
+                                *ngFor="let attach of design?.designgeneralinformation.moduleslayoutdesign; let i = index">
+                                <div>
+                                    <img [src]="attach.ext !== ('.png' || '.jpg' || '.jpeg' || '.gif') ? 'assets/icon/file.png' : attach.url "
+                                        style="height: 10rem; width: 10rem; border: 3px solid black" alt="file" />
+                                    <ion-icon class="remove" name="close-circle-outline"
+                                        (click)="removemodulelayoutdesign(attach, i)"></ion-icon>
+                                </div>
+                            </ion-slide>
+                        </ng-container>
+                    </ion-slides>
+                </ion-col>
+
+            </ion-row>
+
+
+            <ion-row class="ion-margin-top">
+                <ion-col>
+                    <ion-item class="ion-no-padding no-border" lines="none">
+                        <ion-checkbox checked="false" (ionChange)="mpucheckbox($event)"></ion-checkbox>
+                        <span>&nbsp;MPU required</span>
+                    </ion-item>
+                </ion-col>
+                <ion-col size="6" *ngIf="firebox == 'true'">
+                    <span class="input-placeholder">Details of setback*</span>
+
+                    <ion-input type="text" class="form_input" placeholder="Ex. abc  " autocapitalize="words"
+                        formControlName="setbackdetails" autocomplete="off"></ion-input>
+                </ion-col>
+            </ion-row>
+
+            <ion-row class="ion-margin-top">
+                <span class="input-placeholder">Comments <span *ngIf="commentrequi">*</span></span>
+            </ion-row>
+            <ion-row class="ion-margin-top">
+                <ion-col size="12" class="ion-no-padding">
+                    <ion-textarea class="ion-no-margin ion-no-padding comment_box" rows="3" formControlName="comments"
+                        [placeholder]="place" [required]="commentrequi">
+                    </ion-textarea>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+
+    </form>
+
+</ion-content>
+<ion-row style="margin: 0 auto;width: 98%;">
+    <ion-col size="6" *ngIf="!isClient && !isVAAgent"></ion-col>
+    <ion-col size="6">
+        <ion-button class="buttcan1" fill="clear" (click)="addForm('save')">
+            Save for later
+        </ion-button>
+    </ion-col>
+    <ion-col size="6" *ngIf="isClient || isVAAgent">
+        <!-- *ngIf="(userdata.role.type=='clientsuperadmin' || userdata.role.type=='clientadmin') && ((design && design.status != 'requestdeclined') || design==null) && designId==0" -->
+        <ion-button class="buttcc" fill="clear" *ngIf="isClient || isVAAgent" (click)="addForm('send')">
+            Submit to WattMonk</ion-button>
+    </ion-col>
+</ion-row>

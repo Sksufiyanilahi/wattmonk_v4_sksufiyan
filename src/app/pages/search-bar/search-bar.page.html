@@ -1,0 +1,903 @@
+<ion-header class="ion-align-items-center">
+
+    <ion-row>
+        <ion-col size="2">
+            <ion-button fill="clear" size="small" style="color: #595959;" (click)="goBack()" [disabled]="enableDisable">
+                Back
+            </ion-button>
+        </ion-col>
+        <ion-col size="8">
+            <h1 class="ion-no-padding ion-no-margin home">Search</h1>
+        </ion-col>
+        <ion-col size="2"></ion-col>
+    </ion-row>
+
+
+
+    <!--<ion-button style="float: right;" fill="clear" *ngIf="userData.role.type !== 'surveyors'">
+        <ion-icon name="filter-outline"></ion-icon>&nbsp;<ion-select value="all" (ionChange)="searchfor($event)"
+            style="padding-left: 0px;text-transform: none;" interface="popover" [(ngModel)]="Type">
+            <ion-select-option #d name="Designs" value="design">{{'Designs' | lowercase}}</ion-select-option>
+            <ion-select-option #s name="Surveys" value="survey">{{'Surveys' | lowercase}}</ion-select-option>
+            <ion-select-option #s name="Surveys" value="pestamp">{{'PE Stamps' | lowercase}}</ion-select-option>
+            <ion-select-option value="all">{{'All' | lowercase}}</ion-select-option>
+        </ion-select>
+    </ion-button>-->
+
+
+</ion-header>
+
+
+
+
+
+<ion-content>
+    <div class="loc-flex">
+        <div style="width:100%;margin:10px;">
+            <ion-searchbar debounce="0" placeholder="Search" (ionChange)="searchfor($event)"
+                [(ngModel)]="searchElement"></ion-searchbar>
+        </div>
+    </div>
+
+
+    <ion-segment mode="md" scrollable value="all" *ngIf="userData.role.type !== 'surveyors' "
+        (ionChange)="searchfor($event)" mode="md" [(ngModel)]="Type">
+
+        <ion-segment-button value="all"
+            *ngIf="userData.role.type !== 'peengineer' && !isPeSuperadmin && !isUserDesigner && !isUserAnalyst">
+            <ion-label class="segment-btn">All</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="design" *ngIf="userData.role.type !== 'peengineer' && !isPeSuperadmin">
+            <ion-label class="segment-btn">Designs</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="survey"
+            *ngIf="userData.role.type !== 'peengineer' && !isPeSuperadmin && !isUserDesigner && !isUserAnalyst">
+            <ion-label class="segment-btn">Surveys</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="pestamp" *ngIf="!isUserDesigner && !isUserAnalyst">
+            <ion-label class="segment-btn">PE Stamps</ion-label>
+        </ion-segment-button>
+
+
+    </ion-segment>
+
+    <ion-refresher slot="fixed" (ionRefresh)="refreshData($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <ion-grid class="padd padd-list" *ngIf="isSearch_da">
+
+        <ng-container *ngIf="SortedModel.length!==0 ; else norecordfound">
+
+            <ion-row *ngFor="let search of SortedModel | filter:searchElement" class="padd padd-top">
+                <ion-col size="12" class="padd padd-col ">
+                    <div class="custom-card" *ngIf="search?.type=='design'"
+                        [routerLink]="['/design-details/',search?.id]">
+
+
+                        <ion-row class="">
+                            <ion-col size="8" class="padd ">
+
+                                <div class="customer-name">
+                                    <span>{{search?.name}}</span>
+
+                                    <!--<span fill="clear" background-border="clear" (click)="gotoActivity(search,$event)"
+                            class="imagebutton" size="small"><img src="/assets/images/activitylist.png"
+                                style="height: 20px;" /></span>-->
+                                    <!-- comment on 20220211 -->
+                                    <!-- <ng-container *ngIf="search?.chatid!==null">
+                            <span fill="clear" background-border="clear" (click)="gotoChats(search,$event)"
+                                class="chatbutton" size="small"><img style="height:20px"
+                                    src="assets/images/chat.svg" /></span>
+                        </ng-container> -->
+                                </div>
+                            </ion-col>
+                            <ion-col size="4" class="padd "><span> <a (click)="gotoActivity(search,$event)"
+                                        style="text-decoration: none;" class="imagebutton phone">
+                                        <span class="customer-phone">
+                                            <ion-img src="assets/images/activity.svg" style="width:12px;height: 12px;">
+                                            </ion-img>
+                                        </span></a></span></ion-col>
+                            <ion-col size="12" class="padd ">
+
+                                <div class="chip-block">
+                                    <div class="chipdetail5" *ngIf="search?.requesttype == 'permit'">
+                                        {{search?.requesttype}}</div>
+                                    <div *ngIf="search?.requesttype == 'prelim'" class="chipdetail5">
+                                        {{search?.requirementtype}}</div>
+                                    <div class="chipdetail4" *ngIf="search?.status == 'requestdeclined'">On Hold</div>
+                                    <div class="chipdetail1" *ngIf="search?.deliverydate > 0">Overdue</div>
+                                    <div class="chipdetail4" *ngIf="search.unhold &&
+                        search.status != 'requestdeclined'">Un Hold</div>
+                                    <div class="chipdetail2" *ngIf="search?.status == 'requestaccepted'">Accepted</div>
+                                    <div class="chipdetail2" *ngIf="search?.status == 'reviewpassed'">Review
+                                        Passed</div>
+                                    <div class="chipdetail2" *ngIf="search?.status == 'delivered'">Delivered</div>
+                                    <div class="chipdetail2" *ngIf="search?.status == 'designcompleted'">Completed</div>
+                                    <div class="chipdetail" *ngIf="search?.status == 'reviewfailed'">Review
+                                        Failed</div>
+                                    <div class="chipdetail3" *ngIf="search?.status == 'created'">Unassigned</div>
+                                    <div class="chipdetail3" *ngIf="search?.status == 'designassigned'">Design assigned
+                                    </div>
+                                    <div class="chipdetail3" *ngIf="search?.status == 'reviewassigned'">In
+                                        Review</div>
+                                    <div class="chipdetail3" *ngIf="search?.status == 'outsourced' && isClient">
+                                        <!-- Outsourced -->
+                                        Waiting for acceptance
+                                    </div>
+                                    <div class="chipdetail1" *ngIf="search?.isinrevisionstate">Revision</div>
+                                    <div *ngIf="search?.status=='assigned'" class="chipdetail1">
+                                        pending
+                                    </div>
+                                </div>
+                            </ion-col>
+
+                            <ion-col size="8" class="padd ">
+
+                                <div class="loc-flex location_list">
+                                    <div class="flex">
+                                        <div class="list_clo">
+                                            <ion-icon name="location-outline"></ion-icon>
+                                        </div>
+                                    </div>
+                                    <div><span class="customer-address"
+                                            (click)="openAddressOnMap(search.address,$event,search.latitude, search.longitude)">
+                                            {{(search.address | slice:0:60) +
+                                            (search.address?.length > 60 ? '...' : '')}}</span></div>
+
+                                </div>
+
+                                <div class="loc-flex asignee_list" *ngIf="!isClient && search?.company != null">
+
+
+                                    <div class="flex">
+                                        <div class="list_clo">
+                                            <ion-icon name="business-outline"></ion-icon>
+                                        </div>
+                                    </div>
+                                    <div><span class="customer-address">{{(search.company )}}</span></div>
+
+                                </div>
+
+                                <div class="loc-flex asignee_list"
+                                    *ngIf="search?.designassignedto != null && (search?.status == 'designassigned' || search?.status == 'designcompleted') && !isUserDesigner">
+                                    <div class="flex">
+                                        <div class="list_clo">
+                                            <ion-icon name="person-circle-outline"></ion-icon>
+                                        </div>
+                                    </div>
+                                    <div class="flex">
+                                        <div class="list_clo"><span class="customer-address"> Assigned to :
+                                                {{search.designassignedto.firstname | titlecase}}
+                                                {{search.designassignedto.lastname | titlecase}}</span></div>
+                                    </div>
+
+                                </div>
+                                <div class="loc-flex asignee_list"
+                                    *ngIf="search?.reviewassignedto != null && (search?.status == 'reviewassigned' || search.status == 'reviewpassed') && !isUserAnalyst">
+
+
+
+                                    <div>
+                                        <ion-icon name="person-circle-outline"></ion-icon>
+                                    </div>
+                                    <div><span class="customer-address"> Assigned to :
+                                            {{search.reviewassignedto.firstname | titlecase}}
+                                            {{search.reviewassignedto.lastname | titlecase}}</span></div>
+
+                                </div>
+
+
+
+
+                            </ion-col>
+                            <ion-col size="4" class="padd ">
+
+
+
+                                <div class="loc-flex location_list" style="float:right;">
+
+
+
+
+                                    <span class="chipdetail" style="align-self: center; float: right;"
+                                        *ngIf="search?.jobtype=='pvbattery'">{{search?.jobtype=='pvbattery'
+                                        ? 'PV+Battery' :
+                                        search?.jobtype}}</span>
+                                    <span class="chipdetail" style="align-self: center; float: right;"
+                                        *ngIf="search?.jobtype=='pv'">{{search?.jobtype=='pv'
+                                        ? 'PV':
+                                        search?.jobtype}}</span>
+                                    <span class="chipdetail" style="align-self: center; float: right;"
+                                        *ngIf="search?.jobtype=='battery'">{{search?.jobtype=='battery'
+                                        ? 'Battery':
+                                        search?.jobtype}}</span>
+                                </div>
+
+
+                                <div style="float:right;margin-top:16px;"
+                                    *ngIf="search.status == 'designassigned'&& userData.role.type!='clientsuperadmin' && userData.role.type!='clientadmin'">
+                                    <span *ngIf="search.status == 'designassigned'">
+                                        {{search.designremainingtime}}</span>
+                                </div>
+                                <div style="float:right;margin-top:16px;" *ngIf="search.status == 'outsourced'">
+                                    <span *ngIf="search.status == 'outsourced'">
+                                        {{search.designacceptanceremainingtime}}</span>
+                                </div>
+                            </ion-col>
+                        </ion-row>
+
+
+                        <ion-row class="ion-no-margin" *ngIf="!userAccessRights?.viewonly">
+                            <ion-col class="">
+                                <p style="margin:0px">
+                                    <span class="recordupdatedon" routerDirection="forward">
+                                        {{ search.updated_at | date: "HH:mm" }}
+                                    </span>|
+                                    <span class="recordupdatedon">
+                                        {{search?.updated_at|date: 'dd MMM yyyy'}}
+                                    </span>
+                                </p>
+
+                            </ion-col>
+                        </ion-row>
+
+                        <!-- <span class="chipdetail"   >{{search?.company}}</span> -->
+                        <!-- <span class="chipdetail" 
+                    >{{search?.requesttype}}</span> -->
+
+                        <!-- <span class="chipdetail"  *ngIf="search?.source"
+                    >{{search?.source | titlecase}}</span> -->
+
+
+
+
+                        <!-- <ion-col *ngIf="segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted'">
+                        <span *ngIf="search?.status == 'created' || search?.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(search?.id,search)"
+                        >Assign</span>
+                        <span style="float: right;">
+
+                            <ion-col size="8"  *ngIf="search?.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="accept(search?.id,'requestaccepted')">
+                                Accept
+                            </ion-col>
+                            <ion-col size="4" *ngIf="search?.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="decline(search?.id)">
+                            On Hold
+                            </ion-col>
+                        </span>
+
+                        <span *ngIf="search?.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(search?.id,search)"
+                        >Reassign</span>
+                    </ion-col>
+
+
+                    <ion-col *ngIf="search?.requesttype=='prelim'&& search?.status=='designcompleted'">
+                        <span  style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(search?.id,search)"
+                        >Assign Review</span>
+                    </ion-col>
+                    <ion-col *ngIf="search?.status == 'reviewpassed' || search?.status == 'reviewfailed'|| search?.status == 'reviewassigned'">
+                        <span *ngIf="search?.status == 'reviewpassed'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openreviewPassed(search?.id,search)"
+                        >&nbsp;Deliver</span>
+                        <span  style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(search?.id,search)">
+                            Reassign Review</span>
+                    </ion-col>
+                    <ion-col *ngIf="search?.requesttype=='prelim'&& search?.status=='delivered'" >
+                        <span  style="float:right !important;" class="ion-text-end action-button-color" (click)="shareWhatsapp(search)">
+                            <ion-icon name="share-social-outline"></ion-icon></span>&nbsp;
+                        <span style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="shareViaEmails(search?.id,search)">
+                            <ion-icon name="mail" ></ion-icon></span>
+                    </ion-col>
+                    -->
+
+                    </div>
+                    <div class="custom-card" *ngIf="search?.type=='survey'"
+                        (click)="gotoDetailspage('/survey-details/',search?.id ,search,'survey')">
+
+
+                        <ion-row class="ion-no-margin">
+                            <ion-col size="8" class="padd ">
+
+                                <div class="customer-name">
+                                    <span>{{search?.name}}</span>
+
+                                    <!--<span fill="clear" background-border="clear" (click)="gotoSurveyActivity(search,$event)"
+                            class="imagebutton" size="small"><img src="/assets/images/activitylist.png"
+                                style="height: 20px;" /></span>-->
+                                    <!-- comment on 20220211 -->
+                                    <!-- <ng-container *ngIf="search?.chatid!==null && search?.status !== 'created'">
+                            <span fill="clear" background-border="clear" (click)="gotoChats(search,$event)"
+                                class="chatbutton" size="small"><img style="height:20px"
+                                    src="assets/images/chat.svg" /></span>
+                        </ng-container> -->
+                                </div>
+                            </ion-col>
+                            <ion-col size="4" class="padd "><span *ngIf="search?.phonenumber != null"> <a
+                                        href="tel:{{search.phonenumber}}" (click)="$event.stopPropagation()"
+                                        style="text-decoration: none;" class="imagebutton phone">
+                                        <span class="customer-phone">
+                                            <ion-img src="assets/images/call_phone.svg"
+                                                style="width:12px;height: 12px;"></ion-img>
+                                        </span></a></span></ion-col>
+                            <ion-col size="12" class="padd ">
+                                <div class="chip-block">
+                                    <div class="chipdetail5" routerDirection="forward">survey</div>
+                                    <div class="chipdetail4" *ngIf="search?.status == 'requestdeclined'"
+                                        routerDirection="forward">Oh Hold</div>
+                                    <div class="chipdetail1" *ngIf="search?.deliverydate > 0" routerDirection="forward">
+                                        Overdue</div>
+                                    <div class="chipdetail2" *ngIf="search?.status == 'requestaccepted'"
+                                        routerDirection="forward">Accepted</div>
+                                    <div class="chipdetail2" *ngIf="search?.status == 'reviewpassed'"
+                                        routerDirection="forward">Review Passed</div>
+                                    <div class="chipdetail2" *ngIf="search?.status == 'delivered'"
+                                        routerDirection="forward">Delivered</div>
+                                    <div class="chipdetail2" *ngIf="search?.status == 'completed'"
+                                        routerDirection="forward">Completed</div>
+                                    <div class="chipdetail3" *ngIf="search?.status == 'created'"
+                                        routerDirection="forward">Unassigned</div>
+                                    <div class="chipdetail3" *ngIf="search?.status == 'designassigned'"
+                                        routerDirection="forward">Designing Assigned</div>
+                                    <div class="chipdetail1" *ngIf="search?.status == 'reviewassigned'"
+                                        routerDirection="forward">In Review</div>
+                                    <div class="chipdetail3" *ngIf="search?.isoutsourced == 'true'"
+                                        routerDirection="forward">Waiting for
+                                        acceptance</div>
+                                    <div *ngIf="search?.status=='assigned'" class="chipdetail1"
+                                        routerDirection="forward">
+                                        pending
+                                    </div>
+                                </div>
+                            </ion-col>
+
+
+
+
+                            <ion-col size="8" class="padd ">
+
+                                <div class="loc-flex location_list">
+                                    <div class="flex">
+                                        <div class="list_clo">
+                                            <ion-icon name="location-outline"></ion-icon>
+                                        </div>
+                                    </div>
+                                    <div><span class="customer-address"
+                                            (click)="openAddressOnMap(search.address,$event,search.latitude, search.longitude)">
+                                            {{(search.address | slice:0:60) +
+                                            (search.address?.length > 60 ? '...' : '')}}</span></div>
+
+                                </div>
+
+                                <div class="loc-flex location_list"
+                                    *ngIf="search?.email != null && search?.email != ''">
+                                    <div class="flex">
+                                        <div class="list_clo">
+                                            <ion-icon name="mail-outline"></ion-icon>
+                                        </div>
+                                    </div>
+                                    <div><span class="customer-address"
+                                            (click)="onMailClick(search.email, $event)">{{search.email}}</span></div>
+
+                                </div>
+                                <div class="loc-flex location_list" *ngIf="search?.phonenumber != null">
+                                    <div class="flex">
+                                        <div class="list_clo">
+                                            <ion-icon name="call-outline"></ion-icon>
+                                        </div>
+                                    </div>
+                                    <div><span class="customer-address"
+                                            (click)="$event.stopPropagation()">{{search.phonenumber}}</span></div>
+
+                                </div>
+                                <div class="loc-flex asignee_list" *ngIf="!isClient && search?.company != null">
+
+
+                                    <div class="flex">
+                                        <div class="list_clo">
+                                            <ion-icon name="business-outline"></ion-icon>
+                                        </div>
+                                    </div>
+                                    <div><span class="customer-address">{{(search.company )}}</span></div>
+
+                                </div>
+                                <div class="loc-flex asignee_list" *ngIf="search.assignedto != null">
+                                    <div class="flex">
+                                        <div class="list_clo">
+                                            <ion-icon name="person-circle-outline"></ion-icon>
+                                        </div>
+                                    </div>
+                                    <div><span class="customer-address">Assigned to : {{search.assignedto.firstname |
+                                            titlecase}}
+                                            {{search.assignedto.lastname | titlecase}}</span></div>
+
+                                </div>
+                            </ion-col>
+                            <ion-col size="4" class="padd ">
+
+
+                                <div class="loc-flex location_list" style="float:right;"><span class="chipdetail"
+                                        routerDirection="forward">{{search?.jobtype=='pvbattery' ? 'PV+Battery' :
+                                        search?.jobtype}}</span></div>
+                            </ion-col>
+
+
+
+
+
+                        </ion-row>
+
+
+
+
+                        <!--<p style="margin:0px">
+                    <span class="customer-email" (click)="onMailClick(search.email, $event)"
+                        style="float:left;font-size: smaller;">{{search?.email}}</span>
+                </p><br>
+                <p style="margin:0px" *ngIf="search?.phonenumber != null">
+                    <a href="tel:{{search.phonenumber}}" (click)="$event.stopPropagation()"
+                        style="text-decoration: none;" class="z-100">
+                        <span class="customer-phone">{{search?.phonenumber}}</span></a>
+                </p>-->
+
+                        <!-- <span class="chipdetail"  routerDirection="forward">{{search?.company}}</span> -->
+
+                        <!-- <span class="chipdetail"  *ngIf="search?.source"
+                     routerDirection="forward">{{search?.source |
+                    titlecase}}</span> -->
+                        <ion-row class="ion-no-margin ion-no-margin">
+                            <ion-col class="">
+                                <p style="margin:0px">
+                                    <span class="recordupdatedon" routerDirection="forward">
+                                        {{utils.formatTimeInDisplayFormat(search.datetime)}}
+                                    </span>|
+                                    <span class="recordupdatedon">
+                                        {{search?.datetime|date: 'dd MMM yyyy'}}
+                                    </span>
+                                </p>
+
+                            </ion-col>
+                            <ion-col size="auto" class="ion-no-margin ion-no-padding"
+                                *ngIf="isClient  &&(search.createdby.parent==userData.parent.id) && (userData.role.type!='master')">
+                                <span style="margin:1px;"
+                                    *ngIf="(search.status == 'created' && userData.usertype !== 'individual') || (search.status == 'requestaccepted' && userData.role.type !== 'clientsuperadmin') || search.status=='requestdeclined'"
+                                    class=" butt" (click)="openSurveyors(search.id,search,$event)">Assign</span>
+                                <span style="margin:1px;" *ngIf="search.status == 'created'" class=" butt"
+                                    (click)="assignedTo(search,$event)">
+                                    Start Survey
+                                </span>
+                            </ion-col>
+
+                            <ion-col size="auto" class="ion-no-margin ion-no-padding"
+                                *ngIf="isClient   && search.status == 'assigned'&& search.createdby.parent==userData.parent.id && userData.role.type!='master'"
+                                style="margin-bottom: 5px;">
+                                <span class=" butt" style="margin:1px;" *ngIf="userData.role.type!='surveyors'"
+                                    (click)="openSurveyors(search.id,search,$event)">Reassign</span>
+                                <span class=" butt" style="margin:1px;" *ngIf="userData.id==search.assignedto?.id"
+                                    (click)="resumeSurvey(search,$event)" routerDirection="forward">
+                                    Start Survey
+                                </span>
+                            </ion-col>
+                            <!-- <ion-col *ngIf="segments=='requesttype=prelim&status=created&status=outsourced&status=requestaccepted'">
+                            <span *ngIf="search?.status == 'created' || search?.status == 'requestaccepted'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openSurveyors(search?.id,search)"
+                            >Assign</span>
+                            <span style="float: right;">
+
+                                <ion-col size="8"  *ngIf="search?.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="accept(search?.id,'requestaccepted')">
+                                Accept
+                                </ion-col>
+                                <ion-col size="4" *ngIf="search?.status == 'outsourced'"  class="ion-text-end action-button-color" (click)="decline(search?.id)">
+                                Decline
+                                </ion-col>
+                            </span>
+
+                            <span *ngIf="search?.status == 'requestdeclined'"style="float:right !important;" class="ion-text-end action-button-color" (click)="openDesigners(search?.id,search)"
+                            >Reassign</span>
+                        </ion-col>
+
+
+                        <ion-col *ngIf="search?.requesttype=='prelim'&& search?.status=='designcompleted'">
+                            <span  style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(search?.id,search)"
+                            >Assign Review</span>
+                        </ion-col>
+                        <ion-col *ngIf="search?.status == 'reviewpassed' || search?.status == 'reviewfailed'|| search?.status == 'reviewassigned'">
+                            <span *ngIf="search?.status == 'reviewpassed'" style="float:right !important;" class="ion-text-end action-button-color" (click)="openreviewPassed(search?.id,search)">
+                            &nbsp;Deliver</span>
+                            <span  style="float:right !important;" class="ion-text-end action-button-color" (click)="openreviewPassed(search?.id,search)">
+                            Reassign Review</span>
+                        </ion-col>
+                        <ion-col *ngIf="search?.requesttype=='prelim'&& search?.status=='delivered'" >
+                            <span  style="float:right !important;" class="ion-text-end action-button-color" (click)="shareWhatsapp(search)">
+                                <ion-icon name="share-social-outline"></ion-icon></span>&nbsp;
+                            <span style="float:right !important;margin-right: 8px;" class="ion-text-end action-button-color" (click)="shareViaEmails(search?.id,search)">
+                                <ion-icon name="mail" ></ion-icon></span>
+                        </ion-col>
+                        -->
+                        </ion-row>
+                    </div>
+                    <div class="custom-card"
+                        *ngIf="search?.type=='electrical' || search?.type=='both' || search?.type=='structural'"
+                        (click)="gotoDetailspage('/master-details/pestamp-details/',search?.id ,search,'pestamp')">
+
+
+
+
+
+                        <ion-row class="ion-no-margin">
+                            <ion-col size="8" class="padd ">
+
+                                <div class="customer-name">
+                                    <span>{{search?.personname}}</span>
+
+                                    <!--<span fill="clear" background-border="clear" (click)="gotoSurveyActivity(search,$event)"
+                                       class="imagebutton" size="small"><img src="/assets/images/activitylist.png"
+                                           style="height: 20px;" /></span>-->
+                                    <!-- comment on 20220211 -->
+                                    <!-- <ng-container *ngIf="search?.chatid!==null && search?.status !== 'created'">
+                                       <span fill="clear" background-border="clear" (click)="gotoChats(search,$event)"
+                                           class="chatbutton" size="small"><img style="height:20px"
+                                               src="assets/images/chat.svg" /></span>
+                                   </ng-container> -->
+                                </div>
+                            </ion-col>
+                            <ion-col size="4" class="padd "><span> <a (click)="gotoPEStampActivity(search,$event)"
+                                        style="text-decoration: none;" class="imagebutton phone">
+                                        <span class="customer-phone">
+                                            <ion-img src="assets/images/activity.svg" style="width:12px;height: 12px;">
+                                            </ion-img>
+                                        </span></a></span></ion-col>
+                            <ion-col size="12" class="padd ">
+
+                                <div class="chip-block">
+                                    <div class="chipdetail5">pestamp</div>
+                                    <div class="chipdetail4" *ngIf="search.status == 'declined'">On Hold</div>
+                                    <div class="chipdetail4" *ngIf="search.unhold &&
+                        search.status != 'requestdeclined'">Un Hold</div>
+                                    <!-- <span class="chipdetail"  *ngIf="search.status == 'reviewfailed'"  >Review Failed</span> -->
+                                    <!-- <span class="chipdetail"  *ngIf="search.isoverdue" >Overdue</span> -->
+                                    <div class="chipdetail2" *ngIf="search.status == 'accepted'">Accepted</div>
+                                    <!-- <span class="chipdetail"  *ngIf="search.status == 'reviewpassed'" >Review Passed</span> -->
+                                    <div class="chipdetail2" *ngIf="search?.acceptedbypeengineer && search.status != 'delivered'">Accepted</div>
+                                    <div class="chipdetail2" *ngIf="search.status == 'delivered'">Delivered</div>
+                                    <div class="chipdetail2" *ngIf="search.status == 'completed'">
+                                        Completed </div>
+                                    <div class="chipdetail3" *ngIf="search.status == 'created'">Unassigned</div>
+                                    <div class="chipdetail2"
+                                        *ngIf="search.status == 'assigned' || search.status == 'pesuperadminassigned'">
+                                        Assigned</div>
+                                    <!-- <span class="chipdetail" style="background-color: #1289A7;" *ngIf="search.status == 'reviewassigned'" >In Review</span> -->
+                                    <!-- && (userData.role.type=='clientadmin'|| userData.role.type=='clientsuperadmin') -->
+                                    <div class="chipdetail3" *ngIf="search.status == 'outsourced' && isClient">Waiting
+                                        for acceptance</div>
+                                    <div class="chipdetail1"
+                                        *ngIf="search.isinrevisionstate && userData.role.type !== 'peengineer'">Revision
+                                    </div>
+
+
+                                    <div class="chipdetail1"
+                                        *ngIf="search.isinrevisionstate && userData.role.type == 'peengineer'">Restamp
+                                    </div>
+                                </div>
+
+
+
+
+                            </ion-col>
+
+
+
+
+                            <ion-col size="8" class="padd ">
+
+                                <div class="loc-flex location_list" *ngIf="search?.typingaddress != null && search?.modeofstamping != 'ecopy'">
+                                    <div class="flex">
+                                        <div class="list_clo">
+                                            <ion-icon name="location-outline"></ion-icon>
+                                        </div>
+                                    </div>
+                                    <div><span class="customer-address"
+                                            (click)="openAddressOnMap(search.typingaddress,$event,search.latitude, search.longitude)">{{(search.typingaddress
+                                            | slice:0:60) +
+                                            (search.typingaddress.length > 60 ? '...' : '')}}</span></div>
+
+                                </div>
+
+
+                                <div class="loc-flex location_list" *ngIf="search?.email != null">
+                                    <div class="flex">
+                                        <div class="list_clo">
+                                            <ion-icon name="mail-outline"></ion-icon>
+                                        </div>
+                                    </div>
+                                    <div><span class="customer-address"
+                                            (click)="onMailClick(search.email, $event)">{{search.email}}</span></div>
+
+                                </div>
+                                <div class="loc-flex location_list" *ngIf="search?.contactnumber != null && search?.contactnumber != ''">
+                                    <div class="flex">
+                                        <div class="list_clo">
+                                            <ion-icon name="call-outline"></ion-icon>
+                                        </div>
+                                    </div>
+                                    <div><span class="customer-address"
+                                            (click)="$event.stopPropagation()">{{search.contactnumber}}</span></div>
+
+                                </div>
+                                <!--<div class="loc-flex asignee_list"
+                                    *ngIf=" search?.createdby.company != null">
+                                    <div class="flex">
+                                        <div class="list_clo">
+                                            <ion-icon name="business-outline"></ion-icon>
+                                        </div>
+                                    </div>
+                                    <div><span class="customer-address">{{(search.createdby.company )}}</span></div>
+
+                                </div>-->
+                                <div class="loc-flex asignee_list"
+                                    *ngIf="(search.status=='assigned' || search.status=='completed' || search.status=='delivered') && userData.role.type !== 'peengineer'">
+                                    <div><span class="list_clo">
+                                            <ion-icon name="person-circle-outline"></ion-icon>
+                                        </span></div>
+                                    <div><span class="customer-address">Assigned to : {{search.assignedto !== null ?
+                                            search.assignedto.firstname : '' | titlecase}} {{search.assignedto !== null
+                                            ?
+                                            search.assignedto.lastname : '' | titlecase}}</span></div>
+
+                                </div>
+                            </ion-col>
+                            <ion-col size="4" class="padd ">
+
+
+                                <div class="" style="float:right;"><span class="chipdetail"
+                                        style="align-self: center; float: right;"
+                                        *ngIf="search?.propertytype">{{search?.propertytype |
+                                        titlecase}}</span>
+                                    <span class="chipdetail" style="align-self: center; float: right;"
+                                        *ngIf="search?.type">{{search?.type |
+                                        titlecase}}</span>
+                                </div>
+                            </ion-col>
+
+
+
+
+
+                        </ion-row>
+
+
+
+
+
+                        <!--<ion-row><ion-col size="8"> 
+                    <p class="customer-name">->
+                        <span>{{search?.personname}}</span>-->
+                        <!--<span fill="clear" background-border="clear" (click)="gotoPEStampActivity(search,$event)"
+                            class="imagebutton" size="small"><img src="/assets/images/activitylist.png"
+                                style="height: 20px;" /></span>-->
+                        <!-- comment on 20220211 -->
+                        <!-- <ng-container *ngIf="search?.chatid!==null">
+                            <span fill="clear" background-border="clear" (click)="gotoChats(search,$event)"
+                                class="chatbutton" size="small"><img style="height:20px"
+                                    src="assets/images/chat.svg" /></span>
+                        </ng-container> -->
+                        <!--</p>
+
+                    <p style="margin:0px">
+                       
+                    </p>
+
+                    <p style="margin-top: 18px;">
+                        
+                        
+                    </p>
+                    <p style="margin:8px">
+                       
+                        <span class="recordupdatedon">{{search.deliverydate|date: 'dd MMM yyyy'}}</span>
+                    </p>
+                    <p style="margin:8px">
+                        <span class="customer-address z-100"
+                            *ngIf="search.deliveryaddress != null && search.deliveryaddress != ''"
+                            (click)="openAddressOnMap(search.deliveryaddress,$event)">{{(search.deliveryaddress |
+                            slice:0:60) + (search.deliveryaddress.length > 60 ? '...' : '')}}
+                        </span>
+                    </p>
+
+                    <p *ngIf="search.status=='assigned' || search.status=='completed' || search.status=='delivered'"><span>Assigned to : {{search.assignedto !== null ?
+                        search.assignedto.firstname : '' | titlecase}} {{search.assignedto !== null ?
+                        search.assignedto.lastname : '' | titlecase}}</span></p>
+                </ion-col>
+                <ion-col size="4"  > 
+                   
+                    <p *ngIf="search?.contactnumber != null"> <a href="tel:{{search.contactnumber}}" (click)="$event.stopPropagation()"
+                        style="text-decoration: none;" class="imagebutton phone">
+                        <span class="customer-phone"><ion-img src="assets/images/call_phone.svg" style="width:12px;height: 12px;" ></ion-img></span></a></p>
+
+                   
+                   
+                   <p><span *ngIf="search.isoverdue" class="latebystyle"><span>Late by
+                    {{search.lateby}}</span></span></p>
+                   <p style=" position: absolute;
+                bottom: 0;
+                right: 0;"><span class="chipdetail" *ngIf="search?.propertytype"
+                            >{{search?.propertytype |
+                            titlecase}}</span>
+                        <span class="chipdetail" *ngIf="search?.type"
+                            >{{search?.type |
+                            titlecase}}</span>
+                </p>
+                </ion-col></ion-row>-->
+
+                        <ion-row>
+                            <ion-col class="">
+                                <p style="margin:0px">
+                                    <span class="recordupdatedon" routerDirection="forward">
+                                        {{search.created_at | date: "HH:mm"}}
+                                    </span> |
+                                    <span class="recordupdatedon">
+                                        {{search?.updated_at|date: 'dd MMM yyyy'}}
+                                    </span>
+                                </p>
+
+                            </ion-col>
+                        </ion-row>
+
+
+
+
+                        <!--- <br>
+                
+               
+               
+                <ion-row class="ion-no-margin ion-no-margin">
+                     <ion-row style="margin-bottom: 0px;" [routerLink]="['/permit-design-details/',search.id]"> 
+                   <ion-row style="margin-bottom: 0px;" > 
+                    <ion-col style="padding-left:0px">
+                        <span class="chipdetail" *ngIf="search?.source"
+                            >{{search?.source |
+                            titlecase}}</span> 
+                        
+                         <span class="chipdetail"  >{{search?.jobtype=='pvbattery' ? 'PV+Battery' : search?.jobtype}}</span> 
+                    </ion-col>
+                </ion-row>-->
+                    </div>
+
+                </ion-col>
+            </ion-row>
+        </ng-container>
+
+    </ion-grid>
+
+
+    <ng-template #norecordfound>
+        <div *ngIf="!isSearch_da && SortedModel.length == 0 && searchElement!=''"
+            class="h-100 d-flex flex-column align-center justify-center mar_not">
+            <!-- <div *ngIf="!netSwitch"> -->
+            No such record found
+            <!-- </div> -->
+
+            <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
+        </div>
+        <div *ngIf="SortedModel.length == 0 && searchElement==''"
+            class="h-100 d-flex flex-column align-center justify-center mar_not">
+            <!-- <div *ngIf="!netSwitch"> -->
+            <div style="margin:auto;">Enter text to search</div>
+            <!-- </div> -->
+
+            <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
+        </div>
+    </ng-template>
+
+
+    <ion-grid class="padd padd-list" *ngIf="!isSearch_da">
+        <ion-row class="padd padd-top">
+            <ion-col class="padd padd-col">
+                <ng-container *ngFor="let notifications of [1,2,3,4,5,6]">
+                    <div class="custom-card" style="margin-top:8px;margin-bottom:8px; ">
+                        <ion-row class="padd padd-top">
+
+                            <ion-col size="12" class="padd padd-col">
+                                <ion-row>
+                                    <ion-col size="9">
+                                        <ion-skeleton-text animated style="width: 80%; height: 22px;">
+                                        </ion-skeleton-text>
+                                        <ion-skeleton-text animated style="width: 40%; height: 10px;">
+                                        </ion-skeleton-text>
+                                    </ion-col>
+                                    <ion-col size="3">
+                                        <ion-skeleton-text animated style="width: 55%; height: 22px; float:right">
+                                        </ion-skeleton-text>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col size="9">
+                                        <ion-skeleton-text animated style="width: 65%; height: 8px;">
+                                        </ion-skeleton-text>
+                                        <ion-skeleton-text animated style="width: 65%; height: 8px;">
+                                        </ion-skeleton-text>
+                                    </ion-col>
+
+                                    <ion-col size="3">
+                                        <ion-skeleton-text animated style="width: 35%; height: 22px; float:right">
+                                        </ion-skeleton-text>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col size="9">
+                                        <ion-skeleton-text animated style="width: 65%; height: 8px;">
+                                        </ion-skeleton-text>
+                                        <ion-skeleton-text animated style="width: 65%; height: 8px;">
+                                        </ion-skeleton-text>
+                                    </ion-col>
+                                    <ion-col size="3">
+                                        <ion-skeleton-text animated style="width: 95%; height: 32px; float:right">
+                                        </ion-skeleton-text>
+                                    </ion-col>
+
+                                </ion-row>
+                            </ion-col>
+                        </ion-row>
+
+                    </div>
+                </ng-container>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+
+</ion-content>
+
+<!---
+<ng-container *ngIf="showBottomDraw">
+
+
+    <ion-bottom-drawer [(state)]="drawerState" [minimumHeight]="0" [dockedHeight]="541" [draggable]="false"
+    [disableDrag]="true" [shouldBounce]="true" [distanceTop]="0"  style="z-index: 9999 !important;border-radius: 24px 24px 0px 0px;">
+   
+    <form [formGroup]="assignForm">
+        <ion-grid class="drawer">
+            <ion-row><ion-col><span class="input-placeholder" style="margin-left: 8px; font-size: 20px;padding:6px;">Assign to</span></ion-col>
+                <ion-col> <ion-button fill="clear" size="small" style="float: right;" class="ion-no-padding"  (click)="dismissBottomSheet()">
+                <ion-icon name="close-outline" style="color: dimgrey;" size="large"></ion-icon>
+            </ion-button></ion-col></ion-row>
+            <ion-row>
+                <ion-col size="12">
+                    <app-user-selector (assigneeData)=getassignedata($event) placeholder="Assign"
+                        [assignees]="listOfAssignees" formControlName="assignedto"></app-user-selector>
+                </ion-col>
+            </ion-row>-->
+<!-- <ion-row style="margin-left: 8px;">
+              <ion-col size="12">
+                  <span class="input-placeholder">comments</span>
+              </ion-col>
+              <ion-col size="12" style="padding-top: 0px;">
+                  <ion-textarea style="max-width: 98%;" class="ion-no-margin ion-no-padding comment_box" rows="3"
+                                formControlName="comment"></ion-textarea>
+              </ion-col>
+          </ion-row>-->
+<!--<ion-row >
+            <ion-col size="6">
+                <ion-button size="large" class="buttcan" fill="clear" (click)="dismissBottomSheet()">
+                    Cancel
+                </ion-button>
+            </ion-col>
+            <ion-col size="6" >
+                <ion-button size="large" class="buttcc" fill="clear" (click)="assign()">
+                    Confirm
+                </ion-button>
+            </ion-col>
+            
+        </ion-row>-->
+<!----<ion-row style="justify-content: flex-end;">
+                <ion-col size="auto" style="padding-top: 0px; margin-right: 6px;">
+                    <ion-button class="buttom-drawer-button" fill="clear" (click)="assign()">
+                        Confirm
+                    </ion-button>
+                </ion-col>
+                <ion-col size="auto">
+                    <ion-button class="buttom-drawer-button-cancel" fill="clear" (click)="dismissBottomSheet()">
+                        Cancel
+                    </ion-button>
+                </ion-col>
+            </ion-row>-->
+<!--</ion-grid>
+    </form>
+
+</ion-bottom-drawer>
+</ng-container>-->

@@ -1,0 +1,152 @@
+// NEW DESIGN SCSS 
+
+.maincontent {
+    --background: #FFFFFF !important;
+}
+
+.maindiv {
+    padding: 0px 16px 16px 16px;
+}
+
+.mainhead {
+    font-family: 'Lexend';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 32px;
+    color: #262626;
+    padding-bottom: 10px;
+}
+
+.subheadone {
+    font-family: 'Lexend';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 32px;
+    color: #262626;
+    padding-bottom: 8px;
+}
+
+.subheadtwo {
+    font-family: 'Lexend';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #595959;
+    ;
+
+}
+
+.subheadthree {
+    font-family: 'Lexend';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 32px;
+    color: #262626;
+
+}
+
+.label-input {
+    font-family: 'Lexend';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    // line-height: 21px;
+    // padding-bottom: 8px;
+    color: #262626;
+
+}
+
+.divtwo {
+    border: 1px solid #BFBFBF;
+    border-radius: 0px !important;
+    margin-top: 8px;
+    display: flex;
+    height: 56px;
+
+}
+.error-box {
+    margin-bottom: 0px;
+
+}
+
+.input_form {
+    // --padding: 0px 10px 0px 10px;
+    font-family: 'Lexend';
+    font-size: 14px;
+    --placeholder-color: #C4C4C4;
+    --placeholder-font-style: normal;
+    --placeholder-font-weight: 400;
+    // --padding-end:20px;
+}
+
+.iconform {
+    // align-items: end;
+    // padding-right: 10px;
+    // padding-top: 10px;
+    // justify-content: center;
+    // height: 24px;
+    width: 24px;
+    margin-right: 12px;
+}
+.imgselected{
+    height: 150px;
+    width: 150px;
+}
+.divthree {
+    // margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8px;
+    height: 156px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed #D9D9D9;
+}
+
+.divthreeimg{
+width: 26px;
+height: 24px;  
+}
+
+.divdetails {
+    font-family: 'Lexend';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #A6A6A6;
+    text-align: center;
+    width: 200px;
+}
+
+.btn1 {
+    margin-top: 40px;
+    --background: #FBB814;
+    padding:0px;
+    height: 56px;
+    --box-shadow: none;
+}
+
+.btn-label {
+    font-family: 'Lexend';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    text-align: right;
+    color: #3A3019;
+}
+
+.registeredText {
+    text-align: center;
+
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    color: #333029;
+}

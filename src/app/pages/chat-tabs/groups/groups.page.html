@@ -1,0 +1,96 @@
+<ion-header class="ion-no-border">
+    <ion-row>
+        <ion-col size="2"></ion-col>
+        <ion-col size="8">
+            <div style="display: flex;justify-content: center;align-items: center;padding-top: 9px;">
+                <h1 class="ion-no-padding ion-no-margin title">
+                    Inbox
+                </h1>
+                <div class="all-unread-msg-count" *ngIf="totalcountsforallgroups > 0">{{ totalcountsforallgroups }}
+                </div>
+            </div>
+        </ion-col>
+        <ion-col size="2"></ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center">
+        <ion-col size="1">
+            <ion-buttons style="float:left">
+                <ion-menu-button mode="md">
+                    <ion-img fill="clear" class="ion-no-margin  menu_im" src="assets/icon/new/menu.svg"></ion-img>
+                </ion-menu-button>
+            </ion-buttons>
+        </ion-col>
+        <ion-col size="11">
+            <ion-searchbar debounce="1500" placeholder="Search" (ionChange)="getGroup()" [(ngModel)]="searchElement">
+            </ion-searchbar>
+        </ion-col>
+    </ion-row>
+</ion-header>
+
+<ion-content class="ion-padding">
+    <ion-grid *ngIf="conversations.length === 0 && searchElement === ''">
+        <ion-row class="ion-align-items-center ion-justify-content-center">
+            <ion-col size="12" class="ion-align-items-center ion-justify-content-center" style="text-align: center;">
+                No Messages
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+    <ion-list *ngIf="conversations.length !== 0 && searchElement === ''" class="group-list">
+        <ion-item *ngFor="let conversation of conversations" (click)="openConversation(conversation)"
+            class="ion-no-padding">
+            <ion-avatar slot="start">
+                <span class="name">{{ conversation.setCharacter }}</span>
+            </ion-avatar>
+            <div class="details-block">
+                <div class="group-name">{{conversation.getConversationWith().getName()}}</div>
+                <div class="last-msg" *ngIf="conversation?.getLastMessage()?.type=='text'">
+                    {{conversation.getLastMessage()?.text}}</div>
+            </div>
+            <div slot="end" class="right-block">
+                <div class="time">
+                    {{ conversation.time }}
+                </div>
+                <div class="unread-msg-count" *ngIf="conversation?.getUnreadMessageCount() > 0">
+                    {{conversation.getUnreadMessageCount()}}
+                </div>
+            </div>
+        </ion-item>
+    </ion-list>
+    <ion-list *ngIf="groups.length !== 0 && searchElement !== ''" class="group-list">
+        <ion-item *ngFor="let group of groups | filter:searchElement" (click)="openConversation(group)"
+            class="ion-no-padding">
+            <ion-avatar slot="start">
+                <span class="name">{{ group.setCharacter }}</span>
+            </ion-avatar>
+            <div class="details-block">
+                <div class="group-name">{{group?.getConversationWith().getName()}}</div>
+                <div class="last-msg" *ngIf="group?.getLastMessage()?.type=='text'">
+                    {{group.getLastMessage()?.text}}</div>
+            </div>
+            <div slot="end" class="right-block">
+                <div class="time">
+                    {{ group.time }}
+                </div>
+                <div class="unread-msg-count" *ngIf="group?.getUnreadMessageCount() > 0">
+                    {{group.getUnreadMessageCount()}}
+                </div>
+            </div>
+            <!-- <ion-avatar slot="start">
+                <span class="name">{{ group.setCharacter }}</span>
+            </ion-avatar>
+            <div class="details-block">
+                <div class="group-name">{{ group?.getName() }}</div>
+            </div>
+            <div slot="end" class="right-block">
+                <div class="time">
+                    {{ group.time }}
+                </div>
+            </div> -->
+        </ion-item>
+    </ion-list>
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</ion-content>

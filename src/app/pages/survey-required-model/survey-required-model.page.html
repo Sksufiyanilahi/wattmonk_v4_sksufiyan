@@ -1,0 +1,30 @@
+<ion-header>
+  <div class="head-block">
+      <div class="title">Required Images Missing</div>
+      <div class="sub-title">Below are missing required images</div>
+  </div>
+</ion-header>
+<ion-content>
+  <div *ngIf="getSurveyRequiredData?.length > 0" class="data-block">
+      <ion-row *ngFor="let data of getSurveyRequiredData; let i = index" class="ion-no-padding">
+          <ion-col size="9" class="ion-no-padding">
+              <span>{{ i + 1 }}) {{ data.shotinfo }}</span>
+          </ion-col>
+          <ion-col size="2" class="ion-no-padding">
+              <ion-button class="view-btn" fill="clear" (click)="dismiss(data)">
+                  View
+              </ion-button>
+          </ion-col>
+      </ion-row>
+  </div>
+</ion-content>
+<ion-footer>
+  <ion-item>
+      <ion-button slot="end" class="view-btn" fill="clear" (click)="dismiss(getSurveyRequiredData[0])">
+          Okay
+      </ion-button>
+      <ion-button slot="end" class="view-btn" fill="clear" (click)="dismiss()">
+          Cancel
+      </ion-button>
+  </ion-item>
+</ion-footer>

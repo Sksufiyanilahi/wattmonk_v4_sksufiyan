@@ -1,0 +1,239 @@
+<!-- style="height:650px;" -->
+<ion-content class="ion-padding-start ion-padding-end ion-padding-bottom">
+    <form [formGroup]="surveyForm">
+        <div style="position: relative;" class="form_mar">
+            <div>
+                <div size="12" class="ion-no-padding">
+                    <span class="input-placeholder">Name*</span>
+
+                    <ion-input type="text" class="form_input" autocapitalize="words" placeholder="Ex.John Deo"
+                        formControlName="name">
+                    </ion-input>
+                </div>
+
+                <div>
+
+                    <div style="height: 5px;">
+                        <div *ngIf="surveyForm.get('name').hasError('pattern') && surveyForm.get('name').dirty">
+                            <span class="error">{{nameError}}</span>
+                        </div>
+                        <div *ngIf="surveyForm.get('name').value === '' && surveyForm.get('name').dirty">
+                            <span class="error">{{fieldRequired}}</span>
+                        </div>
+                        <div *ngIf="surveyForm.get('name').hasError('whitespaces') && surveyForm.get('name').dirty">
+                            <span class="error">{{whitespaces}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div size="12" class="ion-no-padding">
+                    <span class="input-placeholder">Email</span>
+
+                    <ion-input autocapitalize="none" formControlName="email" email="true" type="email"
+                        autocomplete="off" class="form_input" placeholder="Ex.John@gmail.com"
+                        [disabled]="fieldDisabled"></ion-input>
+                </div>
+                <div>
+
+                    <div style="height: 5px;">
+                       
+                        <div *ngIf="surveyForm.get('email').hasError('pattern') && surveyForm.get('email').dirty">
+                            <span class="error">{{emailError}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div size="12" class="ion-no-padding">
+                    <span class="input-placeholder">Phone*</span>
+
+                    <ion-input formControlName="phonenumber" (keypress)="NumbersOnly($event)"
+                        (keyup)="updateTNVal($event)" (focus)="filterByTN(surveyForm.get('phonenumber').value)"
+                        placeholder="123-456-7890" type="tel" class="form_input" maxLength="15">
+                    </ion-input>
+                </div>
+                <div>
+
+                    <div style="height: 5px;">
+                        <div
+                            *ngIf="surveyForm.get('phonenumber').hasError('pattern') && surveyForm.get('phonenumber').dirty">
+                            <span class="error">{{phoneError}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div size="12" class="ion-no-padding">
+                    <span class="input-placeholder">Address*</span>
+
+                    <ion-input type="text" class="form_input" placeholder="Ex.USA" autocapitalize="words"
+                        formControlName="address" autocomplete="off" (ionChange)="updateSearchResults($event)"
+                        (ionClear)="onCancel()" debounce="300" (ionFocus)="forAutoComplete($event)"
+                        (ionBlur)="onBlur()"></ion-input>
+
+                </div>
+                <div>
+
+                    <!-- && surveyId == 0 -->
+                    <ion-list style="padding:0px" *ngIf="!isSelectSearchResult">
+                        <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
+                            <span>
+                                {{ item.description }}
+                            </span>
+                        </ion-item>
+                    </ion-list>
+                    <div style="height: 5px;">
+                        <div *ngIf="surveyForm.get('address').hasError('pattern') && surveyForm.get('address').dirty">
+                            <span class="error">{{addressError}}</span>
+                        </div>
+                        <div *ngIf="surveyForm.get('address').value === '' && surveyForm.get('address').dirty">
+                            <span class="error">{{fieldRequired}}</span>
+                        </div>
+                        <div
+                            *ngIf="surveyForm.get('address').hasError('whitespaces') && surveyForm.get('address').dirty">
+                            <span class="error">{{whitespaces}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div style="display:flex">
+                <div style="width:100%">
+                    <span class="input-placeholder">Job Type*</span>
+
+                    <ion-select class="form_input select_div" ok-text="" cancel-text="" formControlName="jobtype"
+                        interface="popover" [disabled]="fieldDisabled">
+                        <ion-select-option value="pv">PV</ion-select-option>
+                    </ion-select>
+                </div>
+                <div style="width:5%"></div>
+                <div style="width:100%">
+                    <span class="input-placeholder">Property Type*</span>
+
+                    <ion-select class="form_input select_div" ok-text="" cancel-text="" formControlName="projecttype"
+                        [disabled]="fieldDisabled" (ionChange)="PropertyTypeOption($event)" interface="popover">
+                        <ion-select-option value="residential">Residential</ion-select-option>
+                        <ion-select-option value="commercial">Commercial</ion-select-option>
+                        <!-- <ion-select-option value="detachedbuildingorshop">Detached building or shop
+                            </ion-select-option>
+                            <ion-select-option value="carport">Carport</ion-select-option> -->
+                    </ion-select>
+                </div>
+
+
+            </div>
+
+            <div *ngIf="propertytypevalue == 'residential'">
+                <span class="input-placeholder">Residential Type*</span>
+            </div>
+            <ion-radio-group formControlName="projectsubtype" *ngIf="propertytypevalue == 'residential'">
+                <div>
+                    <div size="auto">
+                        <ion-item lines="none">
+                            <span class="input-placeholder">House</span>
+                            <ion-radio slot="start" mode="md" [disabled]="fieldDisabled" value="house"></ion-radio>
+                        </ion-item>
+                    </div>
+                    <div size="auto">
+                        <ion-item lines="none">
+                            <span class="input-placeholder">CarPort</span>
+                            <ion-radio slot="start" mode="md" [disabled]="fieldDisabled" value="carport"></ion-radio>
+                        </ion-item>
+                    </div>
+                </div>
+            </ion-radio-group>
+            <div *ngIf="propertytypevalue == 'commercial'">
+                <span class="input-placeholder">Commercial Type*</span>
+            </div>
+            <ion-radio-group formControlName="projectsubtype" *ngIf="propertytypevalue == 'commercial'">
+                <div>
+                    <div size="auto">
+                        <ion-item lines="none">
+                            <span class="input-placeholder">Detached Building or Shop</span>
+                            <ion-radio slot="start" mode="md" [disabled]="fieldDisabled" value="detachedbuildingorshop">
+                            </ion-radio>
+                        </ion-item>
+                    </div>
+                    <div size="auto">
+                        <ion-item lines="none">
+                            <span class="input-placeholder">CarPort</span>
+                            <ion-radio slot="start" mode="md" [disabled]="fieldDisabled" value="carport"></ion-radio>
+                        </ion-item>
+                    </div>
+                </div>
+            </ion-radio-group>
+
+            <div>
+                <div size="12" class="ion-no-padding">
+                    <span class="input-placeholder">Date*</span>
+                </div>
+                <div (click)="modalOpen('dateModal')" class="datetime-block">
+                    <ion-icon name="calendar-outline"></ion-icon>
+                    <ion-input value="{{mydate | date: 'd MMM YYYY'}}" id="date" class="form_input"
+                        formControlName="date_my"></ion-input>
+                </div>
+                <ion-modal trigger="date" size="cover" [ngClass]="{'datetime-modal': dateModal}"
+                    (didDismiss)="dismissModal()">
+                    <ng-template>
+                        <ion-datetime color="datetime" [min]="currentDate" displayFormat="MMM DD, YYYY"
+                            presentation="date" [showDefaultButtons]="true" locale="en-GB" hourCycle="h12"
+                            [(ngModel)]="mydate" [ngModelOptions]="{standalone: true}" (ionChange)="changeDate($event)">
+                        </ion-datetime>
+                    </ng-template>
+                </ion-modal>
+            </div>
+
+            <div>
+                <div size="12" class="ion-no-padding">
+                    <span class="input-placeholder book-slot">Book Slot*
+                        <span (click)="modalOpen('timeModal')" class="custom-time-block" id="time">
+                            <img src="./assets/icon/clock.svg" />
+                            <span class="text">Custom</span>
+                        </span>
+                    </span>
+
+                    <ion-modal trigger="time" size="cover" [ngClass]="{'datetime-modal': timeModal}"
+                        (didDismiss)="dismissModal()">
+                        <ng-template>
+                            <ion-datetime color="datetime" [min]="currentDate" displayFormat="hh:mm a"
+                                presentation="time" [showDefaultButtons]="true" locale="en-GB" hourCycle="h12"
+                                [(ngModel)]="mytime" [ngModelOptions]="{standalone: true}"
+                                (ionChange)="changeTime($event)">
+                            </ion-datetime>
+                        </ng-template>
+                    </ion-modal>
+                </div>
+            </div>
+            <div class="demo-class">
+                <ion-button class="block" *ngFor="let slot of slotsArr;let i=index" expand="full"
+                    [ngClass]="slot.isselected ?'custombtn1':'custombtn'" fill="clear"
+                    (click)="selectTime($event,i,slot.slotname, slot.slotname + ':00 ' + slot.value)" style="color: black;">{{slot.slotname + ':00 ' + slot.value }}</ion-button>
+            </div>
+            <div>
+                <div style="height: 5px;">
+                    <div *ngIf="surveyForm.get('time').value === '' && surveyForm.get('time').dirty">
+                        <span class="error">{{phoneError}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="ion-margin-top">
+                <div size="12" class="ion-no-padding">
+                    <span class="input-placeholder">Comments</span>
+                </div>
+                <div size="12" class="ion-no-padding">
+                    <ion-textarea class="ion-no-margin ion-no-padding  comment_box" placeholder="Start Typing" rows="3"
+                        formControlName="comments">
+                    </ion-textarea>
+                </div>
+            </div>
+
+        </div>
+    </form>
+    <!-- <ion-alert-controller></ion-alert-controller> -->
+
+
+</ion-content>

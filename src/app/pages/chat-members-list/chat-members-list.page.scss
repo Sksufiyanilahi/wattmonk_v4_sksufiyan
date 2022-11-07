@@ -1,0 +1,104 @@
+.title {
+    //styleName: Title 3(R);
+    font-family: 'Lexend';
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 25px;
+    letter-spacing: 0em;
+    text-align: center;
+}
+
+ion-content {
+    --padding-start: var(--ion-padding, 16px) !important;
+    --padding-end: var(--ion-padding, 16px) !important;
+}
+
+.add-member {
+    ion-avatar {
+        background: #E1E1E1 !important;
+        border: 1px solid #E3E3E3 !important;
+        display: flex;
+
+        img {
+            height: 20px;
+            margin: auto;
+            width: 20px;
+        }
+    }
+
+    .details-block {
+        .name {
+            color: #838383 !important;
+        }
+    }
+}
+
+.members-list {
+    background: unset;
+    --ion-item-background: none;
+
+    ion-item {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    ion-avatar {
+        background: #f9eab8;
+        padding: 1px;
+        width: 46px;
+        height: 46px;
+        position: relative;
+        display: flex;
+        border: 1px solid #FDCC23;
+
+        .name {
+            margin: auto;
+            color: #906700;
+            font-size: 20px;
+            line-height: 25px;
+            text-transform: uppercase;
+        }
+
+        .status {
+            border: 1px solid #FDCC23;
+            width: 12px;
+            height: 12px;
+            border-radius: 50px;
+            position: absolute;
+            right: 0;
+            display: flex;
+
+            .online {
+                background: #61B05A;
+                height: 8px;
+                width: 8px;
+                border-radius: 50px;
+                margin: auto;
+            }
+        }
+
+    }
+
+    .details-block {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .name {
+            color: #2F2E2C;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 20px;
+            letter-spacing: 0em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+}
+
+.cent {
+    justify-content: center;
+    display: flex;
+    margin-top: 10px;
+}

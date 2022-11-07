@@ -1,0 +1,297 @@
+
+.labb_card{
+
+
+    margin:16px;
+    background: #FFFFFF;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.04);
+    border-radius: 8px;
+    }
+  .profile-background {
+    width: 100%;
+    border-radius: 50%;
+    // border-bottom-left-radius: 32px;
+    // border-bottom-right-radius: 32px;
+   
+  
+  }
+  
+  .user-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    // border-radius: 50%;
+    border: 4px solid #FBB200;
+  
+  }
+  
+  .profile_img{
+   // height: 100px;
+   // width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    //font-size: 30px;
+    color: #906700;
+    //border-radius: 50%;
+    /* background: blue; */
+    background: #FBB200;
+    background: 4c8dff;
+    border: 4px solid #FBB200;
+    margin:0px;
+    // border-radius:50%;
+    height: 73px;
+    width: 73px;
+    margin-right: 16px;
+    border-radius: 64px;
+    padding: 15px, 14px, 15px, 13px;
+    //styleName: Title 1(R);
+  font-family: 'Lexend';
+  font-size: 28px;
+  font-weight: 400;
+  
+  
+  
+  }
+  .iti{
+  
+    margin-top: 11px; text-align:center;
+    
+  /* Title 3(R) */
+  
+  font-family: 'Lexend';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 25px;
+  /* identical to box height */
+  
+  text-align: center;
+  
+  /* #333029 */
+  
+  color: #333029;
+  }
+  .profile_image{
+      height: 73px;
+      width: 73px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 30px;
+      color: #fff;
+      margin-left: -16px;
+      margin-right: 16px;
+  
+      // border-radius: 50%;
+      /* background: blue; */
+      //background: #266eef;
+      background: 4c8dff;
+      // border: 4px solid #4c8dff;
+      // border-radius:50%;s
+      border-radius: 64px;
+      padding: 15px, 14px, 15px, 13px;
+  }
+  
+  .profile-name{
+    color: #333029;
+   
+  font-family: 'Lexend';
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 25px;
+  letter-spacing: 0em;
+  text-align: left;
+  
+  }
+  .profile-amount{
+    color: #8B8B8B;
+    font-size: 20px;
+  }
+  
+  ion-icon[slot="start"]{
+      margin-right: unset;
+      margin-inline-end: 12px;
+  }
+  
+  .pro_div{
+  
+    
+  }
+  .profile_tie{
+  
+    font-family: 'Lexend';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 12px;
+    /* identical to box height */
+    
+    
+    /* #595959 */
+    
+    color: #595959;
+  
+  }
+  .profile-email{
+    color:  #333029;
+    
+   //styleName: Body (Main)(R);
+  font-family: 'Lexend';
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 15px;
+  
+  letter-spacing: 0em;
+  text-align: left;
+  
+  }
+  
+  .dollar-badge{
+    margin-top: 6px;
+      width: 60px;
+      height: 13px;
+  }
+  
+  .profile-icon{
+    width: 50px;
+    height: 50px;
+    margin-right: 4px;
+   
+  }
+  
+  .badge-container{
+    background: #e9f1ff;
+    border-radius: 10px;
+  }
+  
+  .profile-tab{
+    border-bottom-left-radius: 32px;
+      border-bottom-right-radius: 32px;
+  }
+  
+  
+  ion-tab-bar {
+    --border: none;
+  }
+  
+  ion-tab-button {
+    font-size: 1em;
+    --color: #9E9E9E;
+    --color-selected: #FBB200;
+  }
+  
+  // ion-tab-button[aria-selected=true] {
+  //   border-bottom: 3px solid #FBB200;
+  //   border-bottom-left-radius: 2px;
+  //   border-bottom-right-radius: 2px;
+  // }
+  
+  ._color{
+    color: #6e6e6e;
+  }
+  
+  .my-custom-modal-css {
+    &::part(content) {
+    height: 20%;
+    top: 80%;
+    position: absolute; 
+    display: block;
+    }
+  }
+  
+  
+  .procard{
+  
+  
+    height: 128px;
+    width: 360px;
+    left: 16px;
+   
+    border-radius: 0px;
+    
+  
+  
+  }
+  
+  .itemslist{
+  
+    height: 56px;
+    width: 360px;
+    left: 16px;
+    //top: 508px;
+    border-radius: 0px;
+    
+  
+  }
+
+  .delete-btn{
+  
+    padding: 8px;
+  float:center;
+  
+  color:#fff;
+  background:#E25B30;
+  border-radius: 104px;
+  font-family: 'Lexend';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  margin-top: 5px;
+  
+  height: 24px;
+  width: 56px;
+  
+  
+  
+  }
+  
+  
+  .active_jo{
+  
+    padding: 8px;
+  float:center;
+  
+  color:#fff;
+  background: #61B05A;
+  border-radius: 104px;
+  font-family: 'Lexend';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  margin-top: 5px;
+  
+  height: 24px;
+  width: 56px;
+  
+  
+  
+  }
+  
+  
+  .card-content-md {
+    padding-left: 4px; 
+     padding-right: 4px; 
+      padding-top: 4px;
+      padding-bottom: 4px; 
+     font-size: 12px;
+     line-height: 1.5;
+   }
+   .card-content-ios {
+     padding-left: 4px; 
+      padding-right: 4px; 
+       padding-top: 4px;
+       padding-bottom: 4px; 
+      font-size: 12px;
+      line-height: 1.5;
+    }
+  
+  
+    ion-toggle{
+  
+  
+      --handle-width: 15px;
+      --handle-height: 15px;
+    }

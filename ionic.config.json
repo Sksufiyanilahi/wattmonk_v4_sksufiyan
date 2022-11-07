@@ -1,7 +1,6 @@
 {
-  "name": "wattmonk",
+  "name": "Wattmonk_V3",
   "integrations": {
-    "cordova": {},
     "capacitor": {}
   },
   "type": "angular"

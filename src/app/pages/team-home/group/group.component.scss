@@ -1,0 +1,44 @@
+.custom-card {
+    display: flex !important;
+    flex-direction: column !important;
+    background: white !important;
+    border-radius: 6px !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
+    padding: 15px 20px;
+  }
+  
+  .customer-name {
+    font-size: 1.2em;
+    color: #434343;
+    font-weight: bold;
+    display:table;
+    margin: 0px;
+  }
+  .customer-role-name {
+    font-size: 0.8em;
+    color: rgb(14, 13, 13);
+  }
+  
+  .customer-description {
+    font-size: 0.8em;
+    color:dimgrey;
+  }
+  
+  
+  .cssclass{
+    --max-height :100% !important;
+    // position: absolute;
+    // display: block;
+  }
+  
+  
+  //.drawer {
+  //  background: #F3F3F3;
+  //  --background: #F3F3F3;
+  //}
+  //
+  //.ion-bottom-drawer-scrollable-content {
+  //  background: #F3F3F3 !important;
+  //}
+  
+ 

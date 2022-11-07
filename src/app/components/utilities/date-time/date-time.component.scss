@@ -1,0 +1,104 @@
+.main-background {
+    margin-top: 8px;
+    background: #F8F8F8;
+    border-radius: 0.5em;
+    color: #656565;
+}
+
+.date-background {
+
+    background: #FBB200;
+    border-radius: 0.5em;
+    color: #F8F8F8;
+}
+
+.month {
+    font-size: 1em;
+}
+
+.day {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.time {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+
+ion-datetime {
+    max-width: 100% !important;
+    width: 100% !important;
+    // padding-left: 0px !important;
+    height: 48px;
+    //width: 171px;
+    left: 0px;
+    //top: 26px;
+    border-radius: 8px;
+    padding: 16px;
+    justify: space-between;
+
+}
+
+
+.shift ion-icon {
+    font-size: 16px;
+}
+
+
+.shift {
+
+
+    position: absolute;
+    left: 16.67%;
+    right: 16.67%;
+    top: 56%;
+    bottom: 68%;
+    z-index: 999999999;
+    /* #333029 */
+
+    color: #333029;
+}
+
+.daat {
+    text-align: center;
+    float: right;
+    color: #333029;
+}
+
+
+.form_input {
+
+    color: #595959;
+
+}
+
+
+.da_p {
+
+
+
+    box-sizing: border-box;
+
+    /* Auto layout */
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px;
+    margin: 4px;
+
+    height: 48px;
+
+
+    /* #FFFFFF */
+
+    background: #FFFFFF;
+    border-radius: 8px;
+}
+
+.flex-container>div {
+    margin-top: 4px;
+    //margin-left: 8px;
+}

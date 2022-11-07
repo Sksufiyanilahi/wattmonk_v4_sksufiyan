@@ -1,0 +1,301 @@
+<ion-header class="ion-no-border" style="--background: #F8F8F8;">
+
+  <ion-row>
+    <ion-col size="2">
+      <!-- <ion-buttons >
+         
+              <ion-menu-button mode="md"> <ion-img fill="clear" class="ion-no-margin  " src="assets/icon/new/menu.svg" ></ion-img></ion-menu-button>
+          </ion-buttons> -->
+      <!-- <ion-button  (click)="goBack()" style="width: 55px !important; height:20px !important"> -->
+      <!-- <ion-button fill="clear" (click)="goBack()" [disabled]='enableDisable' >
+              <ion-img fill="clear" src="assets/images/back.svg" class="action-icon"></ion-img>
+          </ion-button> -->
+      <!--- <ion-button fill="clear" size="small" class="ion-no-padding" style="color:#595959" (click)="goBack()">
+              Back
+          </ion-button>-->
+      <ion-button fill="clear" size="small" class="ion-no-padding"
+        style="color: #595959;margin: 9px 0 0 12px;font-size: 12px;" (click)="goBack()">
+        Back
+      </ion-button>
+      <!-- </ion-button> -->
+    </ion-col>
+    <ion-col size="8">
+      <p class="iti">Profile</p>
+    </ion-col>
+
+    <ion-col size="2">
+      <!-- <ion-button fill="clear" (click)="Settings()" [disabled]='enableDisable'>
+              <ion-icon  class="_color" name="settings-outline"></ion-icon>
+            </ion-button> -->
+    </ion-col>
+    <!--<ion-col size="2" style="display: flex;justify-content: center;">
+          <ion-button fill="clear" (click)="logout()" [disabled]='enableDisable'>
+              <ion-icon class="text-center" class="_color" name="log-out-outline"
+                  style="font-size: 26px;width:48px;text-align: center;"></ion-icon>
+          </ion-button>
+      </ion-col>-->
+  </ion-row>
+
+</ion-header>
+<ion-content>
+
+  <ion-grid class="profile-background padd" mode="md">
+
+
+
+    <ion-card class="labb_card" mode="md" style="padding:5px;">
+      <ion-card-content>
+        <ion-row>
+          <ion-col size="10">
+            <div class="flex-container">
+              <div *ngIf="isEmptyObject(user?.userprofile?.logo) || user?.userprofile?.logo ==null" class="profile_img" mode="md">
+                {{profile?.firstname.slice(0,1).toUpperCase() + profile?.lastname.slice(0,1).toUpperCase()}}
+              </div>
+              <div *ngIf="!isEmptyObject(user?.userprofile?.logo) && user?.userprofile?.logo !==null">
+                <img [src]="user?.userprofile?.logo?.url" class="profile_image" />
+              </div>
+
+              <div class="pro_div">
+                <div class="profile-name" style="margin-left: -16px;
+          ">{{profile?.firstname}} {{profile?.lastname}}</div>
+
+                <div class="profile-email" style="    margin-left: -16px;
+          ">{{currentUserRole}}</div>
+
+                <div style="    margin-left: -16px;
+          " *ngIf="(user.role.type=='clientsuperadmin' && profile?.ispaymentmodeprepay)|| user.designertype=='external'">
+                  <span>$ {{profile?.amount}}</span>
+                  <ion-label>Wallet</ion-label>
+                </div>
+                <div style="display: flex">
+                  <div style="margin-top:12px;margin-left: -16px;
+      ">
+                    <span class="active_jo">Active Jobs</span>
+                    <!-- <div>{{activedesignjobs}} </div> -->
+                  </div>
+                  <div style="margin-top:12px;margin-left:6px;" (click)="blockUser()">
+                    <span class="delete-btn">Delete User</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ion-col>
+          <ion-col size="2">
+
+            <ion-img src="/assets/icon/new/edit.svg" (click)="profileEdit()"
+              style="box-sizing: border-box;width:16px;float: right;"></ion-img>
+
+
+            <!-- <ion-button *ngIf="user.role.type=='clientsuperadmin' && profile?.ispaymentmodeprepay" (click)='AddWallet()' fill='clear'><ion-icon class="_color"  style="font-size: 26px;width:48px;text-align: center;" name="wallet-outline"></ion-icon></ion-button> -->
+          </ion-col>
+        </ion-row>
+
+
+        <!-- <span>Active jobs </span>
+              <span>{{activedesignjobs}} </span> -->
+
+        <!-- <img src="assets/images/user_placeholder.jpg" alt="User Image" class="user-image"> -->
+
+
+        <!-- </ion-col>
+
+      <ion-col class="ion-no-padding"> -->
+
+        <!-- </ion-col>
+      <ion-col class="ion-no-padding" *ngIf="(user.role.type=='clientsuperadmin' && profile?.ispaymentmodeprepay)|| user.designertype=='external'"> -->
+
+
+        <!-- </ion-col>
+      <ion-col style="text-align: center;" *ngIf="user.role.type=='clientsuperadmin' && profile?.ispaymentmodeprepay"> -->
+        <!-- <ion-button *ngIf="user.role.type=='clientsuperadmin' && profile?.ispaymentmodeprepay" (click)='AddWallet()' fill='clear'>Add money</ion-button>  -->
+        <!-- <span>Active jobs </span>
+        <span>{{activedesignjobs}} </span> -->
+
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="labb_card" mode="md">
+
+
+      <ion-item lines="none">
+        <ion-icon name="mail" slot="start"></ion-icon>
+        <ion-label>
+          <h3 class="profile_tie">Email</h3><span class="profile-email">{{user?.email}}</span>
+        </ion-label>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-icon name="business-sharp" slot="start"></ion-icon>
+        <ion-label>
+          <h3 class="profile_tie">Company</h3><span class="profile-email">{{profile?.company}}</span>
+        </ion-label>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-icon name="call-outline" slot="start"></ion-icon>
+        <ion-label>
+          <h3 class="profile_tie">Phone</h3> <span class="profile-email">{{profile?.phone==null?"No Phone number
+            found":profile?.phone}}</span>
+        </ion-label>
+      </ion-item>
+    </ion-card>
+
+
+
+    <!--<ion-col size="12" class="ion-no-padding" style="margin-top: 5%;">
+              <div>
+                  <ion-icon name="mail" style="margin-left: 10%"></ion-icon>
+                  <span class="profile-email" style="font-size: larger;
+                margin-left: 5%;">{{user?.email}}</span>
+              </div>
+          </ion-col>
+
+          <ion-col size="12" class="ion-no-padding" style="margin-top: 5%;">
+              <div>
+                  <ion-icon name="business-sharp" style="margin-left: 10%;"></ion-icon>
+                  <span class="profile-email" style="font-size: larger;
+                margin-left: 5%;">{{user?.company}}</span>
+              </div>
+          </ion-col>
+
+          <ion-col size="12" class="ion-no-padding" style="margin-top: 5%;">
+              <div>
+                  <ion-icon name="call-outline" style="margin-left: 10%;"></ion-icon>
+                  <span class="profile-email" style="font-size: larger;
+                margin-left: 5%;">{{user?.phone==null?"No Phone number found":user?.phone}}</span>
+              </div>
+          </ion-col>-->
+
+
+    <!-- <ion-col size="12" class="ion-no-padding">
+            <div style="text-align: center">
+                <span class="profile-name">{{user?.firstname}} {{user?.lastname}}</span>
+            </div>
+        </ion-col>
+
+        <ion-col size="12" class="ion-no-padding">
+            <div style="text-align: center">
+                <span class="profile-email">{{user?.email}}</span>
+            </div>
+        </ion-col> -->
+    <!-- <ion-col size="12" class="ion-no-padding">
+            <div style="text-align: center">
+                <span class="profile-email" *ngIf="user.role.type=='wattmonkadmins' || user.role.name=='ContratorAdmin';else role">{{"Admin"}}</span>
+                <ng-template #role>
+                  <span class="profile-email" *ngIf="user.role.type=='wattmonkadmins' || user.role.name=='ContratorAdmin'">{{user.role.name}}</span>
+                </ng-template>
+            </div>
+        </ion-col> -->
+    <!-- <ion-col size="12" class="ion-no-padding">
+            <div style="text-align: center">
+                <span class="profile-email" *ngIf="user.role.type=='wattmonkadmins' || user.role.name=='ContratorAdmin';else role">{{user.company}}</span>
+                 <ng-template #role>
+                  <span class="profile-email" *ngIf="user.role.type=='wattmonkadmins' || user.role.name=='ContratorAdmin'">{{user?.phone==null?"No Phone number found":user?.phone}}</span>
+                 </ng-template>
+            </div>
+        </ion-col> -->
+    <!-- <ion-col size="12" class="ion-no-padding" *ngIf="(user.role.type=='clientsuperadmin' && profile?.ispaymentmodeprepay)|| user.designertype=='external'">
+          <div style="text-align: center">
+            <span>$ {{profile?.amount}}</span><br>
+             <ion-label>Wallet</ion-label>
+          </div>
+      </ion-col> -->
+
+    <!-- <ion-col size="12" class="ion-no-padding">
+            <div style="text-align: center">
+                <span class="profile-amount">Total points: {{user.amount}}</span>
+            </div>
+            <div style="text-align: center;color:#FBB200" (click)="addPoints()">Add points</div>
+        </ion-col> -->
+
+    <!-- <ion-col size="12" class="ion-no-padding">
+            <div style="text-align: center">
+                <span style="color: #BCBCBC;">Male</span>
+            </div>
+        </ion-col> -->
+    <!-- <ion-col size="12">
+            <div style="text-align: center">
+                <ion-badge class="badge-container">
+                    <div class="dollar-badge">
+                        <span style="color: grey;">$50</span>
+                    </div>
+                </ion-badge>
+            </div>
+        </ion-col> -->
+    <!-- <ion-col class="ion-align-items-center ion-text-center">
+            <ion-button fill="clear" class="action-button-color" (click)="logout()">Logout</ion-button>
+        </ion-col>
+        <ion-col class="ion-align-items-center ion-text-center">
+            <ion-button fill="clear" class="action-button-color" (click)="syncSurvey()">Sync Surveys</ion-button>
+        </ion-col> -->
+
+    <!-- <ion-row> -->
+
+    <!-- </ion-row> -->
+
+    <!-- <ion-row class="ion-justify-content-center">
+    <ion-col size="6">
+      <div style="text-align: center">
+        <span>Notifications</span>
+      </div>
+
+    </ion-col>
+    <ion-col size="6">
+      <div style="text-align: center">
+        <span>History</span>
+      </div>
+
+    </ion-col>
+  </ion-row> -->
+
+    <ion-card class="labb_card" mode="md">
+      <ion-card-content>
+
+        <ion-item lines="none">
+          <ion-label class="profile-email">Auto Sync Survey</ion-label>
+          <ion-toggle [(ngModel)]="getAutoSyncSurvey" (ionChange)="onToggleChange(user,'survey',$event)" slot="end">
+          </ion-toggle>
+
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+    <ion-card class="labb_card" mode="md">
+      <ion-card-content>
+
+        <ion-item lines="none">
+          <ion-label class="profile-email">Emails</ion-label>
+          <ion-toggle [(ngModel)]="getemail" (ionChange)="onToggleChange(user,'email',$event)" slot="end"></ion-toggle>
+
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+    <ion-card class="labb_card" mode="md">
+      <ion-card-content>
+        <ion-item lines="none">
+          <ion-label class="profile-email">Notifications</ion-label>
+          <ion-toggle [(ngModel)]="getnotification" (ionChange)="onToggleChange(user,'notification',$event)" slot="end">
+          </ion-toggle>
+        </ion-item>
+
+      </ion-card-content>
+    </ion-card>
+  </ion-grid>
+
+
+
+
+  <!-- <ion-content style="--background: #FEF8F8;">
+   <ion-tabs style="
+position: inherit;">
+     <ion-tab-bar slot="top" class="ion-no-border" class="profile-tab">
+          <ion-tab-button tab="profile-notification">
+              <ion-label style="font-size: 16px;color:#FBB200">Notifications</ion-label>
+          </ion-tab-button>
+      </ion-tab-bar>
+  </ion-tabs>
+
+  </ion-content> -->
+
+  <!-- </ion-content> -->
+
+</ion-content>

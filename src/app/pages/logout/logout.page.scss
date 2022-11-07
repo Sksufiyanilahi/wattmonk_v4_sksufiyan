@@ -1,0 +1,169 @@
+
+body{background: #fff;  
+}
+ion-content {
+  --background: #fff !important;
+  --height:177px;
+
+}
+
+
+ion-modal.stack-modal {
+  --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+  --backdrop-opacity: var(--ion-backdrop-opacity, 0.32);
+  --height:177px;
+  --max-height: 177px;
+
+}
+
+.sc-ion-modal-md-h {
+  --width: 100%;
+  --min-width: auto;
+  --max-width: auto;
+  --height: 177px;
+  --max-height: 177px;
+
+  --min-height: auto;
+  --overflow: hidden;
+  --border-radius: 0;
+  --border-width: 0;
+  --border-style: none;
+  --border-color: transparent;
+  --background: var(--ion-background-color, #fff);
+  --box-shadow: none;
+  --backdrop-opacity: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: -ms-flexbox;
+  display: flex;
+  position: absolute;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  outline: none;
+  contain: strict;
+}
+.sc-ion-modal-ios-h {
+  --width: 100%;
+  --min-width: auto;
+  --max-width: auto;
+  --height: 177px;
+  --min-height: auto;
+  --max-height: 177px;
+  --overflow: hidden;
+  --border-radius: 0;
+  --border-width: 0;
+  --border-style: none;
+  --border-color: transparent;
+  --background: var(--ion-background-color, #fff);
+  --box-shadow: none;
+  --backdrop-opacity: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: -ms-flexbox;
+  display: flex;
+  position: absolute;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  outline: none;
+  contain: strict;
+}
+
+mat-divider{
+margin-left: 10px;
+  margin-right: 10px;
+ // margin-top: 5px;
+  color: gray;
+}
+ion-icon {
+font-size: 30px;//Preferred size here
+margin-left: 10px;
+}
+
+.small-modal{
+  &::part(content) {
+    position: absolute;
+    bottom: 0;
+    min-height: initial;
+    top: initial;
+    height: 95%;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+}
+}
+
+ion-radio{
+  
+--border-radius:3px;
+--background: linear-gradient(45.7deg, #FBB200 -69.25%, #FDCF27 101.61%);
+}
+
+
+.label{
+
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+
+}
+ion-label{
+ 
+  .tit{
+
+    font-family: 'Lexend';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    /* identical to box height */
+    
+    
+    --color: #000000;
+  
+  }
+
+}
+
+
+
+
+
+.obd_class{
+
+
+padding: 0px;
+
+margin: 0px;
+
+
+
+}
+
+
+ion-toolbar{
+
+  --background:  #fff !important;
+
+}
+
+.filetresearc{
+
+padding: 5px;
+
+margin: 5px;
+  --background:  none !important;
+
+
+
+}
+
+
+
+

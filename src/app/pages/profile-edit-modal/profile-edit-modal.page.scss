@@ -1,0 +1,69 @@
+.toolbar-background {
+  --background: #F8F8F8;
+}
+
+
+.profie-edit {
+  &::part(content) {
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    display: block;
+  }
+}
+
+.butt_bot {
+
+
+  position: absolute;
+  bottom: 0;
+
+
+
+}
+
+.home {
+
+
+  //styleName: Title 3(R);
+  font-family: 'Lexend';
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 25px;
+  letter-spacing: 0em;
+  text-align: center;
+
+
+
+}
+
+.action-icon {
+
+  margin-top: 5px;
+}
+
+
+.iti {
+
+  margin-top: 11px;
+  text-align: center;
+
+  /* Title 3(R) */
+
+  font-family: 'Lexend';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 25px;
+  /* identical to box height */
+
+  text-align: center;
+
+  /* #333029 */
+
+  color: #333029;
+}
+
+.form_mar {
+  margin: 16px;
+}

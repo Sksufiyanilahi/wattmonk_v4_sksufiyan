@@ -1,0 +1,50 @@
+.toolbar-background {
+    --background: #F8F8F8;
+}
+
+
+.home {
+
+
+    //styleName: Title 3(R);
+    font-family: 'Lexend';
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 25px;
+    letter-spacing: 0em;
+    text-align: center;
+    margin-top: 9px;
+
+
+}
+
+.butt {
+    width: 40vw;
+    height: 48px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 15px;
+    letter-spacing: 0em;
+    text-align: left;
+    float: right;
+    background: #FBB200;
+    margin: 10px;
+
+    color: #333029;
+
+    border-radius: 8px;
+    padding: 12px;
+
+
+
+}
+
+ion-tabs {
+    margin-top: 0px;
+    border-radius: 4px;
+}
+
+.start-survey-btn {
+    background: #2F2E2C !important;
+    color: #ffffff !important;
+}

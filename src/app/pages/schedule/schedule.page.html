@@ -1,0 +1,167 @@
+<!-- <ion-content scroll="false"> -->
+<!-- <ion-grid style="overflow:hidden;" scroll="false"> -->
+<ion-row>
+    <ion-col size="2">
+        <ion-button *ngIf="currentTab === 'design' || currentTab==='sales-proposal'" fill="clear" size="small" class="back_butt" (click)="goBack()">
+            Back
+        </ion-button>
+    </ion-col>
+    <ion-col>
+        <h1 class=" home" *ngIf="!tabsDisabled && router.url=='/schedule/design'">Site Assessment</h1>
+        <h1 class=" home" *ngIf="!tabsDisabled && router.url=='/schedule/sales-proposal'">Sales Proposal</h1>
+        <h1 class=" home" *ngIf="!tabsDisabled && router.url=='/schedule/survey'">Schedule Survey</h1>
+        <h1 class=" home" *ngIf="tabsDisabled">Edit </h1>
+    </ion-col>
+    <ion-col size="2">
+        <ion-button  *ngIf="currentTab === 'survey'" fill="clear" size="small" class="back_butt" (click)="goBack()">
+            Back
+        </ion-button>
+    </ion-col>
+</ion-row>
+<!--<ion-row class="ion-align-items-center ion-padding-start">
+<ion-col>
+    <h5 class="ion-no-padding ion-no-margin" style="font-weight: bolder;"
+        *ngIf="!tabsDisabled && router.url=='/schedule/design'">Request Site Assessment</h5>
+    <h5 class="ion-no-padding ion-no-margin" style="font-weight: bolder;"
+        *ngIf="!tabsDisabled && router.url=='/schedule/sales-proposal'">Request Sales Proposal</h5>
+    <h5 class="ion-no-padding ion-no-margin" style="font-weight: bolder;"
+        *ngIf="!tabsDisabled && router.url=='/schedule/survey'">Schedule Survey</h5>
+    <h4 class="ion-no-padding ion-no-margin" *ngIf="tabsDisabled">Edit </h4>
+</ion-col>
+<ion-col size="auto">
+    <ion-button fill="clear" size="small" class="ion-no-padding" (click)="goBack()">
+        <ion-icon name="close-outline" style="color: dimgrey;" size="large"></ion-icon>
+    </ion-button>
+    
+</ion-col>
+</ion-row>-->
+<!-- <ion-row class="ion-padding-start ion-padding-end">
+        <ion-col *ngIf="address !== '' ">
+            <span class="address-text">
+                {{address}}
+            </span>
+        </ion-col>
+        <ion-col *ngIf="address === '' ">
+            <span>
+                No address found
+            </span>
+        </ion-col>
+    </ion-row> -->
+<!-- <ion-row class="ion-padding-start ion-padding-end">
+        <ion-col class="ion-text-end" *ngIf="!tabsDisabled">
+            <span [routerLink]="['/map-page']" routerDirection="forward" style="color: #4E6FB0;">
+                Change
+            </span>
+        </ion-col>
+        <ion-col class="ion-text-end" *ngIf="tabsDisabled">
+            <span class="edit_span">
+                Change
+            </span>
+        </ion-col>
+    </ion-row> -->
+<!-- </ion-grid> -->
+
+<!-- <ion-grid class="ion-margin-start ion-margin-end" style="overflow:hidden;" scroll="false"> -->
+<!-- <ion-segment mode="ios" class="segments" (ionChange)="segmentChanged($event)" [value]="currentTab"
+        [disabled]="tabsDisabled">
+        <ion-segment-button value="design">
+            <ion-label>Design</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="survey">
+            <ion-label>Survey</ion-label>
+        </ion-segment-button>
+    </ion-segment> -->
+<!-- </ion-grid> -->
+<ion-content>
+    <ion-tabs #tabs>
+        <!-- <ion-tab-bar slot="top" style="display:none;" >
+            <ion-tab-button tab="design">
+                <ion-label>Design</ion-label>
+            </ion-tab-button>
+
+            <ion-tab-button tab="survey">
+                <ion-label>Survey</ion-label>
+            </ion-tab-button>
+        </ion-tab-bar> -->
+    </ion-tabs>
+    <!-- <ion-grid> -->
+    <!-- <ion-row class="ion-padding-start ion-padding-end mrT"  style="background: #ffffff;">
+            <ion-col size="9" [ngClass]="address.length > 20 ? 'font_10' : 'font_12'" style="background: #ffffff;">
+                <p></p>
+                
+                <b>{{address == "" ? "No Address Found" : address}}</b>
+                
+            </ion-col>
+
+            <ion-col class="ion-text-end" *ngIf="!tabsDisabled" size="3">
+                <p></p>
+                <span [routerLink]="['/map-page']" routerDirection="forward" style="color: #4E6FB0;">
+                    Change
+                </span>
+            </ion-col>
+            <ion-col class="ion-text-end" *ngIf="tabsDisabled" size="3">
+                <p></p>
+                <span   style="color:grey;">
+                    Change
+                </span>
+            </ion-col>
+        </ion-row> -->
+
+    <!-- </ion-grid> -->
+</ion-content>
+<!-- </ion-content> -->
+
+<ion-footer class="ion-no-border ">
+    <ion-grid *ngIf="currentTab === 'design' || currentTab==='sales-proposal'">
+        <ion-row class="bottom_buu">
+            <ion-col size="5.8" *ngIf="!isClient && !isVAAgent"></ion-col>
+            <ion-col size="5.8">
+                <ion-button class="buttcan1" style="width:100%;" fill="clear" (click)="saveDesignForm()">
+                    Save for later
+                </ion-button>
+            </ion-col>
+
+            <ion-col size="0.2"></ion-col>
+            <ion-col size="5.8" *ngIf="isClient || isVAAgent">
+                <ion-button fill="clear" class="buttcc" style="width:100%;" (click)="sendDesignForm()">Submit to
+                    WattMonk</ion-button>
+            </ion-col>
+        </ion-row>
+        <!--<ion-row>
+        <ion-col></ion-col>
+        <ion-col size="auto">
+            <ion-button class="action-button-color" style="font-size: 12px;" fill="clear"
+                (click)="saveDesignForm()">Save for later</ion-button>-->
+        <!-- *ngIf="((userdata.role.type=='clientsuperadmin' || userdata.role.type=='clientadmin')&& ((designs && designs.status != 'requestdeclined') || designs==null)) && designId==0" -->
+        <!--<ion-button *ngIf="isClient" class="action-button-color" style="font-size: 12px;" fill="clear"
+                (click)="sendDesignForm()">Submit to WattMonk</ion-button>
+        </ion-col>
+    </ion-row>-->
+    </ion-grid>
+    <ion-grid *ngIf="currentTab === 'survey'">
+        <ion-row class="bottom_buu">
+            <ion-col size="5.8">
+                <ion-button class="buttcan1" style="width:100%;" fill="clear" (click)="saveSurveyForm()">
+                    Create
+                    <!-- Save for later -->
+                </ion-button>
+            </ion-col>
+            <ion-col size="0.2"></ion-col>
+            <ion-col size="5.8">
+                <ion-button class="buttcc start-survey-btn" style="width:100%;" fill="clear" (click)="startSurvey()">
+                    Start Survey</ion-button>
+            </ion-col>
+        </ion-row>
+        <!--<ion-row>
+        <ion-col size="auto">
+            <ion-button class="action-button-color" style="font-size: 12px;" fill="clear"
+                (click)="saveSurveyForm()">Save for later</ion-button>
+        </ion-col>
+        <ion-col></ion-col>
+        <ion-col size="auto">
+            <ion-button class="action-button-color" style="font-size: 12px;" fill="clear" (click)="startSurvey()">
+                Start Survey</ion-button>
+        </ion-col>
+    </ion-row>-->
+    </ion-grid>
+</ion-footer>

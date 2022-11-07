@@ -1,0 +1,92 @@
+
+<div class="d-flex flex-column transparent-background margin" style="overflow:scroll">
+  
+  
+  <span class="input-placeholder" *ngIf="required">*</span>
+  <div *ngFor="let assignee of filteredAssignees" (click)="selectAssignee(assignee)" >
+    
+
+    
+      <ion-item  lines="none"  class="preselected" id="pre" *ngIf="assignee.id==reviewAssigned?.id"
+      [class.preselected]="assignee.selected" [class.active]="!assignee.selected ">
+       <ion-thumbnail slot="start">
+        <img *ngIf="assignee.contractorlogo && assignee.contractorlogo.logo" [src]="assignee.contractorlogo.logo.url" class="assignee-image1"/>
+        <img *ngIf="!assignee.contractorlogo || !assignee.contractorlogo.logo" src="/assets/icon/new/user.svg" class="assignee-image"/>
+
+           </ion-thumbnail>
+       <ion-label>
+         <h2 style="text-transform: capitalize;">{{assignee?.firstname=='Ankit' ? 'Wattmonk' : assignee?.firstname}} </h2>
+         <p>{{assignee?.lastname=="Sheoran" ? '' : assignee?.lastname}}</p>
+       </ion-label>
+
+       <ion-badge class="badgere" style="float:right;" slot="end">{{assignee?.jobcount}}</ion-badge>
+      
+     </ion-item>
+
+
+      
+           <ion-item  lines="none" class="active" *ngIf="assignee.id !=reviewAssigned?.id"
+           [class.active]="assignee.selected" [class.preselected]="!assignee.selected " >
+          <ion-thumbnail slot="start">
+           <img *ngIf="assignee.contractorlogo && assignee.contractorlogo.logo" [src]="assignee.contractorlogo.logo.url" class="assignee-image1"/>
+           <img *ngIf="!assignee.contractorlogo || !assignee.contractorlogo.logo" src="/assets/icon/new/user.svg" class="assignee-image"/>
+
+              </ion-thumbnail>
+          <ion-label>
+            <h2 style="text-transform: capitalize;">{{assignee?.firstname=='Ankit' ? 'Wattmonk' : assignee?.firstname}} </h2>
+            <p>{{assignee?.lastname=="Sheoran" ? '' : assignee?.lastname}}</p>
+          </ion-label>
+
+          <ion-badge class="badgere" style="float:right;width:22px;height:23px;" slot="end">{{assignee?.jobcount}}</ion-badge>
+         
+        </ion-item>
+     </div>
+
+</div>
+
+
+<!--<div class="d-flex flex-column transparent-background margin" style="overflow:scroll">
+  <span class="input-placeholder" style="margin-left: 8px; font-weight: bold;">{{placeholder }}</span>
+  <span class="input-placeholder" *ngIf="required">*</span>
+  
+    <div>
+      <ion-searchbar class="searchbar-input-container.sc-ion-searchbar-md" debounce="0" placeholder="Search " (ionChange)="filterUsers()" [(ngModel)]="searchTerm">
+    
+      </ion-searchbar>
+    </div>
+    <div scrollX="true" style="margin-top: 4px;">
+    <div class="d-flex flex-row">
+      
+      <div *ngFor="let assignee of filteredAssignees" class="assignee-margin " (click)="selectAssignee(assignee)">
+
+        <div class="preselected" id="pre" *ngIf="assignee.id==reviewAssigned?.id"
+             [class.selected]="assignee.selected" [class.normal]="!assignee.selected " >
+             <ion-badge class="badge" style="z-index:999">{{assignee?.jobcount}}</ion-badge>
+          <img *ngIf="assignee.contractorlogo && assignee.contractorlogo.logo" [src]="assignee.contractorlogo.logo.url" class="assignee-image"/>
+          <div *ngIf="!assignee.contractorlogo || !assignee.contractorlogo.logo" class="assignee-image d-flex flex-row align-center justify-center">
+            <div class="name_div">
+            
+              <span style="text-transform: capitalize;">{{assignee?.firstname?.substring(0, 1) | uppercase}}{{assignee?.lastname?.substring(0, 1) | uppercase}}</span>
+              </div>
+          </div>
+           </div>
+
+           <div class="selected d-flex" *ngIf="assignee.id !=reviewAssigned?.id"
+             [class.selected]="assignee.selected" [class.normal]="!assignee.selected " >
+             <ion-badge class="badge" style="z-index:999">{{assignee?.jobcount}}</ion-badge>
+          <img *ngIf="assignee.contractorlogo && assignee.contractorlogo.logo" [src]="assignee.contractorlogo.logo.url" class="assignee-image"/>
+          <div *ngIf="!assignee.contractorlogo || !assignee.contractorlogo.logo" class="assignee-image d-flex flex-row align-center justify-center">
+            <div class="name_div">
+            
+              <span style="text-transform: capitalize;">{{assignee?.firstname?.substring(0, 1) | uppercase}}{{assignee?.lastname?.substring(0, 1) | uppercase}}</span>
+            </div>
+          </div>
+           </div>
+          <small style="font-size: 8px;">{{assignee?.firstname=='Ankit' ? 'Wattmonk' : assignee?.firstname}} <br />{{assignee?.lastname=="Sheoran" ? '' : assignee?.lastname}}</small>
+         </div>
+        
+         </div>
+        </div>
+
+</div>-->
+

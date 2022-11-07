@@ -1,0 +1,71 @@
+.custom-card {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border-radius: 4px !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
+    padding: 8px 12px;
+  }
+
+  .customer-name {
+    font-size: 1em;
+    color: #434343;
+    font-weight: bold;
+    display:table;
+    margin: 0px;
+  }
+
+  .customer-email {
+    font-size: 0.8em;
+    color: #666666;
+  }
+
+  .customer-phone {
+    font-size: 0.8em;
+    color: #FBB200;
+  }
+
+  .customer-address {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    font-size: 0.8em;
+    color: #FBB200;
+  }
+
+  .placeholder {
+    //width: 50vw !important;
+  }
+
+  .timestamp {
+    font-size: 0.7em;
+  }
+
+  .chipdetail{
+    display: inline;
+    vertical-align: middle;
+    background-color: #95afc0;
+    font-size: 0.6em;
+    padding: 4px 10px;
+    border-radius: 10px;
+    text-align: center;
+    color: #fff;
+  }
+
+  .segment-btn{
+    font-size: 10px !important;
+    position: absolute;
+  }
+
+  .latebystyle{
+    float: right;
+    font-size: 10px;
+    color: #3C78DB;
+    text-align: right;
+  }
+
+  .imagebutton{
+    float:right;
+    margin-top: 0px;
+
+
+  }

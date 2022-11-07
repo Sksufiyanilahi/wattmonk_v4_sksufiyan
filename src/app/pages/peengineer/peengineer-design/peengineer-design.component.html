@@ -1,0 +1,408 @@
+
+<ion-row  class="ion-align-items-center">
+  <ion-col >
+      
+      <h1 class="ion-no-padding ion-no-margin home" >PE Stamp </h1>
+  </ion-col>
+  
+  <ion-col size="auto" >
+      <div class="flex-container" style="float:right;margin-right: 8px;">
+          
+          
+        <div><ion-img src="/assets/icon/new/sort.svg" style="margin-top:16px; width:20px;height:20px;margin-right: 8px;" (click)="sort_model()"></ion-img>  </div>
+
+      
+  </div>
+      
+      
+  </ion-col>
+
+
+  </ion-row>
+
+  <ion-row class="padd" style="margin-left: 16px;">
+    <ion-col *ngIf="getsortFilterData?.value">
+        <div class="chip-block" (click)="removesorting()">
+            <div class="chipdetail1" *ngIf="getsortFilterData?.ordertypefilterstatus" >Clear Applied {{ getsortFilterData?.ordertypefilterstatus }}</div>
+
+            <div class="chipdetail1" *ngIf="getsortFilterData?.priority">Clear Applied Priority</div>
+
+           
+            
+        </div>
+    </ion-col>
+    
+</ion-row>
+
+<!----
+<ion-row>
+  <ion-col size="6">
+    <ion-button style="float: left;" fill="clear">
+      <ion-button>Sort</ion-button>&nbsp;<ion-select [(value)]="orderbyfilterstatus" placeholder="Order Type"
+        style="padding-left: 0px;text-transform: none;" interface="popover" [(ngModel)]="orderbyfilterstatus"
+        (ionChange)="filtersortvalue($event)">
+        <ion-select-option #d name="Created At" value="created_at">Created At</ion-select-option>
+        <ion-select-option #s name=">Deliver At" value="actualdelivereddate" *ngIf="sortdelive == 'delivered'">
+          Deliver At</ion-select-option>
+        <ion-select-option #s name="Clear filter" value="null" *ngIf="orderbyfilterstatus != null">Clear
+          filter
+        </ion-select-option>
+      </ion-select>
+    </ion-button>
+  </ion-col>
+  <ion-col size="6" *ngIf="orderbyfilterstatus != null">
+    <ion-button style="float: left;" fill="clear">
+      <ion-select [(value)]="ordertypefilterstatus" (ionChange)="filtersortvalue($event)" placeholder="Order By"
+        style="padding-left: 0px;text-transform: none;" interface="popover" [(ngModel)]="ordertypefilterstatus"
+        required>
+        <ion-select-option value="asc">Ascending </ion-select-option>
+        <ion-select-option value="desc">Descending</ion-select-option>
+      </ion-select>
+    </ion-button>
+  </ion-col>
+
+  <ion-col *ngIf="!isClient">
+    <ion-item class="ion-no-padding no-border" style="float:right" lines="none">
+      <ion-checkbox checked="false" (ionChange)="prioritycheck($event)" [(ngModel)]="priority"></ion-checkbox>
+      <ion-label>&nbsp;Priority</ion-label>
+    </ion-item>
+  </ion-col>
+</ion-row>-->
+<ion-segment mode="md" class="sege_mar" scrollable (ionChange)="segmentChanged($event)" value="InStamping" mode="md">
+  <ion-segment-button value="InStamping">
+    <ion-label class="segment-btn">In Stamping ({{ PEstampCounts?.instamping }})</ion-label>
+  </ion-segment-button>
+  <!-- <ion-segment-button value="completed">
+    <ion-label class="segment-btn">Completed</ion-label>
+  </ion-segment-button> -->
+  <ion-segment-button value="delivered">
+    <ion-label class="segment-btn">Delivered ({{ PEstampCounts?.delivered }})</ion-label>
+  </ion-segment-button>
+</ion-segment>
+<ion-content (click)="close()" style="padding-bottom: 250px;position: sticky;" #content>
+  <ion-refresher slot="fixed" (ionRefresh)="refreshDesigns($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-grid  *ngIf="isPeenginer"class="padd padd-list">
+<ng-container *ngIf="listOfDesignsHelper.length !== 0 ;else nodesignFound">
+    <ion-row *ngFor="let item of listOfDesignsHelper;let i = index" class="padd padd-top">
+
+      <ion-col *ngFor="let designData of item.listOfDesigns;let j = index;trackBy: trackdesign" size="12" class="padd padd-col ">
+        
+        
+        
+        <ion-card class=" custom-card" style="height: 100%;"
+          (click)="gotoDetails(designData,$event)">
+
+
+
+								
+					<ion-row class="ion-no-margin" >
+            <ion-col size="8" class="padd ">
+            <div class="customer-name"><span routerDirection="forward">{{designData.personname}}</span>
+                     
+                 </div>
+                 </ion-col><ion-col size="4" class="padd "><span> <a (click)="gotoActivity(designData,$event)"
+                     style="text-decoration: none;" class="imagebutton phone">
+                     <span class="customer-phone"><ion-img src="assets/images/activity.svg" style="width:12px;height: 12px;" ></ion-img></span></a></span></ion-col>
+                 <ion-col size="12" class="padd "  >
+                  <div class="chip-block"> 
+                <!-- <span class="chipdetail" style="background-color: #1289A7;" [routerLink]="['/permit-design-details/',designData.id]" routerDirection="forward">
+                       {{designData.deliverydate | date: 'hh:mm a'}}
+                   </span> -->
+                             <!-- <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;"
+                         *ngIf="designData.isoutsourced == 'true'">Wattmonk</span> -->
+                             <div class="chipdetail6" 
+                                 *ngIf="designData.status == 'declined'">On Hold</div>
+                                 <div class="chipdetail4"  *ngIf="designData.unhold &&
+designData.status != 'requestdeclined'">Un Hold</div>
+                             <!-- <span class="chipdetail" style="background-color: rgb(246, 77, 10);" *ngIf="designData.status == 'reviewfailed'"  >Review Failed</span> -->
+                             <!-- <span class="chipdetail" style="background-color: rgb(246, 104, 10);" *ngIf="designData.isoverdue" >Overdue</span> -->
+                             <div class="chipdetail2" 
+                                 *ngIf="designData?.acceptedbypeengineer && designData.status != 'delivered'">Accepted</div>
+                             <!-- <span class="chipdetail" style="background-color: rgb(109, 187, 26);" *ngIf="designData.status == 'reviewpassed'" >Review Passed</span> -->
+                             <div class="chipdetail2" 
+                                 *ngIf="designData.status == 'delivered'">Delivered</div>
+                             <div class="chipdetail2" 
+                                 *ngIf="designData.status == 'completed'">
+                                 <ion-icon name="checkmark-done-outline" style="color: #fff;"></ion-icon>
+                             </div>
+                             <div class="chipdetail3" 
+                                 *ngIf="designData.status == 'created'">Unassigned</div>
+                             <div class="chipdetail2" 
+                                 *ngIf="designData.status == 'assigned' || designData.status == 'pesuperadminassigned'">Assigned</div>
+                             <!-- <span class="chipdetail" style="background-color: #1289A7;;" *ngIf="designData.status == 'reviewassigned'" >In Review</span> -->
+                             <!-- && (userData.role.type=='clientadmin'|| userData.role.type=='clientsuperadmin') -->
+                             <div class="chipdetail3" *ngIf="designData.status == 'outsourced'"
+                                 >Waiting for acceptance</div>
+                             <div class="chipdetail1" 
+                                 *ngIf="designData?.isinrevisionstate">Restamp</div>
+     </div>
+                 </ion-col>
+                 
+           
+           <ion-col size="8" class="padd ">
+            <div class="loc-flex location_list" *ngIf="designData?.typingaddress != null">
+              <div class="flex"><div class="list_clo" ><ion-icon name="location-outline" ></ion-icon></div></div>
+               <div><span class="customer-address" 
+                  (click)="openAddressOnMap(designData.typingaddress,$event,designData.latitude, designData.longitude)">{{(designData.typingaddress | slice:0:60) +
+                      (designData.typingaddress.length > 60 ? '...' : '')}}</span></div>
+             
+            </div>
+
+           <div class="loc-flex location_list">
+                     <div class="flex">		   <div class="list_clo" ><ion-icon name="mail-outline" ></ion-icon></div></div>
+                         <div><span class="customer-address" 
+                             (click)="onMailClick(designData.email, $event)">{{designData.email}}</span></div>
+                        
+                       </div>
+                       <div class="loc-flex location_list" *ngIf="designData?.contactnumber != null">
+                        <div class="flex">		   <div class="list_clo" ><ion-icon name="call-outline" ></ion-icon></div></div>
+                            <div><span class="customer-address" 
+                                (click)="$event.stopPropagation()">{{designData.contactnumber}}</span></div>
+                           
+                          </div>
+     <!----
+                       <div class="loc-flex asignee_list" *ngIf="designData.createdby.company != null">
+                         <div class="flex">		   <div class="list_clo" ><ion-icon name="business-outline" ></ion-icon></div></div>
+                         <div><span class="customer-address" >{{(designData.createdby.company )}}</span></div>
+                        
+                     </div>-->
+                    
+                     <!--<div class="loc-flex asignee_list" *ngIf="designData.status=='assigned' || designData.status=='completed' || designData.status=='delivered'">
+                         <div class="flex">		   <div class="list_clo" ><ion-icon name="person-circle-outline" ></ion-icon></div>		   
+                     </div><div><span class="customer-address" >Assigned to : {{designData.assignedto !== null ?
+                         designData.assignedto.firstname : '' | titlecase}} {{designData.assignedto !== null
+                         ?
+                         designData.assignedto.lastname : '' | titlecase}}</span></div>
+                        
+                       </div>-->
+               
+                   
+                </ion-col>
+                 <ion-col size="4" class="padd " >
+                     
+                   <div  style="float:right;">  
+                 
+             
+             
+             <span class="chipdetail" *ngIf="designData?.source"
+                                     style="align-self: center; float: right;">{{designData?.source |
+                                     titlecase}}</span>
+                                 <span class="chipdetail" *ngIf="designData?.propertytype"
+                                     style="align-self: center; float: right;">{{designData?.propertytype |
+                                     titlecase}}</span>
+                                 <span class="chipdetail" *ngIf="designData?.type"
+                                     style="align-self: center; float: right;">{{designData?.type |
+                                     titlecase}}</span>
+             </div>
+             
+             </ion-col>
+             </ion-row>
+                <ion-row class="ion-no-margin"  *ngIf="!userAccessRights?.viewonly">
+                         <ion-col class=""><span style="margin:0px" ><span class="recordupdatedon" routerDirection="forward" *ngIf="designData.outsourceddate ==null;else outsourceddate">
+                          {{ designData.updated_at | date: "HH:mm" }}
+                         </span> <ng-template #outsourceddate>
+                                 <span class="recordupdatedon">
+                                  {{ designData.outsourceddate | date: "HH:mm" }}
+                                 </span>
+                             </ng-template><span class="recordupdatedon" *ngIf="today == item.date" id="todayitems">
+                            |   {{item.date | date: 'dd MMM yyyy'}}
+                         </span>
+                         <span class="recordupdatedon" *ngIf="today != item.date">
+                             |   {{item.date | date: 'dd MMM yyyy'}}
+                         </span> </span>
+                         </ion-col>
+                        
+     
+              </ion-row>
+               
+
+
+          <!--<p class="customer-name" *ngIf="designData.personname != null && designData.personname != ''"
+            routerDirection="forward">{{designData.personname}}
+
+
+            <span fill="clear" background-border="clear" (click)="gotoActivity(designData,$event)" class="imagebutton"
+              size="small"><img src="/assets/images/activitylist.png" style="height: 20px;" /></span>
+            <!-- comment on 20220211 -->
+            <!-- <ng-container *ngIf="!userAccessRights?.viewonly && designData?.chatid!==null && designData?.addedtogroupchat">
+                <span fill="clear" background-border="clear" (click)="gotoChats(designData,$event)" class="chatbutton"  size="small"  ><img  style= "height:20px" src="assets/images/chat.svg" /></span>
+              </ng-container> -->
+
+          <!--</p>
+          <p style="margin:0px">
+            <!-- <span class="chipdetail ml-1 ml-1" style="background-color: #FA983A;"
+        *ngIf="designData.isoutsourced == 'true'">Wattmonk</span> -->
+            <!--<span class="chipdetail" style="background-color: rgb(246, 77, 10);"
+              *ngIf="designData.status == 'declined'">On Hold</span>
+            <span class="chipdetail" style="background-color: #1289A7;;"
+              *ngIf="designData.status == 'assigned'">Assigned</span>
+            <span class="chipdetail" style="background-color: rgb(109, 187, 26);"
+              *ngIf=" designData.acceptedbypeengineer==true && designData.status == 'assigned'">Accepted</span>
+            <span class="chipdetail" style="background-color: rgb(109, 187, 26);padding: 4px 5px;"
+              *ngIf="designData.status == 'completed'">
+              <ion-icon name="checkmark-done-outline" style="color: #fff;"></ion-icon>
+            </span>
+            <span class="chipdetail" style="background-color: rgb(183,21,64)"
+              *ngIf="designData.isinrevisionstate">Revision</span>
+            <span class="chipdetail" style="background-color: rgb(109, 187, 26);"
+              *ngIf="designData.status == 'delivered'">Delivered</span>
+          </p>
+
+          <p style="margin:0px">
+            <span class="customer-email" routerDirection="forward">{{designData.email}}</span>
+            <span *ngIf="designData.isoverdue" class="latebystyle"><strong>Late by {{designData.lateby}}</strong></span>
+
+          </p>
+          <p style="margin:0px">
+            <a href="tel:{{designData.contactnumber}}" style="text-decoration: none;" class="z-100">
+              <span class="customer-phone"
+                *ngIf="designData.contactnumber != null && designData.contactnumber != ''">{{designData.contactnumber}}</span></a>
+            <!-- <span class="recordupdatedon">{{designData.deliverydate|date: 'dd MMM yyyy'}}</span> -->
+          <!--</p>
+          <span class="customer-address z-100"
+            *ngIf="designData.deliveryaddress != null && designData.deliveryaddress != ''"
+            (click)="openAddressOnMap(designData.deliveryaddress,$event)">{{(designData.deliveryaddress | slice:0:60) +
+            (designData.deliveryaddress.length > 60 ? '...' : '')}}
+
+            <ion-col>
+
+            </ion-col>
+
+          </span>
+          <!-- <ion-col *ngIf="designData.status=='assigned' || designData.status=='completed' || designData.status=='delivered'" style="font-size: 0.8em;padding-right: 0px;padding-bottom: 18px;">
+                      <span style=" float:right"><strong>Assigned to : {{designData.assignedto.firstname | titlecase}} {{designData.assignedto.lastname | titlecase}}</strong></span>
+                      </ion-col> -->
+          <!--<ion-row class="date-time">
+            <p *ngIf="designData.status == 'assigned' && designData.created_at">
+              {{ designData.created_at | date: " dd MMM yy HH:mm " }}
+            </p>
+            <p *ngIf="designData.status == 'delivered' && designData.actualdelivereddate" class="silentdetail">
+              {{ designData.actualdelivereddate | date: "dd MMM yy HH:mm " }}
+            </p>
+          </ion-row>
+
+          <ion-row class="ion-no-margin ion-no-margin" style="margin-bottom: 0px;">
+            <ion-col style="padding-left:0px">
+              <span class="chipdetail" *ngIf="designData?.source"
+                style="background-color: #95afc0;align-self: center;">{{designData?.source |
+                titlecase}}</span>
+              <span class="chipdetail"
+                style="background-color: #95afc0;align-self: center;">{{designData?.propertytype}}</span>
+              <span class="chipdetail" style="background-color: #95afc0;align-self: center;">{{designData?.type}}</span>
+            </ion-col>
+
+
+
+            <!-- <ion-col *ngIf="segments=='status=assigned&status=declined'"> -->
+            <!--<ion-col>
+              <span style="float: right;">
+                <!-- <ng-container
+                  *ngIf="!userAccessRights?.viewonly && (designData.status == 'assigned' && (designData.acceptedbypeengineer==false && designData.declinedbypeengineer==false) && designData.type!=='both') || (userData.peengineertype=='structural' && designData.isstructuralassigned && designData.type == 'both' && !designData.acceptedbystructuralpeengineer) || (userData.peengineertype=='electrical' && designData.iselectricalassigned && designData.type == 'both' && !designData.acceptedbyelectricalpeengineer)">
+                  <ion-col size="8" class="ion-text-end action-button-color"
+                    (click)="accept(designData.id,designData,$event)">
+                    Accept
+                  </ion-col>
+                  <ion-col size="4" style="color:#dc6e67;" class="ion-text-end"
+                    (click)="decline(designData.id,'pestamp',$event)">
+                    On Hold
+                  </ion-col>
+                </ng-container> -->
+              <!--</span>
+              <!-- <span style="float: right;">
+                          <ng-container *ngIf="!userAccessRights?.viewonly && userData.peengineertype=='structural' && designData.isstructuralassigned && designData.type == 'both' && !designData.acceptedbystructuralpeengineer" >
+                              <ion-col size="8" class="ion-text-end action-button-color" (click)="accept(designData.id,designData,$event)">
+                                 Accept
+                              </ion-col>
+                              <ion-col size="4" style="color:#dc6e67;" class="ion-text-end" (click)="decline(designData.id,'pestamp',$event)">
+                              On Hold
+                              </ion-col>
+                          </ng-container>
+                      </span>
+                      <span style="float: right;">
+                        <ng-container *ngIf="!userAccessRights?.viewonly && userData.peengineertype=='electrical' && designData.iselectricalassigned && designData.type == 'both' && !designData.acceptedbyelectricalpeengineer" >
+                            <ion-col size="8" class="ion-text-end action-button-color" (click)="accept(designData.id,designData,$event)">
+                               Accept
+                            </ion-col>
+                            <ion-col size="4" style="color:#dc6e67;" class="ion-text-end" (click)="decline(designData.id,'pestamp',$event)">
+                            On Hold
+                            </ion-col>
+                        </ng-container>
+                    </span> -->
+           <!---- </ion-col>
+
+            <ion-col
+              *ngIf="!userAccessRights?.viewonly && segments=='status=completed' && userData.role.type != 'clientsuperadmin' && userData.role.type !== 'clientadmin'">
+              <!-- <span style="float:right !important;" class="ion-text-end action-button-color"
+                (click)="openreviewPassed(designData.id,designData,$event)"> &nbsp; Deliver</span> -->
+              <!-- <span (click)="openDesigners(designData.id,designData)" style="float:right !important;" class="ion-text-end action-button-color"
+                      >Reassign</span> -->
+              <!-- <span *ngIf="userData.role.type!='clientsuperadmin' &&(designData.status =='reviewpassed'||designData.status=='reviewfailed'||designData.status=='reviewassigned')" style="float:right !important;" class="ion-text-end action-button-color" (click)="openAnalysts(designData.id,designData)"
+                      >Reassign Review</span> -->
+            <!--</ion-col>
+
+
+
+          </ion-row>-->
+
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+
+  </ng-container>
+  </ion-grid>
+  <ng-template #nodesignFound>
+    <div *ngIf="listOfDesignsHelper.length === 0 && isPeenginer" class="h-100 d-flex flex-column align-center justify-center mar_not">
+
+
+      {{noDesignFound}}
+
+      <ion-img src="/assets/images/blank.png" class="placeholder"></ion-img>
+    </div>
+  </ng-template>
+
+
+  <ion-grid class="padd padd-list" *ngIf="!isPeenginer">
+    <ion-row class="padd padd-top">
+      <ion-col class="padd padd-col">
+        <ng-container *ngFor="let notifications of [1,2,3,4,5,6]">
+          <div class="custom-card" style="margin-top:8px;margin-bottom:8px; ">
+            <ion-row class="padd padd-top">
+             
+              <ion-col size="12"  class="padd padd-col">
+                <ion-row >
+                  <ion-col size="9"><ion-skeleton-text animated style="width: 80%; height: 22px;"></ion-skeleton-text>
+                  <ion-skeleton-text animated style="width: 40%; height: 10px;"></ion-skeleton-text>
+                </ion-col>
+                  <ion-col size="3"><ion-skeleton-text animated style="width: 55%; height: 22px; float:right"></ion-skeleton-text></ion-col>
+                </ion-row>
+                <ion-row >
+                  <ion-col size="9"><ion-skeleton-text animated style="width: 65%; height: 8px;"></ion-skeleton-text>
+                  <ion-skeleton-text animated style="width: 65%; height: 8px;"></ion-skeleton-text>
+                </ion-col>
+
+                  <ion-col size="3"><ion-skeleton-text animated style="width: 35%; height: 22px; float:right"></ion-skeleton-text></ion-col>
+                </ion-row>
+                <ion-row >
+                  <ion-col size="9">
+                    <ion-skeleton-text animated style="width: 65%; height: 8px;"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="width: 65%; height: 8px;"></ion-skeleton-text></ion-col>
+                  <ion-col size="3"><ion-skeleton-text animated style="width: 95%; height: 32px; float:right"></ion-skeleton-text></ion-col>
+                  
+                </ion-row>
+              </ion-col>
+            </ion-row>
+        
+    </div>
+      </ng-container>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+</ion-content>

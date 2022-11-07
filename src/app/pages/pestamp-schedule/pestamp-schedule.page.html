@@ -1,0 +1,566 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>pestamp-schedule</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+<ion-row class="ion-align-items-center ion-padding-start">
+    <ion-col size="2">
+        <ion-button fill="clear" size="small" class="ion-no-padding" style="color:#595959" (click)="goBack()">
+            Back
+        </ion-button>
+        <!-- <ion-buttons slot="start">
+                    <ion-back-button></ion-back-button>
+                </ion-buttons> -->
+    </ion-col>
+    <ion-col>
+        <h5 class="ion-no-margin ion-padding title"> PE Stamp
+        </h5>
+    </ion-col>
+    <ion-col size="2"></ion-col>
+</ion-row>
+
+<ion-content class="ion-padding-start ion-padding-end ion-padding-bottom" style="height:650px">
+    <form [formGroup]="firstFormGroup" novalidate style="overflow:scroll">
+        <ion-row class="ion-align-items-center ion-justify-content-center" *ngIf="!isClient">
+            <ion-col size="12">
+                <span class="input-placeholder">Company name *</span>
+                <ion-select placeholder="Ex. Solar Ltd" (ionChange)="onCompanyChanged($event)"
+                    class="form_input select_div" ok-text="" cancel-text="" formControlName="companyname"
+                    interface="popover" [required]="companyrequi">
+                    <ion-select-option *ngFor="let company of getCompanies" [value]="company">
+                        {{company.attributes.username}}
+                    </ion-select-option>
+                </ion-select>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <span class="input-placeholder">Name*</span>
+                <ion-input class="form_input" placeholder="Ex. John Deo" type="name" autocapitalize="none"
+                    autocomplete="off" formControlName="name">
+                </ion-input>
+                <div style="height: 5px;">
+                    <div *ngIf="firstFormGroup.get('name').hasError('pattern') && firstFormGroup.get('name').dirty">
+                        <span class="error">{{nameError}}</span>
+                    </div>
+                    <div *ngIf="firstFormGroup.get('name').value === '' && firstFormGroup.get('name').dirty">
+                        <span class="error">{{fieldRequired}}</span>
+                    </div>
+                </div>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <span class="input-placeholder">Email*</span>
+                <ion-input class="form_input" placeholder="Ex. John@wattmonk.com" type="email" autocapitalize="none"
+                    autocomplete="off" formControlName="email" [disabled]="fieldDisabled"></ion-input>
+
+                <div style="height: 5px;">
+                    <div *ngIf="firstFormGroup.get('email').hasError('pattern') && firstFormGroup.get('email').dirty">
+                        <span class="error">{{emailError}}</span>
+                    </div>
+                    <div *ngIf="firstFormGroup.get('email').value === '' && firstFormGroup.get('email').dirty">
+                        <span class="error">{{fieldRequired}}</span>
+                    </div>
+                </div>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col><span class="input-placeholder">Mode of Stamping*</span></ion-col>
+        </ion-row>
+        <ion-radio-group formControlName="stampingmode" (ionChange)="stampingModeOption($event)">
+            <ion-row>
+                <ion-col size="auto">
+                    <ion-item lines="none">
+                        <span class="input-placeholder">Email Copy</span>
+                        <ion-radio slot="start" class="whiteradioitem" mode="md" [disabled]="fieldDisabled"
+                            value="ecopy"></ion-radio>
+                    </ion-item>
+                </ion-col>
+                <ion-col size="auto">
+                    <ion-item lines="none">
+                        <span class="input-placeholder">Hard Copy</span>
+                        <ion-radio slot="start" class="whiteradioitem" mode="md" [disabled]="fieldDisabled"
+                            value="hardcopy"></ion-radio>
+                    </ion-item>
+                </ion-col>
+                <ion-col size="auto">
+                    <ion-item lines="none">
+                        <span class="input-placeholder">Both</span>
+                        <ion-radio slot="start" class="whiteradioitem" mode="md" [disabled]="fieldDisabled"
+                            value="both"></ion-radio>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+        </ion-radio-group>
+        <!-- <ion-row *ngIf="!isECopy"> -->
+        <ion-row *ngIf="stampingModeValue == 'hardcopy' || stampingModeValue == 'both'">
+            <ion-col>
+                <span class="input-placeholder">No. of Hard Copies*</span>
+                <ion-input type="cell" class="form_input" placeholder="Ex. 1-10" autocapitalize="words"
+                    formControlName="numberofhardcopy" autocomplete="off" maxLength="4"></ion-input>
+                <div style="height: 5px;">
+                    <div
+                        *ngIf="firstFormGroup.get('numberofhardcopy').hasError('max') && firstFormGroup.get('numberofhardcopy').dirty">
+                        <span class="error">{{hardCopiesError}}</span>
+                    </div>
+                    <div
+                        *ngIf="(firstFormGroup.get('numberofhardcopy').dirty && firstFormGroup.get('numberofhardcopy').hasError('pattern')) || (firstFormGroup.get('numberofhardcopy').hasError('min') && firstFormGroup.get('numberofhardcopy').dirty)">
+                        <span class="error">{{hardCopiesPatternError}}</span>
+                    </div>
+                    <div
+                        *ngIf="firstFormGroup.get('numberofhardcopy').value === '' && firstFormGroup.get('numberofhardcopy').dirty">
+                        <span class="error">{{fieldRequired}}</span>
+                    </div>
+                </div>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="stampingModeValue == 'hardcopy' || stampingModeValue == 'both'">
+            <ion-col>
+                <span class="input-placeholder">Shipping Address*</span>
+                <ion-input type="text" placeholder="Ex. abc  " class="form_input" autocapitalize="words"
+                    formControlName="shippingaddress" autocomplete="off" (ionChange)="updateSearchResults($event)"
+                    (ionClear)="onCancel()" debounce="300" (ionFocus)="forAutoComplete($event)" (ionBlur)="onBlur()">
+                </ion-input>
+                <!-- <ion-item class="ion-no-padding">
+      <span class="input-placeholder" >Shipping Address*</span>
+      <ion-input type="text" class="form_input" autocapitalize="words"
+                  formControlName="shippingaddress" autocomplete="off"></ion-input>
+  </ion-item> -->
+                <ion-list style="padding:0px" *ngIf="!isSelectSearchResult && designId == 0">
+                    <ion-item *ngFor="let item of autocompleteItems" tappable (click)="selectSearchResult(item)">
+                        <span>
+                            {{ item.description }}
+                        </span>
+                    </ion-item>
+                </ion-list>
+                <div style="height: 5px;">
+                    <div
+                        *ngIf="firstFormGroup.get('shippingaddress').hasError('pattern') && firstFormGroup.get('shippingaddress').dirty">
+                        <span class="error">{{addressError}}</span>
+                    </div>
+                    <div
+                        *ngIf="firstFormGroup.get('shippingaddress').value === '' && firstFormGroup.get('shippingaddress').dirty">
+                        <span class="error">{{fieldRequired}}</span>
+                    </div>
+                </div>
+
+
+                <!-- <ion-item *ngIf="autocompleteItems.length === 0" lines="none">
+                    <span class="ion-text-center">
+                        Search for address
+                    </span>
+                </ion-item> -->
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="stampingModeValue == 'hardcopy' || stampingModeValue == 'both'">
+            <ion-col>
+                <span class="input-placeholder">Contact Number*</span>
+                <ion-input type="tel" placeholder="Ex. 1234567890" (keypress)="NumbersOnly($event)"
+                    (keyup)="updateTNVal($event)" (focus)="filterByTN(firstFormGroup.get('contactnumber').value)"
+                    class="form_input" autocapitalize="none" formControlName="contactnumber" autocomplete="off"
+                    minLength="8" maxLength="15"></ion-input>
+                <div style="height: 5px;">
+                    <div
+                        *ngIf="firstFormGroup.get('contactnumber').hasError('pattern') && firstFormGroup.get('contactnumber').dirty">
+                        <span class="error">{{contactError}}</span>
+                    </div>
+                    <div
+                        *ngIf="firstFormGroup.get('contactnumber').value === '' && firstFormGroup.get('contactnumber').dirty">
+                        <span class="error">{{fieldRequired}}</span>
+                    </div>
+                </div>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col size="6">
+                <!-- <span style="display: none;">Mounting Type*</span> -->
+                <span class="input-placeholder">Property Type*</span>
+                <!-- <span class="input-placeholder">mounting type</span> -->
+                <ion-select class="form_input select_div" placeholder="Ex. abc  " ok-text="" cancel-text=""
+                    formControlName="propertytype" [disabled]="fieldDisabled" interface="popover"
+                    (ionChange)="PropertyTypeOption($event)">
+                    <ion-select-option value="residential">Residential</ion-select-option>
+                    <ion-select-option value="commercial">Commercial</ion-select-option>
+                </ion-select>
+            </ion-col>
+            <ion-col size="6">
+                <!-- <span style="display: none;">Mounting Type*</span> -->
+                <span class="input-placeholder">Mounting Type*</span>
+                <!-- <span class="input-placeholder">mounting type</span> -->
+                <ion-select class="form_input select_div" ok-text="" placeholder="Ex. abc  " cancel-text=""
+                    formControlName="mountingtype" [disabled]="fieldDisabled" interface="popover">
+                    <ion-select-option value="roof">Roof</ion-select-option>
+                    <ion-select-option value="ground">Ground</ion-select-option>
+                    <ion-select-option value="both">Both</ion-select-option>
+                </ion-select>
+            </ion-col>
+
+        </ion-row>
+        <ion-row style="margin-top: 20px;" *ngIf="propertytypevalue == 'residential'">
+            <span class="input-placeholder">Residential Type*</span>
+        </ion-row>
+        <ion-radio-group formControlName="propertysubtype" *ngIf="propertytypevalue == 'residential'">
+            <ion-row>
+                <ion-col size="auto">
+                    <ion-item lines="none">
+                        <span class="input-placeholder">House</span>
+                        <ion-radio slot="start" class="whiteradioitem" mode="md" [disabled]="fieldDisabled"
+                            value="house"></ion-radio>
+                    </ion-item>
+                </ion-col>
+                <ion-col size="auto">
+                    <ion-item lines="none">
+                        <span class="input-placeholder">CarPort</span>
+                        <ion-radio slot="start" class="whiteradioitem" mode="md" [disabled]="fieldDisabled"
+                            value="carport"></ion-radio>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+        </ion-radio-group>
+        <ion-row style="margin-top: 20px;" *ngIf="propertytypevalue == 'commercial'">
+            <span class="input-placeholder">Commercial Type*</span>
+        </ion-row>
+        <ion-radio-group formControlName="propertysubtype" *ngIf="propertytypevalue == 'commercial'">
+            <ion-row>
+                <ion-col size="auto">
+                    <ion-item lines="none">
+                        <span class="input-placeholder">Detached Building or Shop</span>
+                        <ion-radio slot="start" class="whiteradioitem" mode="md" [disabled]="fieldDisabled"
+                            value="detachedbuildingorshop"></ion-radio>
+                    </ion-item>
+                </ion-col>
+                <ion-col size="auto">
+                    <ion-item lines="none">
+                        <span class="input-placeholder">CarPort</span>
+                        <ion-radio slot="start" class="whiteradioitem" mode="md" [disabled]="fieldDisabled"
+                            value="carport"></ion-radio>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+        </ion-radio-group>
+
+        <ion-row style="margin-top: 20px;">
+            <!-- <span class="input-placeholder">Type of Stamping</span> -->
+            <span class="input-placeholder">Request type*</span>
+        </ion-row>
+        <ion-radio-group formControlName="stampingtype" (ionChange)="stampingTypeOption($event)">
+            <ion-row>
+                <ion-col size="auto">
+                    <ion-item lines="none">
+                        <span class="input-placeholder">Structural</span>
+                        <ion-radio slot="start" class="whiteradioitem" mode="md" [disabled]="fieldDisabled"
+                            value="structural"></ion-radio>
+                    </ion-item>
+                </ion-col>
+                <ion-col size="auto">
+                    <ion-item lines="none">
+                        <span class="input-placeholder">Electrical</span>
+                        <ion-radio slot="start" class="whiteradioitem" mode="md" [disabled]="fieldDisabled"
+                            value="electrical"></ion-radio>
+                    </ion-item>
+                </ion-col>
+                <ion-col size="auto">
+                    <ion-item lines="none">
+                        <span class="input-placeholder">Both</span>
+                        <ion-radio slot="start" class="whiteradioitem" mode="md" [disabled]="fieldDisabled"
+                            value="both"></ion-radio>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+        </ion-radio-group>
+        <ion-row *ngIf="stampingTypeValue == 'electrical' || stampingTypeValue =='both'"
+            class="ion-align-items-center ion-justify-content-center">
+            <ion-col size="12">
+                <span style="display: none;">Job Type*</span>
+                <span class="input-placeholder">Job Type*</span>
+                <ion-select [disabled]="nonEditableField" placeholder="Ex. abc" class="form_input select_div" ok-text=""
+                    cancel-text="" formControlName="jobtype" interface="popover">
+                    <ion-select-option value="pvbattery">PV+Battery</ion-select-option>
+                    <ion-select-option value="battery">Battery</ion-select-option>
+                    <ion-select-option value="pv">PV</ion-select-option>
+                </ion-select>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="stampingTypeValue == 'structural' || stampingTypeValue =='both'">
+            <ion-col size="12">
+
+                <ng-container>
+                    <ion-item class="ion-no-padding" >
+                        <span class="input-placeholder">Attic Photos*</span>
+                       <!----<input type="file" #attic class="form_input" (change)="atticFiles($event)"
+                            style="margin-top: 12px;" formControlName="atticphotos" multiple>
+                        <ion-icon name="attach-outline" slot="end" style="margin-top:21px"></ion-icon>-->
+                    </ion-item>
+                    <!--<div *ngFor="let file of atticPhotosList;let i = index">
+                        <ion-item>
+                            <ion-col size="11">
+                                {{file.name}}
+                            </ion-col>
+                            <ion-col size="1" (click)="removeArc(file, i,'attic')">x</ion-col>
+                        </ion-item>
+                    </div>-->
+
+                    <div class="row architectureuploadrow">
+                        <div class="col align-items-center architectureuploadcol">
+                          <mat-error  style="font-size: 10px; margin-left: 16px"
+                            *ngIf="atticPhotosList.length == 0">Uploading Attic Photos* is required.
+                          </mat-error>
+                          <div class="multiple-dropzone"  ngx-dropzone
+                            [multiple]="true" (change)="atticFiles($event)" accept=".png, .jpg, .jpeg,.heic">
+                            <ngx-dropzone-label>
+                              <div>
+                                <img class="addimage" src="../assets/icon/add.svg" />
+                                <h6 style="font-size: 14px;">
+                                  Browse Attic Photos*.
+                                </h6>
+                              </div>
+                            </ngx-dropzone-label>
+                            <div *ngFor="let f of atticPhotosList;let i=index">
+                              
+                              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                                [file]="f" [removable]="true" (removed)="removeArc(f,i,'attic')">
+                                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                              </ngx-dropzone-preview>
+                              <ngx-dropzone-preview *ngIf="f.isImage" class="imagepreview"
+                                ngProjectAs="ngx-dropzone-preview" [file]="f" [removable]="true"
+                                (removed)="removeArc(f,i,'attic')">
+                                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                              </ngx-dropzone-preview>
+
+                              <!--ngx-dropzone-image-preview-->
+                            </div>
+                          </div>
+                        </div>
+          
+          
+                      </div>
+
+
+
+
+
+
+
+                </ng-container>
+
+            </ion-col>
+            <ng-container *ngIf="design && design.atticphotos !==null">
+                <div *ngFor="let arc of design.atticphotos;let i=index">
+                    <ion-item>
+                        <ion-col size="auto"> {{arc.name}}{{arc.ext}}</ion-col>
+
+                        <ion-col size="1" (click)="removeattachment(arc,i,'attic')">x</ion-col>
+
+
+                    </ion-item>
+
+
+                </div>
+            </ng-container>
+
+        </ion-row>
+        <ion-row *ngIf="stampingTypeValue == 'structural' || stampingTypeValue =='both'">
+            <ion-col size="12">
+
+                <ng-container>
+                    <ion-item class="ion-no-padding" >
+                        <span class="input-placeholder">Roof Photos*</span>
+                        <!--<input type="file" #roof class="form_input" (change)="roofFiles($event)"
+                            style="margin-top: 12px;" formControlName="roofphotos" multiple>
+                        <ion-icon name="attach-outline" slot="end" style="margin-top:21px"></ion-icon>-->
+                    </ion-item>
+                   <!--<div *ngFor="let file of roofPhotosList;let i = index">
+                        <ion-item>
+                            <ion-col size="11">
+                                {{file.name}}
+                            </ion-col>
+                            <ion-col size="1" (click)="removeArc(file,i,'roof')">x</ion-col>
+                        </ion-item>
+                    </div>-->
+                    <div class="row architectureuploadrow">
+                        <div class="col align-items-center architectureuploadcol">
+                          <mat-error  style="font-size: 10px; margin-left: 16px"
+                            *ngIf="roofPhotosList.length == 0">Uploading Roof Photos* is required.
+                          </mat-error>
+                          <div class="multiple-dropzone"  ngx-dropzone
+                            [multiple]="true" (change)="roofFiles($event)" accept=".png, .jpg, .jpeg,.heic">
+                            <ngx-dropzone-label>
+                              <div>
+                                <img class="addimage" src="../assets/icon/add.svg" />
+                                <h6 style="font-size: 14px;">
+                                  Browse Roof Photos*.
+                                </h6>
+                              </div>
+                            </ngx-dropzone-label>
+                            <div *ngFor="let f of roofPhotosList;let i=index">
+                             
+                              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                                [file]="f" [removable]="true" (removed)="removeArc(f,i,'roof')">
+                                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                              </ngx-dropzone-preview>
+                              <ngx-dropzone-preview *ngIf="f.isImage" class="imagepreview"
+                                ngProjectAs="ngx-dropzone-preview" [file]="f" [removable]="true"
+                                (removed)="removeArc(f,i,'roof')"><ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                              </ngx-dropzone-preview>
+
+                              <!--ngx-dropzone-image-preview-->
+                            </div>
+                          </div>
+                        </div>
+          
+          
+                      </div>
+                </ng-container>
+
+            </ion-col>
+            <ng-container *ngIf="design && design.roofphotos !==null">
+                <div *ngFor="let arc of design.roofphotos;let i=index">
+                    <ion-item>
+                        <ion-col size="auto"> {{arc.name}}{{arc.ext}}</ion-col>
+
+                        <ion-col size="1" (click)="removeattachment(arc,i,'roof')">x</ion-col>
+
+
+                    </ion-item>
+
+
+                </div>
+            </ng-container>
+
+        </ion-row>
+        <ion-row
+            *ngIf="stampingTypeValue == 'structural' || stampingTypeValue =='both' || stampingTypeValue == 'electrical'">
+            <ion-col size="12">
+
+                <ng-container>
+                    <ion-item class="ion-no-padding" >
+                        <span class="input-placeholder">Permit Plan*</span>
+                       <!---<input type="file" #permitplan class="form_input" (change)="permitPlanFiles($event)"
+                            accept="application/pdf" style="margin-top: 12px;" formControlName="permitplanphotos"
+                            multiple>
+                        <ion-icon name="attach-outline" slot="end" style="margin-top:21px"></ion-icon>-->
+                    </ion-item>
+                    <!--<div *ngFor="let file of permitPlanList;let i = index">
+                        <ion-item>
+                            <ion-col size="11">
+                                {{file.name}}
+                            </ion-col>
+                            <ion-col size="1" (click)="removeArc(file,i,'permitplan')">x</ion-col>
+                        </ion-item>
+                    </div>-->
+
+                    <div class="row architectureuploadrow">
+                        <div class="col align-items-center architectureuploadcol">
+                          <mat-error  style="font-size: 10px; margin-left: 16px"
+                            *ngIf="permitPlanList.length == 0">Uploading Permit Plan* is required.
+                          </mat-error>
+                          <div class="multiple-dropzone"  ngx-dropzone
+                            [multiple]="false" (change)="permitPlanFiles($event)" accept="application/pdf">
+                            <ngx-dropzone-label>
+                              <div>
+                                <img class="addimage" src="../assets/icon/add.svg" />
+                                <h6 style="font-size: 14px;">
+                                  Browse Permit Plan*.
+                                </h6>
+                              </div>
+                            </ngx-dropzone-label>
+                            <div *ngFor="let f of permitPlanList;let i=index">
+                              
+                              <ngx-dropzone-preview *ngIf="!f.isImage" class="imagepreview" ngProjectAs="ngx-dropzone-preview"
+                                [file]="f" [removable]="true" (removed)="removeArc(f,i,'permitplan')">
+                                <ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                              </ngx-dropzone-preview>
+                              <ngx-dropzone-preview *ngIf="f.isImage" class="imagepreview"
+                                ngProjectAs="ngx-dropzone-preview" [file]="f" [removable]="true"
+                                (removed)="removeArc(f,i,'permitplan')"><ngx-dropzone-label class="previewlabel">{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                              </ngx-dropzone-preview>
+                              <!--ngx-dropzone-image-preview-->
+                            </div>
+                          </div>
+                        </div>
+          
+          
+                      </div>
+                </ng-container>
+
+            </ion-col>
+            <ng-container *ngIf="design && design.permitplan !==null">
+                <div *ngFor="let arc of design.permitplan;let i=index">
+                    <ion-item>
+                        <ion-col size="auto"> {{arc.name}}{{arc.ext}}</ion-col>
+
+                        <ion-col size="1" (click)="removeattachment(arc,i,'permitplan')">x</ion-col>
+
+
+                    </ion-item>
+
+
+                </div>
+            </ng-container>
+
+        </ion-row>
+        <!-- <ion-row style="margin-top: 20px;">
+    <span class="input-placeholder">Type of Stamping</span>
+  </ion-row>
+  <ion-radio-group formControlName="stampingtype" (ionChange)="stampingTypeOption($event)">
+    <ion-row >
+      <ion-col size="auto">
+    <ion-item lines="none">
+      <span class="input-placeholder">Structural</span>
+      <ion-radio slot="start" class="whiteradioitem" mode="md" value="structural"></ion-radio>
+    </ion-item>
+  </ion-col>
+  <ion-col size="auto">
+    <ion-item lines="none">
+      <span class="margin"   style="font-size: small;">Electrical</span>
+      <ion-radio slot="start" class="whiteradioitem" mode="md"  value="electrical"></ion-radio>
+    </ion-item>
+  </ion-col>
+  <ion-col size="auto">
+    <ion-item lines="none">
+      <span class="margin"   style="font-size: small;">Both</span>
+      <ion-radio slot="start" class="whiteradioitem" mode="md"  value="both"></ion-radio>
+    </ion-item>
+  </ion-col>
+  </ion-row>
+  </ion-radio-group> -->
+
+        <ion-row style="margin-top: 16px;">
+            <ion-col>
+                <ion-item class="ion-no-padding no-border" lines="none">
+                    <ion-checkbox checked="false" (ionChange)="tpcRequired($event)"
+                        [disabled]="(userdata.role.type=='bd' || userdata.role.type=='team_head')"></ion-checkbox>
+                    <span>&nbsp;3rd party stamping required</span>
+                </ion-item>
+            </ion-col>
+            <ion-col size="12">
+                <span class="input-placeholder">Comments</span>
+            </ion-col>
+            <ion-col size="12" style="padding-top: 0px;">
+                <ion-textarea style="max-width: 98%;" placeholder="Ex. mention your comment "
+                    class="ion-no-margin ion-no-padding comment_box" rows="3" formControlName="comment"></ion-textarea>
+            </ion-col>
+        </ion-row>
+    </form>
+    <!-- <form [formGroup]="secondFormGroup" novalidate style="overflow:scroll">
+
+</form> -->
+</ion-content>
+<ion-row style="margin: 0 auto;width: 98%;">
+    <ion-col size="6" *ngIf="!isClient && !isVAAgent"></ion-col>
+    <ion-col size="6">
+        <ion-button class="buttcan1" fill="clear" (click)="submitForm('save')">
+            Save for later
+        </ion-button>
+    </ion-col>
+    <ion-col size="6" *ngIf="isClient|| isVAAgent">
+        <!-- *ngIf="(userdata.role.type=='clientsuperadmin' || userdata.role.type=='clientadmin') && designId==0" -->
+        <ion-button class="buttcc" fill="clear" *ngIf="isClient|| isVAAgent" (click)="submitForm('send')">
+            Submit to WattMonk</ion-button>
+    </ion-col>
+</ion-row>

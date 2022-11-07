@@ -1,0 +1,146 @@
+
+
+.assignee-image1 {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: fill;
+    border: 2px solid white;
+    padding: 8px;
+    text-align: center;
+    background: #fff;
+  }
+  
+  .assignee-image {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: fill;
+    border: 2px solid #F8F8F8;
+    padding: 8px;
+    text-align: center;
+    background: #F8F8F8;
+  }
+  .assignee-margin {
+    margin: 4px;
+    text-align: center;
+  }
+  
+  .selected {
+    
+  
+   
+  height: 80px;
+  
+  
+  background: #EFEFEF;
+  border-radius: 8px;
+  }
+  
+  .normal {
+    //display:flex;
+    height: 80px;
+  
+    margin-bottom: 8px;
+    padding-top: 5px;
+    background: #fff;
+    border-radius: 8px;
+  }
+  
+  .preselected{
+    display:flex;
+    height: 80px;
+  
+    margin-bottom: 8px;
+    padding-top: 5px;
+    background: #fff;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    padding-top: 5px;
+    
+  }
+  
+  .afterselected{
+    display:flex;
+  
+  }
+  
+  
+   .active{
+  
+    display:flex;
+  height: 80px;
+  
+  
+  background: #EFEFEF;
+  border-radius: 8px;
+  
+  --background: #EFEFEF;
+  
+  margin-bottom: 8px;
+  padding-top: 5px;
+  
+  }
+  
+  ion-list[scrollx=true], ion-list[scrolly=true] {
+    position: relative;
+    overflow: hidden;
+  
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  
+  ion-list[scrollx=true] {
+    overflow-x: auto;
+  }
+  
+  ion-list[scrolly=true] {
+    overflow-y: auto;
+  }
+  
+  .name_div {
+    
+    font-size: 20px;
+  }
+  
+  
+  .badgere{
+    padding-top: 5px;
+  
+  
+    color: #000000;
+  background: linear-gradient(45.7deg, #FBB200 -69.25%, #FDCF27 101.61%);
+  border-radius: 4px;
+  
+  }
+  .sc-ion-label-md-s h2 {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 14px;
+    font-weight: normal;
+    left: 80px;
+  }
+  
+  .sc-ion-label-md-s p {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    left: 80px;
+    margin-bottom: 2px;
+    font-size: 12px;
+    line-height: 20px;
+    text-overflow: inherit;
+    overflow: inherit;
+  }
+  
+  ::slotted(ion-thumbnail[slot="start"]) {
+    margin-right: unset;
+    margin-inline-end: 0px; 
+    margin-inline: 0px;
+  
+  }
+  
+  

@@ -1,0 +1,103 @@
+<ion-header class="overflow">
+    <ion-row>
+        <ion-col class="padd" size="2" *ngIf="requesttype!='survey'">
+            <ion-button fill="clear" size="small" class="" style="color: #595959; margin-top: 9px;font-size:12px;"
+                (click)="goBack()" [disabled]="enableDisable">
+                Back
+            </ion-button>
+        </ion-col>
+<!--&& (sourceType == 'android' || sourceType == 'iphone')-->
+        <!-- <ion-col size="1" *ngIf="requesttype=='survey'">
+            <span *ngIf="requesttype=='survey'" (click)="openPaymentModal('share')" style="margin-left: 16px;">
+                <img  style="margin-top: 15px;" src="/assets/icon/share.svg" alt="">
+            </span>
+
+        </ion-col> -->
+        <ion-col size="1" *ngIf="requesttype=='survey' && status=='completed' && (sourceType == 'android' || sourceType == 'iphone')">
+            <span *ngIf="requesttype=='survey'" (click)="openPaymentModal('share')" style="margin-left: 16px;">
+                <img *ngIf="status=='completed'" style="margin-top: 15px;" src="/assets/icon/share.svg" alt="">
+            </span>
+            
+        </ion-col>
+        <ion-col *ngIf="requesttype=='survey' && status=='completed' && (sourceType == 'android' || sourceType == 'iphone')">
+            <span *ngIf="requesttype=='survey'" (click)="openPaymentModal('download')" style="margin-left: 16px;">
+                <img *ngIf="status=='completed'" style="margin-top: 15px;" src="/assets/icon/download.svg" alt="">
+            </span>
+        </ion-col>
+        <ion-col *ngIf="requesttype=='survey' && status!='completed'">
+        </ion-col>
+        <ion-col *ngIf="requesttype=='survey' && sourceType == 'web'">
+        </ion-col>
+        <ion-col size="8">
+            <h1 class="ion-no-padding ion-no-margin home" style="margin-top: 9px;"
+                *ngIf="requesttype=='prelim' && requirementtype == 'assessment'">Site Assessment</h1>
+            <h1 class="ion-no-padding ion-no-margin home" style="margin-top: 9px;"
+                *ngIf="requesttype=='prelim' && requirementtype == 'proposal'">Sales Proposal</h1>
+
+            <h1 class="ion-no-padding ion-no-margin home" style="margin-top: 9px;" *ngIf="requesttype=='survey'">Survey
+                Details</h1>
+            <h1 class="ion-no-padding ion-no-margin home" style="margin-top: 9px;" *ngIf="requesttype=='permit'">Permit
+                Details</h1>
+            <h1 class="ion-no-padding ion-no-margin home" style="margin-top: 9px;" *ngIf="requesttype=='pestamp'">
+                Pestamp Details</h1>
+        </ion-col>
+
+        <ion-col size="2" *ngIf="requesttype=='survey'">
+            <ion-button fill="clear" size="small" class=""
+                style="color: #595959; margin-top: 9px; margin-right: 16px; font-size:12px;" (click)="goBack()"
+                [disabled]="enableDisable">
+                Back
+            </ion-button>
+        </ion-col>
+        <!-- || (allData.status=='assigned' && allData.assignedto.id==user.id) -->
+        <!-- comment on 20220211 -->
+        <!-- <ion-col size="1"
+            *ngIf="!userAccessRights?.viewonly && ((allData.createdby.id == user.id && (allData.status == 'created' || allData.status == 'requestdeclined' ||(allData.status == 'outsourced' && !user.ispaymentmodeprepay)))) && !isEditHide">
+            <ion-button fill="clear" size="small" class="ion-no-padding" (click)="edit()" routerDirection="forward"
+                [disabled]=enableDisable>
+                <ion-img src="/assets/images/edit.svg" class="action-icon"></ion-img>
+            </ion-button>
+        </ion-col> -->
+        <!-- || (allData.status=='assigned' && allData.assignedto.id==user.id) -->
+        <!-- comment on 20220211 -->
+        <!-- <ion-col size="1"
+            *ngIf="!userAccessRights?.viewonly && ((allData.createdby.id == user.id && (allData.status == 'created' ||(requesttype=='survey' && allData.status!=='completed' && allData.status!=='assigned') ||allData.status == 'requestdeclined'||(allData.status == 'outsourced' && !user.ispaymentmodeprepay)))) && !isEditHide">
+            <ion-button fill="clear" size="small" class="ion-no-padding" (click)="deleteDesign()"
+                [disabled]=enableDisable>
+                <ion-img src="/assets/images/trash.svg" class="action-icon"></ion-img>
+            </ion-button>
+        </ion-col> -->
+    </ion-row>
+    <!-- <ion-segment mode="md" scrollable (ionChange)="segmentChanged($event)" value="prelim" mode="md">
+    <ion-segment-button value="prelim">
+        <ion-label class="segment-btn">Prelim</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="Survey">
+        <ion-label class="segment-btn">Survey</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="permit">
+        <ion-label class="segment-btn">Permit</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="Pestamp">
+        <ion-label class="segment-btn">Pestamp</ion-label>
+    </ion-segment-button> -->
+
+
+</ion-header>
+<!-- style="margin-top: 15%;" -->
+<ion-tabs #tabs [style.height.px]="innerHeight - 52">
+    <ion-tab-bar slot="top" *ngIf="isTabCheck">
+        <ion-tab-button tab="prelim-details" *ngIf="isPrelim" (click)="changeToggle('prelim')">
+            <ion-label>Prelim</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="survey-details" *ngIf="isSurvey" (click)="changeToggle('survey')">
+            <ion-label>Survey</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="permit-details" *ngIf="isPermit" (click)="changeToggle('permit')">
+            <ion-label>Permit</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="pestamp-details" *ngIf="isPestamp" (click)="changeToggle('pestamp')">
+            <ion-label>Pestamp</ion-label>
+        </ion-tab-button>
+    </ion-tab-bar>
+</ion-tabs>

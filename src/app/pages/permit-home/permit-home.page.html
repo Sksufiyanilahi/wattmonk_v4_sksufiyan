@@ -1,0 +1,85 @@
+<ion-content>
+    <!-- <ion-header class="ion-no-border white-bg" style="position: relative;">
+        <ion-toolbar> -->
+    <ion-grid >
+        <ion-row class="ion-align-items-center">
+        <ion-toolbar>
+  
+  
+       
+          <ion-row class="ion-align-items-center">
+              <ion-col size="1"><ion-buttons style="float:left">
+                 
+                  <ion-menu-button mode="md"> <ion-img fill="clear" class="ion-no-margin  menu_im" src="assets/icon/new/menu.svg" ></ion-img></ion-menu-button>
+              </ion-buttons></ion-col>
+            
+              <ion-col >
+                  <div  class="sera_div" (click)="searchbar()"><span class="search_test">Search</span></div>
+                  <!--<ion-searchbar  debounce="0"  placeholder="Search " 
+                  ></ion-searchbar>-->
+  
+                 
+              </ion-col>
+              <ion-col size="1" >
+                  <div class="notification-padding" [routerLink]="['/notification']" routerDirection="forward"
+                      (click)="setzero()">
+                      <ion-img src="assets/icon/new/notification.svg" class="notification-icon"></ion-img>
+                      <span class="badge" *ngIf="unreadCount > 0">
+                          {{unreadCount > 99 ? '99+' : unreadCount}}
+                      </span>
+                  </div>
+              </ion-col>
+          </ion-row>
+    </ion-toolbar>
+    </ion-row>
+    </ion-grid>
+  
+  
+  </ion-content>
+  
+  <ion-tabs style="margin-top: 60px">
+      <ion-tab-bar class="ion-no-border">
+          <ion-tab-button tab="permitdesign">
+              <!-- <ion-label>Designs</ion-label> -->
+          </ion-tab-button>
+      </ion-tab-bar>
+  </ion-tabs>
+  <!-- <router-outlet></router-outlet> -->
+  
+  
+  
+  
+  <ion-footer class="ion-no-border white-bg" *ngIf="showFooter">
+    <div class="position-relative">
+        <!-- <ion-fab horizontal="start" class="fab-position position-absolute">
+            <ion-fab-button (click)="scheduledPage()" [disabled]='!netSwitch' routerDirection="forward" mode="md" class="ht_wt">
+                <ion-icon name="add"></ion-icon>
+            </ion-fab-button>
+        </ion-fab> -->
+        <!-- <ion-grid class="bottom-bar ion-no-margin ion-no-padding">
+            <ion-row>
+                <ion-col size="4">
+                    <div class="tab">
+                        <ion-img src="/assets/images/home-outline.svg" class="tab-icon"></ion-img>
+                        <span class="tabText">Home</span>
+                    </div>
+                </ion-col>
+                <ion-col size="4" [routerLink]="['/groups']">
+                    <div class="tab">
+                        <ion-img src="/assets/images/message-outline.svg" class="tab-icon"></ion-img>
+                        <span class="tabText">Messages</span>
+                    </div>
+                </ion-col>
+                <ion-col size="4" [routerLink]="['/profile']" routerDirection="forward">
+                    <div class="tab">
+                        <ion-img src="/assets/images/account-outline.svg" class="tab-icon"></ion-img>
+                        <span class="tabText">Profile</span>
+                    </div>
+                </ion-col>
+            </ion-row>
+        </ion-grid> -->
+    </div>
+  
+  </ion-footer>
+  
+  

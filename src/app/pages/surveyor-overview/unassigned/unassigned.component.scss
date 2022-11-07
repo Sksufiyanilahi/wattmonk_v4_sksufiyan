@@ -1,0 +1,206 @@
+.chatbutton {
+    float: right;
+    margin-top: 0px;
+    margin-right: 5px;
+}
+
+.warninginfo {
+    margin-top: 8px;
+    font-size: 12px;
+    font-style: italic;
+    color: #f00;
+}
+
+.syncing-row {
+    padding: 16px 16px 0;
+
+    img {
+        width: 20px;
+        margin-left: 8px;
+    }
+}
+
+.custom-card {
+    display: flex !important;
+    flex-direction: column !important;
+    background: white !important;
+
+    padding: 8px 12px;
+
+    margin: 0px;
+    margin-left: 16px;
+    margin-right: 16px;
+
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.04);
+    border-radius: 8px;
+
+}
+
+.miles-label{
+    font-family: 'Lexend';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px !important;
+  line-height: 15px !important;
+  margin-top: 2px;
+  /* identical to box height */
+  
+  
+  /* #595959 */
+  
+  color: #595959 !important;
+  }
+
+  .padd-top{
+    padding-top: 12px;
+  }
+
+  .whitechip {
+    display: inline;
+    vertical-align: middle;
+    height: 12px;
+    width: 12px;
+  
+  
+    border-radius: 4px;
+    padding: 4px, 0, 4px, 6px;
+    color: #333029;
+    background: #61B05A33;
+    align-items: right;
+    // text-align: right;
+    // background-color: Solid rgba(251, 184, 20, 0.18);
+    border: 1px solid #E5E5E5; //styleName: Caption 2(R);
+    font-family: 'Lexend';
+    
+    // text-align: left;
+    padding: 3px;
+    margin: 2px;
+  
+    .wclabel{
+      width: 52px;
+  height: 15px;
+  
+  font-family: 'Lexend';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  /* identical to box height */
+  
+  
+  /* #4D483D */
+  
+  color: #4C483D;
+    }
+  
+  }
+  
+  .wchip{
+    display: inline;
+    vertical-align: middle;
+    height: 12px;
+    width: 12px;
+    border-radius: 4px;
+    padding: 4px, 0, 4px, 0;
+    color: #333029;
+    background: #61B05A33;
+    // align-items: right;
+    border: 1px solid #E5E5E5; //styleName: Caption 2(R);
+    font-family: 'Lexend';
+    padding: 3px;
+    margin-top: 20px;
+  
+    .wlabel{
+      width: 52px;
+  height: 15px;
+  
+  font-family: 'Lexend';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  color: #4C483D;
+  }}
+
+  .location_list {
+
+    margin-top: 5px !important;
+  
+  }
+
+  .add_div{
+    // width:170px;
+    white-space: nowrap;
+  overflow: hidden;                            
+  text-overflow: ellipsis;
+  padding-left: 3px;
+  
+  }
+
+  .butt {
+    text-transform: none;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 15px;
+    letter-spacing: 0em;
+  
+    background: #2F2E2C;
+    color: #fff;
+    width: 115px;
+  height: 40px;
+    // justify-content: center;
+    // align-items: center;
+    padding: 10px 20px;
+    gap: 10px;
+    
+    border-radius: 6px 0px;
+    padding: 10px 20px;
+    // padding-right: 12px;
+  
+  
+  }
+  
+  
+  .customer-address {
+    // position: absolute;
+    width: 180px;
+    height: 15px;
+    // left: 17px;
+    // top: 29.78px;
+    // margin-left: -2px;
+    padding-left: 4px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    color: #595959;
+    line-height: 15px;
+    font-family: 'Lexend';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+  
+    
+    //word-wrap: break-word;
+  }
+
+  .list_clo {
+    //margin-top:4px;
+    margin: auto !important;
+    margin-right: 4px !important;
+  
+  
+  }
+
+  .addressrow{
+    margin-top: -4px !important;
+  }
+
+  .loc-flex>div {
+    //margin-top:4px;
+    // margin-left: 8px;
+    margin-top: 5px;
+    // margin-top: -8px;
+    margin-left: -2px;
+    
+  
+  
+  }
